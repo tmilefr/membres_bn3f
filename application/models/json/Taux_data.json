@@ -1,0 +1,22 @@
+{
+	"Taux": [{
+			"name": "Comité",
+			"code": "C",
+			"taux": "0.50",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		},{
+			"name": "Normal",
+			"code": "N",
+			"taux": "1",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		},{
+			"name": "Demi-cotisation",
+			"code": "D",
+			"taux": "0.5",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		}		
+	]
+}

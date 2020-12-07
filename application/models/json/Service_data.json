@@ -1,0 +1,40 @@
+{
+	"Service": [{
+			"name": "Caravane",
+			"code": "C",
+			"amount": "250",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		},{
+			"name": "Place bateau parc amont",
+			"code": "AM",
+			"amount": "60",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		},{
+			"name": "Place bateau parc aval",
+			"code": "AV",
+			"amount": "60",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		},{
+			"name": "Hivernage sous chapiteau",
+			"code": "WI",
+			"amount": "50",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		},{
+			"name": "Licence club jeune",
+			"code": "J",
+			"amount": "29.50",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		},{
+			"name": "Licence club adulte",
+			"code": "I",
+			"amount": "58.50",
+			"created":"2020-12-01 08:00:00",
+			"updated":""
+		}				
+	]
+}

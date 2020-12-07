@@ -1,0 +1,59 @@
+{
+	"id": {
+		"type": "hidden",
+		"list": true,
+		"search": false,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "INT",
+			"constraint": 11,
+			"unsigned": true,
+			"auto_increment": true
+		}
+	},
+	"id_ser": {
+		"type": "select_database",
+		"list": true,
+		"search": false,
+		"rules": null,
+		"since": 2,
+		"values": "distinct(service,id:name)",
+		"dbforge": {
+			"type": "INT",
+			"constraint": "5"
+		}
+	},	
+	"id_cnt": {
+		"type": "select_database",
+		"list": true,
+		"search": false,
+		"rules": null,
+		"since": 2,
+		"values": "distinct(contribution,id:user)",
+		"dbforge": {
+			"type": "INT",
+			"constraint": "5"
+		}
+	},	
+	"created": {
+		"type": "created",
+		"list": false,
+		"search": false,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "DATETIME"
+		}
+	},
+	"updated": {
+		"type": "updated",
+		"list": false,
+		"search": false,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "DATETIME"
+		}
+	}
+}

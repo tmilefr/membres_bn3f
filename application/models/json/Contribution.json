@@ -1,0 +1,114 @@
+{
+	"id": {
+		"type": "hidden",
+		"list": true,
+		"search": false,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "INT",
+			"constraint": 11,
+			"unsigned": true,
+			"auto_increment": true
+		}
+	},
+	"user": {
+		"type": "select_database",
+		"list": true,
+		"search": true,
+		"rules": null,
+		"since": 2,
+		"values": "distinct(users,id:name)",
+		"dbforge": {
+			"type": "INT",
+			"constraint": "5"
+		}
+	},
+	"year": {
+		"type": "int",
+		"list": true,
+		"search": true,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "VARCHAR",
+			"constraint": "10"
+		}
+	},	
+	"amount": {
+		"type": "int",
+		"list": true,
+		"search": true,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "INT",
+			"constraint": "10"
+		}
+	},
+	"presta": {
+		"type": "memo",
+		"link" : "",
+		"list": false,
+		"search": false,
+		"rules": "trim",
+		"since": 1,
+		"values": "",
+		"dbforge": {
+			"type": "VARCHAR",
+			"constraint": "255"
+		}
+	},
+	"taux": {
+		"type": "select_database",
+		"list": true,
+		"search": false,
+		"rules": null,
+		"since": 2,
+		"values": "distinct(taux,id:name)",
+		"dbforge": {
+			"type": "INT",
+			"constraint": "5"
+		}
+	},
+	"check": {
+		"type": "memo",
+		"list": false,
+		"search": false,
+		"rules": "trim",
+		"since": 1,
+		"values": {
+			"1": "1 x 75",
+			"2": "2 x 75",
+			"3": "3 x 75",
+			"4": "4 x 75",
+			"5": "1 x 150",
+			"6": "2 x 150",
+			"7": "1 x 300"
+		},		
+		"dbforge": {
+			"type": "VARCHAR",
+			"constraint": "255"
+		}
+	},		
+	"created": {
+		"type": "created",
+		"list": false,
+		"search": false,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "DATETIME"
+		}
+	},
+	"updated": {
+		"type": "updated",
+		"list": false,
+		"search": false,
+		"rules": null,
+		"since": 1,
+		"dbforge": {
+			"type": "DATETIME"
+		}
+	}
+}
