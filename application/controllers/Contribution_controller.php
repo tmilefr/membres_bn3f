@@ -18,7 +18,7 @@ class Contribution_controller extends MY_Controller {
 		$this->_model_name 		= 'Contribution_model';	   //DataModel
 		$this->_edit_view 		= 'edition/Contribution_form';//template for editing
 		$this->_list_view		= 'unique/Contribution_view.php';
-		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true);
+		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true,'sendbymail'=>true);
 		
 		
 		$this->title .= ' - '.$this->lang->line($this->_controller_name);
@@ -30,12 +30,83 @@ class Contribution_controller extends MY_Controller {
 		$this->load->model('ContributionLgn_model');
 		$this->load->model('Service_model');	
 		$this->load->model('Taux_model');
+		$this->load->model('Sendmail_model');
 		$this->load->library('Libpdf');
 		
+		$this->_mail_txt = "Chers membres, liebe mitglieder, \n
+Veuillez trouver ci-joint votre facture personnelle pour le renouvellement de votre adhésion à la BN3F pour l’année 2021. \n
+Comme vous le constaterez, il y aura quelques changements mineurs : \n
+-	Les tarifs (sauf parc à bateaux) restent inchangés \n
+-	Les emplacements bateau passent tous à 60 Euros\n
+-	Les journées de travail passent de 4 fois 75 Euros à 2 fois 150 euros à titre d’essai. Ceci devrait favoriser les personnes désireuses de prêter main forte à la base, sans pénaliser ceux qui ne viennent jamais. Par contre : Ces 2 journées de travail devront, à de rares exceptions près, être consacrées à l’intérêt général de la base, à l’exclusion de tous travaux internes aux sections. \n
+-	La date limite de payement est fixée au 28 février. Au-delà de cette date, une majoration de 20€ (10€ pour une cotisation individuelle) sera appliquée pour chaque mois entamé. A compter du 1er mai tout membre dont la cotisation ne sera pas réglée sera considéré comme démissionnaire et un nouveau droit d’entrée sera demandé pour une réinscription. \n
+
+Pour toute demande/réclamation/modification : info@bn3f.fr \n
+En vous souhaitant une belle saison 2021\n\n
+
+In der Beilage, finden Sie bitte eure persönliche Rechnung bezüglich der Erneuerung eurer Mitgliedschaft für die Saison 2021. Wie Ihr sehen könnt, gibt es ein Paar kleine Neuigkeiten: \n
+-	Die Preise bleiben unverändert (mit Ausnahme der Bootsplätzen) \n
+-	Die Bootsplätze werden alle auf 60 Euros gesetzt\n
+-	Die Arbeitstage werden, versuchsweise, von 4 auf 2 reduziert. (2x150 Euros statt 4x75 Euros). Diese 2 Arbeitstage sollten jedoch exklusiv zur gemeinsamen Interessen genutzt werden. Sektionentätigkeiten werden nicht mehr anerkannt. \n
+-	Letzter Einzahlungstermin ist der 28. Februar. Danach wird jeder angefangener Monat um 20€ (10 Euros für Einzelbeiträge) erhöht. Ab dem 1. Mai werden die nicht erneuerten Mitglieder als austeigend betrachtet und müssen sich ggf. neu-eischreiben (Inklusive Eintragsgebühr) \n
+Für Fragen/Reklamationen/ Änderungen: info@bn3f.fr \n
+Wir wünschen Ihnen eine schöne Saison 2021 \n
+Pour le comité, Für das Komitee				\n";
 	}
 
 	Public function view($id){
+		$dba_data = $this->MakePdf($id);
+		$this->data_view['datas'] 	= $dba_data;
+		$this->data_view['url_pdf'] = '<a target="_new" href="'.$this->libpdf->_get('pdf_url_path').'/'. $dba_data->pdf.'"><span class="oi oi-file"></span> '. $dba_data->pdf.'</a>';
+		$this->_set('view_inprogress',$this->_list_view);
+		$this->render_view();	
+	}
 
+	function SendByMail()
+	{
+		$this->load->library('email');
+		
+		if (isset($_POST['ids'])){
+			foreach($_POST['ids'] AS $key=>$val){
+				$ref = explode('|', $val);
+				$id = $ref[0];
+				$email = $ref[1];
+				$dba_data = $this->MakePdf($id);
+				if (is_file($this->libpdf->_get('pdf_path').$dba_data->pdf)){
+					$this->email->from('info@bn3f.fr', 'BN3F');
+					$this->email->to($email);
+					$this->email->subject('Appel à cotisation BN3F 2021');
+					$this->email->message($this->_mail_txt);
+					$this->email->set_alt_message($this->_mail_txt);
+					$this->email->attach($this->libpdf->_get('pdf_path').$dba_data->pdf);
+					//log send mail
+					$log = new StdClass();
+					$log->date = date('Y-m-d H:i:s');
+					$log->user = $id;
+					$log->pdf = $dba_data->pdf;				
+					$log->status = (($this->email->send()) ? 'sended':'not-sended');
+					$log->log = $this->email->print_debugger(array('headers'));
+					$this->Sendmail_model->post($log);				
+					$this->email->clear(TRUE);
+				} else {
+					$this->data_view['sendmail'][] = $this->libpdf->_get('pdf_path').$dba_data->pdf. ' not exist';
+				}
+			}
+		}
+
+		$dba_data = $this->{$this->_model_name}->GetUserAndLog();
+
+		foreach($dba_data as $key=>$data){
+			$dba_data[$key]->log = $this->Sendmail_model->GetLog($data->user);
+		}
+
+		$this->data_view['datas'] = $dba_data;
+		$this->_set('view_inprogress','unique/Contribution_view_send.php');
+		$this->render_view();	
+	}
+
+
+	function MakePdf($id = null, $override = true){
 		if ($id){
 			$this->render_object->_set('id',		$id);
 			$this->{$this->_model_name}->_set('key_value',$id);
@@ -43,7 +114,6 @@ class Contribution_controller extends MY_Controller {
 			//get Taux
 			$this->Taux_model->_set('key_value',$dba_data->taux);
 			$dba_data->taux = $this->Taux_model->get_one();
-
 			//get User
 			$this->Users_model->_set('key_value',$dba_data->user);
 			$dba_data->user = $this->Users_model->get_one();
@@ -53,7 +123,6 @@ class Contribution_controller extends MY_Controller {
 			$this->ContributionLgn_model->_set('filter', ['id_cnt'=> $dba_data->id ]);
 			$this->ContributionLgn_model->_set('order', 'id_cnt');
 			$presta = $this->ContributionLgn_model->get_all();
-			
 			$dba_data->real = 0;
 			$dba_data->services = array();
 			foreach($presta AS $service){
@@ -79,40 +148,17 @@ class Contribution_controller extends MY_Controller {
 					break;
 				}
 				$dba_data->real += $detail->total;
-				
 				$dba_data->services[] = $detail;
-
-
 			}
+
 			$values = json_decode($dba_data->check);
-			//$trad_check = $this->Contribution_model->_get('defs')['check']->values;
-			//$this->data_view['trad_check'] 	= $trad_check;
-
 			$dba_data->check = $values;
-			/*
-			if (isset($dba_data->check->todo)) 
-				$dba_data->check->todo = ((isset($trad_check[$dba_data->check->todo])) ? $trad_check[$dba_data->check->todo]:$dba_data->check->todo);
-			else
-				$dba_data->check->todo = 'N/A';
-			if (isset($dba_data->check->have))
-				$dba_data->check->have = ((isset($trad_check[$dba_data->check->have])) ? $trad_check[$dba_data->check->have]:$dba_data->check->have);
-			else
-				$dba_data->check->have = 'N/A';
-			*/
-			
-			$this->data_view['datas'] 	= $dba_data;
-
-			$pdf = NameToFilename('Cotisation_'.$dba_data->user->name.'_'.$dba_data->year).'.pdf';
-			//if (!is_file($this->libpdf->_get('pdf_path').$pdf)){
-				$this->libpdf->DoPdf($dba_data,'unique/Contribution_view_pdf',$pdf);
-			//} 
-			$this->data_view['url_pdf'] = '<a target="_new" href="'.$this->libpdf->_get('pdf_url_path').'/'.$pdf.'"><span class="oi oi-file"></span> '.$pdf.'</a>';
+			$dba_data->pdf = NameToFilename('Cotisation_'.$dba_data->user->name.'_'.$dba_data->year).'.pdf';
+			if (!is_file($this->libpdf->_get('pdf_path').$dba_data->pdf) OR $override){
+				$this->libpdf->DoPdf($dba_data,'unique/Contribution_view_pdf', $dba_data->pdf);
+			} 
+			return $dba_data;
 		}	
-		$this->_set('view_inprogress',$this->_list_view);
-		$this->render_view();	
-		//$this->load->view('unique/Contribution_view_pdf',	$this->data_view);
-
-		//
 	}
 
 }

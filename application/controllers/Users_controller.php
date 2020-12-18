@@ -25,7 +25,7 @@ class Users_controller extends MY_Controller {
 		$this->_set('_debug', TRUE);
 		$this->init();
 
-		$this->{$this->_model_name}->_set('_debug', TRUE);
+		$this->{$this->_model_name}->_set('_debug', FALSE);
 	}
 
 	/*

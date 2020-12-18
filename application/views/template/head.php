@@ -28,6 +28,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<a class="dropdown-item" href="<?php echo base_url('Service_controller/list');?>"><?php echo Lang('Service_controller');?></a>
 						<a class="dropdown-item" href="<?php echo base_url('Taux_controller/list');?>"><?php echo Lang('Taux_controller');?></span></a>
 						<a class="dropdown-item" href="<?php echo base_url('Parameters');?>"><?php echo Lang('Parameters');?></a>
+						<a class="dropdown-item" href="<?php echo base_url('Technique');?>"><?php echo Lang('Technique');?></a>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="#" data-toggle="modal" data-target="#AboutModal"><?php echo Lang('About');?></a>
 					</div>
@@ -74,17 +75,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		<!-- Page Content  -->
 		<div id="content">	
 			<nav class="navbar navbar-expand-lg navbar-light bg-light"> 
-				<ul class="navbar-nav mr-auto"> 
+				<ul class="navbar-nav mr-auto">
 					<li class="nav-item"> 
 						<h2><?php echo $title;?></h2> 
 					</li> 
-				</ul> 
+				</ul>
+				<ul class="nav justify-content-end">
 				<?php  
 				if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
 					if ($this->render_object->_get('_ui_rules')['add']->autorize)
-						echo '<a class="btn btn-success" href="'.$this->render_object->_get('_ui_rules')['add']->url.'"><span class="oi oi-plus"></span> '.$this->render_object->_get('_ui_rules')['add']->name.'</a>'; 
+						echo '<li class="nav-item"><a class="btn btn-success" href="'.$this->render_object->_get('_ui_rules')['add']->url.'"><span class="oi oi-plus"></span> '.$this->render_object->_get('_ui_rules')['add']->name.'</a></li>'; 
+					if (isset($this->render_object->_get('_ui_rules')['sendbymail']) AND $this->render_object->_get('_ui_rules')['sendbymail']->autorize)
+						echo '<li class="nav-item"><a class="btn btn-warning" href="'.$this->render_object->_get('_ui_rules')['sendbymail']->url.'"><span class="oi oi-envelope-closed"></span> '.$this->render_object->_get('_ui_rules')['sendbymail']->name.'</a></li>'; 
+
 				} 
 				?> 
+				</ul> 
 			</nav> 	
 		
 

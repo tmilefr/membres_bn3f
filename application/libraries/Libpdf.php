@@ -19,13 +19,15 @@ class Libpdf {
 		$this->CI = & get_instance();
 		$this->_init();
 		$this->pdf_path = str_replace('application','data/pdf',APPPATH);
+		$this->img_path = base_url().'assets/img/'; //str_replace('application','assets/img/',APPPATH);
 		$this->pdf_url_path = base_url().'data/pdf';
 	}
 	
 	public function _init(){
 		$options = new Options();
 		$options->set('enable_html5_parser', true);
-		$options->set('debugPng',true);
+		$options->set('debugPng',false);
+		$options->set("enable_remote", true);
 		$options->setTempDir($this->pdf_path); 
 		
 		$pdf = new Dompdf($options);
@@ -51,6 +53,7 @@ class Libpdf {
 	 */
 	function DoPdf($datas,$view_pdf,$filename){
 		$data_view['datas'] = $datas;
+		$data_view['img_path'] = $this->_get('img_path');
 		$html = $this->CI->load->view($view_pdf, $data_view, true);
 		$this->filename = $filename;
 		$this->makePdf($html);

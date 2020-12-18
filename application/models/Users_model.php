@@ -7,7 +7,7 @@ class Users_model extends Core_model{
 		parent::__construct();
 		$this->_set('_debug', FALSE);
 		
-		$this->_set('table'	, 'Users');
+		$this->_set('table'	, 'users');
 		$this->_set('key'	, 'id');
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
@@ -19,4 +19,3 @@ class Users_model extends Core_model{
 
 }
 ?>
-

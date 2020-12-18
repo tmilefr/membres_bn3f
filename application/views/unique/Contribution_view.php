@@ -45,15 +45,24 @@
 		</table>
 		<?php if ($datas->taux->code != 'C'){ ?>
 			<?php if (isset($datas->check->todo)){ ?>
-			<p class="card-text">Provisions journées de travail encaissées en 2020 <?php echo $datas->check->encaisse;?> €</p>
+			<p class="card-text">Provisions journées de travail encaissées en 2020 
+			<?php 
+			if (isset($datas->check->encaisse)){
+				echo $datas->check->encaisse.' €';
+			} 
+			?>
+			</p>
 			<?php } ?>
-			<p class="card-text">Provisions journées de travail 2021 : 
-				<?php if (isset($datas->check->todo)){ ?>
-				<?php echo $datas->check->todo;?> € (Chèque à réaliser)
-				<?php } ?>
-				<?php if (isset($datas->check->have)){ ?>
-				<?php echo $datas->check->have;?> (Chèque en notre possession)
-				<?php } ?>
+			<p class="card-text">Provisions journées de travail à régler pour 2021 : 
+			<?php if (isset($datas->check->todo) AND $datas->check->todo){ ?>
+			<?php echo $datas->check->todo;?> €
+			<?php } ?>
+
+			<?php if (isset($datas->check->have) AND $datas->check->have){ ?>
+			<br/>Chèque en notre possession :
+			<?php echo $datas->check->have;?> € <br />
+
+			<?php } ?>
 			</p>
 		<?php } else { ?>
 			<p class="card-text"> exonéré </p>

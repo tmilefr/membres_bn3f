@@ -7,7 +7,7 @@ class Taux_model extends Core_model{
 		parent::__construct();
 		$this->_set('_debug', FALSE);
 		
-		$this->_set('table'	, 'Taux');
+		$this->_set('table'	, 'taux');
 		$this->_set('key'	, 'id');
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
@@ -17,4 +17,3 @@ class Taux_model extends Core_model{
 
 }
 ?>
-

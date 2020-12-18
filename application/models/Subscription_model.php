@@ -7,7 +7,7 @@ class Subscription_model extends Core_model{
 		parent::__construct();
 		$this->_set('_debug', FALSE);
 		
-		$this->_set('table'	, 'Subscription');
+		$this->_set('table'	, 'subscription');
 		$this->_set('key'	, 'id');
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
@@ -17,4 +17,3 @@ class Subscription_model extends Core_model{
 
 }
 ?>
-

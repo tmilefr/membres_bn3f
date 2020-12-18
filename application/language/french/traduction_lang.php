@@ -23,6 +23,24 @@ $lang['country'] = 'Pays';
 $lang['type'] = 'Type';
 $lang['family'] = 'Famille';
 $lang['password'] = 'mot de passe';
+$lang['SENDBYMAIL_Contribution_controller'] = 'Send';
+
+$lang['Service_controller'] = 'Prestations';
+$lang['ADD_Service_controller'] = 'Ajouter';
+$lang['EDIT_Service_controller'] = 'Valider';
+$lang['code'] = 'Code';
+$lang['prix'] = 'Prix';
+
+
+$lang['Taux_controller'] = 'Taux';
+$lang['ADD_Taux_controller'] = 'Ajouter';
+$lang['EDIT_Taux_controller'] = 'Valider';
+
+
+$lang['Contribution_controller'] = 'Gestion des Cotisations';
+$lang['Family'] = 'Familles';
+$lang['ADD_Contribution_controller'] = 'Ajouter';
+$lang['EDIT_Contribution_controller'] = 'Valider';
 
 $lang['Rates'] = 'Tarifs';
 $lang['ADD_Rates_controller'] = 'Ajouter';

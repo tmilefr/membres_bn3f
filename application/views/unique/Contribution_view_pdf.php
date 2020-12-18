@@ -173,7 +173,7 @@ p{
 <div id="content">
 	<table class="table_page">
 	<tr><td rowspan ="2">
-		<img width="100" src="../../assets/img/bn3f.jpg" />
+		<img width="100" src="<?php echo $img_path;?>bn3f.jpg" />
 	</td><td class="nowrap">
 		<h1>Base Nautique des 3 frontières</h1>
 		<h2>Appel à cotisation Année <?php echo $datas->year;?></h2>
@@ -243,13 +243,16 @@ p{
 		?>
 	</td></tr>
 	<tr><td>
-		<h3>Provisions journées de travail 2021</h3>
+		<h3>Provisions journées de travail à régler pour 2021 </h3>
 	</td><td>
-		<?php if (isset($datas->check->todo)){ ?>
-		<?php echo $datas->check->todo;?> € (Chèque à réaliser)
+		<?php if (isset($datas->check->todo) AND $datas->check->todo){ ?>
+		<?php echo $datas->check->todo;?> €
 		<?php } ?>
-		<?php if (isset($datas->check->have)){ ?>
-		<?php echo $datas->check->have;?> (Chèque en notre possession)
+		
+		<?php if (isset($datas->check->have) AND $datas->check->have){ ?>
+		<br />Chèque en notre possession :
+		<?php echo $datas->check->have;?> € 
+
 		<?php } ?>
 	</td></tr>
 	</table>

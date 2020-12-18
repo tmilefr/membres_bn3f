@@ -7,7 +7,7 @@ class Service_model extends Core_model{
 		parent::__construct();
 		$this->_set('_debug', FALSE);
 		
-		$this->_set('table'	, 'Service');
+		$this->_set('table'	, 'service');
 		$this->_set('key'	, 'id');
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
@@ -17,4 +17,3 @@ class Service_model extends Core_model{
 
 }
 ?>
-

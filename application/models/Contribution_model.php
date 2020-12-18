@@ -7,7 +7,7 @@ class Contribution_model extends Core_model{
 		parent::__construct();
 		$this->_set('_debug', FALSE);
 		
-		$this->_set('table'	, 'Contribution');
+		$this->_set('table'	, 'contribution');
 		$this->_set('key'	, 'id');
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
@@ -15,6 +15,15 @@ class Contribution_model extends Core_model{
 		$this->_init_def();
 	}
 
+	function GetUserAndLog(){
+		$datas = $this->db->select('*')
+						   ->join('users', 'contribution.user = users.id', 'left' )
+						   ->order_by('users.name', 'ASC')
+						   ->get($this->table)
+						   ->result();
+
+		return $datas;
+	}
+
 }
 ?>
-

@@ -148,7 +148,7 @@ class MY_Controller extends CI_Controller {
 	 */
 	function __destruct(){
 		if ($this->_debug){
-			echo '<pre>'.print_r($this->data_view,true).'</pre>';
+			//echo '<pre>'.print_r($this->data_view,true).'</pre>';
 
 			$this->bootstrap_tools->render_debug($this->_debug_array);
 		}
