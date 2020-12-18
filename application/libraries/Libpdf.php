@@ -19,7 +19,7 @@ class Libpdf {
 		$this->CI = & get_instance();
 		$this->_init();
 		$this->pdf_path = str_replace('application','data/pdf',APPPATH);
-		$this->img_path = base_url().'assets/img/'; //str_replace('application','assets/img/',APPPATH);
+		$this->img_path = str_replace('application','assets/img',APPPATH); //base_url().'assets/img/';
 		$this->pdf_url_path = base_url().'data/pdf';
 	}
 	
@@ -43,6 +43,11 @@ class Libpdf {
 		$this->_init();
 	}
 
+	function ImgBase64($img){
+		$img = base64_encode(file_get_contents( $this->_get('img_path').$img));
+		return '<img src="data:image/jpg;base64,'.$img.'" />';
+	}
+
 	//not sure that's good place for this ... need to do invoice lib
 	/**
 	 * @brief Pdf Create with $pdf data and view view
@@ -53,7 +58,7 @@ class Libpdf {
 	 */
 	function DoPdf($datas,$view_pdf,$filename){
 		$data_view['datas'] = $datas;
-		$data_view['img_path'] = $this->_get('img_path');
+		$data_view['logo'] =  $this->ImgBase64('bn3f.jpg');
 		$html = $this->CI->load->view($view_pdf, $data_view, true);
 		$this->filename = $filename;
 		$this->makePdf($html);

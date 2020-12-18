@@ -173,7 +173,7 @@ p{
 <div id="content">
 	<table class="table_page">
 	<tr><td rowspan ="2">
-		<img width="100" src="<?php echo $img_path;?>bn3f.jpg" />
+		<?php echo $logo;?>
 	</td><td class="nowrap">
 		<h1>Base Nautique des 3 frontières</h1>
 		<h2>Appel à cotisation Année <?php echo $datas->year;?></h2>
@@ -224,7 +224,6 @@ p{
 	<table  class="table_page">
 	<tr><td>
 		<p>Si vous désirez changer de type de cotisation (familliale, individuelle, jeune) merci d'en avertir le comité</p>
-		<p>Au 1er juin, vous devrez re-payer les droits d'entrée comme un nouveau membre.</p>
 		<br/><br/>
 		<h3>Payement par chèque, liquide ou virement bancaire. (RIB ci-joint)</h3>
 		<br/><br/>
@@ -248,13 +247,17 @@ p{
 		<?php if (isset($datas->check->todo) AND $datas->check->todo){ ?>
 		<?php echo $datas->check->todo;?> €
 		<?php } ?>
-		
-		<?php if (isset($datas->check->have) AND $datas->check->have){ ?>
-		<br />Chèque en notre possession :
-		<?php echo $datas->check->have;?> € 
-
-		<?php } ?>
 	</td></tr>
+	</tr>
+	<tr><td>
+		<?php if (isset($datas->check->have) AND $datas->check->have){ ?>
+		Chèque en notre possession 
+		<?php } ?>
+	</td><td>
+		<?php if (isset($datas->check->have) AND $datas->check->have){ ?>
+		<?php echo $datas->check->have;?> € 
+		<?php } ?>
+	</td></tr>	
 	</table>
 	<?php } else { ?>
 		<table  class="table_page table_border ">
