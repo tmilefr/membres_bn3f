@@ -14,6 +14,5 @@ class ContributionLgn_model extends Core_model{
 		$this->_set('json'	, 'ContributionLgn.json');
 		$this->_init_def();
 	}
-
 }
 ?>

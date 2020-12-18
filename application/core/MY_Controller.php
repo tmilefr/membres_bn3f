@@ -181,7 +181,14 @@ class MY_Controller extends CI_Controller {
 	 * 
 	 * 
 	 */
-	function _debug($msg){
+	function _debug($message , $from = null , $type = null, $file = null, $line = null){
+		$msg = new Stdclass();
+		$msg->message = $message;
+		$msg->from = $from;
+		$msg->type = $type;
+		$msg->file = $file;
+		$msg->line = $line;
+		
 		$this->_debug_array[] = $msg;
 	}
  
@@ -248,6 +255,8 @@ class MY_Controller extends CI_Controller {
 		$this->{$this->_model_name}->_set('per_page'		, $this->per_page);
 		$this->{$this->_model_name}->_set('page'			, $this->session->userdata($this->set_ref_field('page')));
 		
+		$this->_debug($this->set_ref_field('page'));
+		$this->_debug($this->session->userdata($this->set_ref_field('page')));
 		//GET DATAS
 		$this->data_view['fields'] 	= $this->{$this->_model_name}->_get('autorized_fields');
 		$this->data_view['datas'] 	= $this->{$this->_model_name}->get();
@@ -255,6 +264,7 @@ class MY_Controller extends CI_Controller {
 		$config = array();
 		$config['use_page_numbers'] = TRUE;
 		$config['per_page'] 	= $this->per_page;
+		$config['cur_page'] 	= $this->{$this->_model_name}->_get('page');
 		$config['base_url'] 	= $this->config->item('base_url').$this->_controller_name.'/list/page/';
 		$config['total_rows'] 	= $this->{$this->_model_name}->get_pagination();
 		$this->pagination->initialize($config);	

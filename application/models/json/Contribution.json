@@ -47,13 +47,14 @@
 		}
 	},
 	"presta": {
-		"type": "memo",
+		"type": "table",
 		"link" : "",
 		"list": false,
 		"search": false,
 		"rules": "trim",
 		"since": 1,
-		"values": "",
+		"model": "ContributionLgn_model",
+		"foreignkey":"id_cnt",
 		"dbforge": {
 			"type": "VARCHAR",
 			"constraint": "255"

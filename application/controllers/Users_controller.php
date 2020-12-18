@@ -11,7 +11,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Users_controller extends MY_Controller {
 
-	protected $csv_path = APPPATH.'models/csv/';
+	protected $csv_path = '';
 
 	public function __construct(){
 		parent::__construct();
@@ -26,6 +26,8 @@ class Users_controller extends MY_Controller {
 		$this->init();
 
 		$this->{$this->_model_name}->_set('_debug', FALSE);
+
+		$this->csv_path = str_replace('application','data/csv',APPPATH);
 	}
 
 	/*
