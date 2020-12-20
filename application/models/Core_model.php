@@ -85,6 +85,7 @@ class Core_model extends CI_Model {
 				case 'checkbox':
 				case 'select':
 				case 'memo':
+				case 'check':
 					$data = array();
 					if (isset($defs->values) AND $defs->values){
 						foreach($defs->values AS $key=>$value){

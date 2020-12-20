@@ -5,52 +5,71 @@
  * 
  */
 
-class element_table
+class element_table extends element
 {
 	protected $mode; //view, form.
 	protected $name   	= null; //unique id ?
 	protected $value  	= null;
 	protected $values 	= [];
 	protected $type 	= '';
-	
+
+	public function __construct(){
+		parent::__construct();
+		if (isset($this->CI->bootstrap_tools))
+		{
+		$this->CI->bootstrap_tools->_SetHead('assets/js/dynamic_row.js','js');
+		}
+	}	
+
 	public function RenderFormElement(){
 		//return $this->CI->bootstrap_tools->input_text($this->name, $this->CI->lang->line($this->name) , $this->value);
 		$id = $this->CI->render_object->_get('id');
-		
+	
+		$table = '<div class="Dynamic_row">';
 
 		$this->CI->{$this->model}->_set('filter', [$this->foreignkey => $id ]);
 		$this->CI->{$this->model}->_set('order', $this->foreignkey);
 		$datas = $this->CI->{$this->model}->get_all();
-		$table = '<table class="table table-sm"><thead><tr><th scope="col">&nbsp;</th>';
-	  	foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
-			if ($defs->list === true){
-				$table .= '<th scope="col">'.$field.'</a></th>';	
-			}
-		}
-		$table .= '</tr></thead><tbody>';
-		foreach($datas AS $key => $data){
-			$table .= '<tr>';
-			$table .= '<td>';
-			//$table .= $this->CI->render_object->render_element_menu($data);
-			$table .= '</td>';	
-	
-			foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
-				if ($defs->list === true){
-					switch($defs->type){
-						case 'select':
-						case 'select_database':
-							$table .= '<td>'.$defs->values[$data->{$field}].'</td>';
-						break;
-						default:
-							$table .= '<td>'.$data->{$field}.'</td>';
-					}
-
+		if (count($datas)){
+			foreach($datas AS $key => $data){
+				
+				$table .= '<div class="input-group mb-3">';
+				foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
 					
+					if ($defs->list === true){
+						switch($defs->type){
+							case 'select':
+							case 'select_database':
+								$table .= $this->CI->bootstrap_tools->input_select($field.'[]', $defs->values, $data->{$field}); //'<select type="text" name="'.$field.'[]" class="form-control m-input" value="'.$value.'" placeholder="'.$field.'" autocomplete="off">';
+							break;
+							default:
+								$table .= '<input type="text" name="'.$field.'[]" class="form-control m-input" value="'.$data->{$field}.'" placeholder="'.$field.'" autocomplete="off">';
+						}
+						
+					} else {
+						if ($field == 'id'){
+							$table .= '<input type="hidden" id="id_table" name="id_table[]" value="'.$data->id.'">';
+						}
+					}				
 				}
+				$table .= '<div class="input-group-append"><button id="removeRow'.$data->id.'" type="button" class="removeRow btn btn-danger">Remove</button></div></div>';
 			}
-			$table .= '</tr>';
 		}
-		$table .='</tbody></table>';
+		$table .= '<div class="d-none" id="model"><div class="input-group mb-3">';
+		foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
+			if ($defs->list === true){
+				switch($defs->type){
+					case 'select':
+					case 'select_database':
+						$table .= $this->CI->bootstrap_tools->input_select($field.'[]', $defs->values, ''); //'<select type="text" name="'.$field.'[]" class="form-control m-input" value="'.$value.'" placeholder="'.$field.'" autocomplete="off">';
+					break;
+					default:
+						$table .= '<input type="text" name="'.$field.'[]" class="form-control m-input" value="" placeholder="'.$field.'" autocomplete="off">';
+				}
+			}				
+		}
+		$table .= '<div class="input-group-append"><button id="removeRow" type="button" class="removeRow btn btn-danger">Remove</button></div></div></div>';
+		$table .= '</div><button id="addRow" type="button" class="btn btn-info">Add Row</button><textarea class="d-none" id="input'.$this->name.'" name="'.$this->name.'">'.$this->value.'</textarea>';
 		return $table;
 
 	}
@@ -60,24 +79,13 @@ class element_table
 	}
 
 	/**
-	 * Constructor of class element.
-	 * @return void
-	 */
-	public function __construct()
-	{
-		$this->CI =& get_instance();
-	}
-
-	/**
 	 * Destructor of class element.
 	 * @return void
 	 */
 	public function __destruct()
 	{
 		unset($this->CI);
-		echo '<pre><code>'.print_r($this , 1).'</code></pre>';
-
-
+		//echo '<pre><code>'.print_r($this , 1).'</code></pre>';
 	}
 	
 	/**

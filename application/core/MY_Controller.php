@@ -12,6 +12,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 class MY_Controller extends CI_Controller {
 	
 	protected $_autorised_get_key 	= array('order','direction','filter','page','repertoire','search','id'); //autorised key in url
+	protected $_redirect			= true;
 	protected $_model_name			= false;
 	protected $_debug_array  		= array();
 	protected $_debug 				= FALSE;
@@ -348,11 +349,15 @@ class MY_Controller extends CI_Controller {
 
 
 		} else {
-
 			$datas = array();
 			foreach($this->{$this->_model_name}->_get('autorized_fields') AS $field){
-				$datas[$field] 	= $this->input->post($field);
+				if (method_exists($this->{$this->_model_name}->_get('defs')[$field]->element,'PrepareForDBA')){
+					$datas[$field] 	= $this->{$this->_model_name}->_get('defs')[$field]->element->PrepareForDBA($this->input->post($field));
+				} else {
+					$datas[$field] 	= $this->input->post($field);
+				}
 			}
+
 			if ($this->input->post('form_mod') == 'edit'){
 				if (isset($datas['id']) AND $id = $datas['id']){
 					$this->{$this->_model_name}->_set('key_value', $id);	
@@ -360,9 +365,11 @@ class MY_Controller extends CI_Controller {
 					$this->{$this->_model_name}->put();
 				} 
 			} else if ($this->input->post('form_mod') == 'add'){
-				$datas['id'] = $this->{$this->_model_name}->post($datas);
+				$this->data_view['id'] = $this->{$this->_model_name}->post($datas);
 			}
-			redirect($this->_get('_rules')[$this->next_view]->url);
+			if ($this->_redirect){
+				redirect($this->_get('_rules')[$this->next_view]->url);
+			}
 		}
 		
 		$this->data_view['required_field'] = $this->{$this->_model_name}->_get('required');

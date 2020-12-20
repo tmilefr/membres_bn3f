@@ -1,5 +1,8 @@
 
 <div class="container-fluid">
+	<?php
+			echo $this->render_object->render_element_menu();
+	?>
 	<div class="card">
 	  <div class="card-header">
 			Appel à cotisation Année<?php echo $datas->year;?> Section <?php echo $datas->user->section?> 	<div class="float-right"><?php echo $url_pdf;?></div>
@@ -68,9 +71,7 @@
 			<p class="card-text"> exonéré </p>
 			<?php } ?>
 		<br/>
-		<?php
-			echo $this->render_object->render_element_menu();
-		?>
+		
 	  </div>
 	</div>	
 </div>

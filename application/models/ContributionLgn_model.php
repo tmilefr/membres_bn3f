@@ -14,5 +14,12 @@ class ContributionLgn_model extends Core_model{
 		$this->_set('json'	, 'ContributionLgn.json');
 		$this->_init_def();
 	}
+
+	function DeleteLink($id_cnt = null){
+		if ($id_cnt){
+			$this->db->where_in('id_cnt', $id_cnt)
+				 ->delete($this->table);
+		}
+	}
 }
 ?>

@@ -16,6 +16,9 @@ echo form_open('Contribution_controller/SendByMail', array('class' => '', 'id' =
                 <tr>			
                     <?php
                     echo '<th scope="col">'.$this->lang->line('user').'</a></th>';
+                    echo '<th scope="col">'.$this->lang->line('section').'</a></th>';
+                    echo '<th scope="col">'.$this->lang->line('email').'</a></th>';
+                    echo '<th scope="col">'.$this->lang->line('statut').'</a></th>';
                     ?>
                     <th scope="col">&nbsp;</th>
                 </tr>
@@ -25,10 +28,11 @@ echo form_open('Contribution_controller/SendByMail', array('class' => '', 'id' =
             foreach($datas AS $key => $data){
                 echo '<tr>';
                 echo '<td>'. $data->name.' '.$data->surname.'</td>';
+                echo '<td>'. $data->section.'</td>';
                 echo '<td>'. $data->email.'</td>';
                 echo '<td>';
                 foreach($data->log AS $log){
-                    echo '<span class="oi oi-envelope-closed" title="'.urlencode($log->log).'"></span> '.$log->status.' '.$log->date."<br/>";
+                    echo '<span class="badge badge-pill '.(($log->status == 'not-sended') ? 'badge-danger':'badge-success').'"> <span class="oi oi-envelope-closed"></span>  '.$log->status.' '.$log->date."</span><br/>";
                 }
                 echo '</td>';
                 echo '<td><input type="checkbox" '.(($data->email) ? '':'disabled="disabled"').'name="ids[]" value="'.$data->id.'|'.$data->email.'" /></td>';

@@ -23,7 +23,7 @@ class Contribution_controller extends MY_Controller {
 		
 		$this->title .= ' - '.$this->lang->line($this->_controller_name);
 		
-		$this->_set('_debug', TRUE);
+		$this->_set('_debug', FALSE);
 		$this->init();
 
 		$this->load->model('Users_model');
@@ -75,7 +75,7 @@ Pour le comité, Für das Komitee				\n";
 				if (is_file($this->libpdf->_get('pdf_path').$dba_data->pdf)){
 					$this->email->from('info@bn3f.fr', 'BN3F');
 					$this->email->to($email);
-					$this->email->subject('Appel à cotisation BN3F 2021');
+					$this->email->subject('Appel à cotisation BN3F 2021 (correction)');
 					$this->email->message($this->_mail_txt);
 					$this->email->set_alt_message($this->_mail_txt);
 					$this->email->attach($this->libpdf->_get('pdf_path').$dba_data->pdf);
@@ -103,6 +103,43 @@ Pour le comité, Für das Komitee				\n";
 		$this->data_view['datas'] = $dba_data;
 		$this->_set('view_inprogress','unique/Contribution_view_send.php');
 		$this->render_view();	
+	}
+
+	/**
+	 * @brief Edition Method
+	 * @param $id 
+	 * @returns 
+	 * 
+	 * 
+	 */
+	public function edit($id = 0)
+	{		
+		$this->_redirect = true;
+		if ($this->form_validation->run() === FALSE){
+
+
+		} else {
+			$this->data_view['id'] = '';
+			if (!$id){
+				if ($this->input->post('id') ){
+					$id = $this->input->post('id');
+				}
+			}
+			if ($id){
+				$this->ContributionLgn_model->DeleteLink($id);
+				foreach( $this->input->post('id_ser') AS $key=>$id_ser){
+					if ($id_ser != '...'){
+						$lgn = new Stdclass();
+						$lgn->id_cnt = $id;
+						$lgn->id_ser = $id_ser;
+						$lgn->created = date('Y-m-d H:i:s');
+						$this->ContributionLgn_model->post($lgn);
+					}
+				}
+			}			
+		}
+		
+		parent::edit($id);
 	}
 
 
