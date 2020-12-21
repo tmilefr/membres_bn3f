@@ -39,7 +39,7 @@ class element_check extends element
 	public function RenderFormElement(){
 
 		$value = json_decode($this->value);
-		echo '<pre>'.print_r($value,true).'</pre>';
+		//echo '<pre>'.print_r($value,true).'</pre>';
 
 		$input = $this->RenderElement($value,'encaisse');
 		$input .= $this->RenderElement($value,'todo');
