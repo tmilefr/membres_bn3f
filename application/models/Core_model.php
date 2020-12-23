@@ -15,7 +15,7 @@ class Core_model extends CI_Model {
 	protected $filter = array();//filter for model
 	protected $group_by = array(); //group by for model
 	protected $per_page = 20;
-	protected $_debug = FALSE;
+	protected $_debug = TRUE;
 	protected $page = 1;
 	protected $nb = null;
 	protected $_debug_array = array();
@@ -24,6 +24,7 @@ class Core_model extends CI_Model {
 	protected $defs = array();	
 	protected $json = null;
 	protected $json_path = APPPATH.'models/json/';
+	protected $_mode = 'classic'; // classic or join
 	
 	public function __construct()
 	{
@@ -54,7 +55,7 @@ class Core_model extends CI_Model {
 				$as = $value;
 			}
 			$this->db->distinct();
-			return $this->db->select("$id,$fields $as")->order_by("$as", 'asc' )->get($table)->result();
+			return $this->db->select("$table.$id,$fields $as")->order_by("$as", 'asc' )->get($table)->result();
 		} catch (Exception $e) {
 			//echo 'Exception reçue : ',  $e->getMessage(), "\n";
 		}
@@ -100,6 +101,9 @@ class Core_model extends CI_Model {
 				  preg_match('/(\w+)\((\w+)\,(\w+)\:(.*)\)/', $defs->values, $param);
 				  if (method_exists($this,$param[1])){
 					  $datas = $this->{$param[1]}($param[2],$param[3],$param[4]);
+					  $defs->table[$field] = $param[2];
+					  $defs->foreignKey[$field] = $param[3];
+					  $defs->foreignField[$field] = $param[4];
 				  } 
 				 
 				  if (strpos($param[4],'@')){
@@ -281,6 +285,24 @@ class Core_model extends CI_Model {
 			}
 		} 	
 	}	
+
+	function _setField($field){
+		//$real = explode('.', $field );
+
+		$def = $this->_get('defs')[$field];
+		if (isset($def->table[$field])){
+			$this->_mode = 'join';
+			$this->db->join($def->table[$field],$this->table.'.'.$field.'='.$def->table[$field].'.'.$def->foreignKey[$field], 'left' );
+			return $def->table[$field].'.'.$def->foreignField[$field];
+		} else {
+			if ($this->_mode == 'join'){
+				return $this->table.'.'.$field.',';
+			} else {
+				return $field;
+			}
+		}
+		
+	}
 	
 
 	/**
@@ -294,9 +316,9 @@ class Core_model extends CI_Model {
 			$this->db->group_start();
 			foreach($this->autorized_fields_search AS $key => $value){
 				if (!$key AND is_array($this->filter) AND count($this->filter)){
-					$this->db->like($value , $this->global_search);
+					$this->db->like( $this->_setField($value) , $this->global_search);
 				} else {
-					$this->db->or_like($value , $this->global_search);
+					$this->db->or_like( $this->_setField($value)  , $this->global_search);					
 				}
 			}
 			$this->db->group_end();
@@ -314,11 +336,29 @@ class Core_model extends CI_Model {
 		if (!$this->nb){
 			$this->_set_filter();
 			$this->_set_search();
-			$this->nb = $this->db->select( $this->key )->get($this->table)->num_rows();
+			$this->nb = $this->db->select( $this->table.'.'.$this->key )->get($this->table)->num_rows();
 		} 
+		$this->_debug_array[] = 'get_pagination : '. $this->nb; 
 		return $this->nb;
 	}	
 	
+
+	function _set_list_fields(){
+		$string_field = '';
+		if ($this->autorized_fields){
+			foreach($this->autorized_fields AS $field ){
+				if ($this->_mode == 'join'){
+					$string_field .= $this->table.'.'.$field.',';
+				} else {
+					$string_field .= $field.',';
+				}
+			}
+			$string_field .= substr($string_field,-1);
+		} else {
+			$string_field = '*';
+		} 
+		return $string_field;
+	}
 
     /**
 	 * @brief 
@@ -334,7 +374,7 @@ class Core_model extends CI_Model {
 				$this->page = 1 ;
 			$this->db->limit(intval($this->per_page), ($this->page - 1 ) * $this->per_page);
 		}
-        $datas = $this->db->select( ($this->autorized_fields ? implode(',',$this->autorized_fields) : '*' ) )
+        $datas = $this->db->select( $this->_set_list_fields()  )
                            ->order_by($this->order, $this->direction )
                            ->get($this->table);
 		$this->_debug_array[] = $this->db->last_query();

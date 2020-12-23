@@ -12,14 +12,37 @@ class element_table extends element
 	protected $value  	= null;
 	protected $values 	= [];
 	protected $type 	= '';
+	protected $model 	= '';
 
 	public function __construct(){
 		parent::__construct();
 		if (isset($this->CI->bootstrap_tools))
 		{
-		$this->CI->bootstrap_tools->_SetHead('assets/js/dynamic_row.js','js');
+			$this->CI->bootstrap_tools->_SetHead('assets/js/dynamic_row.js','js');
 		}
+		$this->CI->load->model($this->model);
 	}	
+
+	/*public function PrepareForDBA($value){
+		$obj = [];
+		//return json_encode($obj);
+		$id = $this->CI->render_object->_get('id');
+		if ($id){
+			if (method_exists($this->CI->{$this->model},'DeleteLink'))
+				$this->CI->{$this->model}->DeleteLink($id);
+			foreach( $this->CI->input->post('id_ser') AS $key=>$id_ser){
+				if ($id_ser != '...'){
+					$lgn = new Stdclass();
+					$lgn->id_cnt = $id;
+					$lgn->id_ser = $id_ser;
+					$lgn->created = date('Y-m-d H:i:s');
+					$this->CI->ContributionLgn_model->post($lgn);
+					$obj[] = $lgn;
+				}
+			}
+		}	
+		return json_encode($obj);
+	*/
 
 	public function RenderFormElement(){
 		//return $this->CI->bootstrap_tools->input_text($this->name, $this->CI->lang->line($this->name) , $this->value);

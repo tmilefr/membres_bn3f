@@ -74,6 +74,6 @@ foreach($members AS $key => $value)
   }
 }
 
-echo '<pre>'.print_r( $member_list ,true).'</pre>';
+//echo '<pre>'.print_r( $member_list ,true).'</pre>';
 
 ?>

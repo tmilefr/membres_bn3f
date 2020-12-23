@@ -25,11 +25,17 @@
 		}
 	},
 	"year": {
-		"type": "int",
+		"type": "select",
 		"list": true,
-		"search": true,
+		"search": false,
 		"rules": null,
 		"since": 1,
+		"values": {
+			"2020": "2020",
+			"2021": "2021",
+			"2022": "2022",
+			"2023": "2023"
+		},
 		"dbforge": {
 			"type": "VARCHAR",
 			"constraint": "10"
@@ -38,7 +44,7 @@
 	"amount": {
 		"type": "int",
 		"list": true,
-		"search": true,
+		"search": false,
 		"rules": null,
 		"since": 1,
 		"dbforge": {
@@ -63,7 +69,7 @@
 	"taux": {
 		"type": "select_database",
 		"list": true,
-		"search": false,
+		"search": true,
 		"rules": null,
 		"since": 2,
 		"values": "distinct(taux,id:name)",

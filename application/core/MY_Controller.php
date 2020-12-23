@@ -255,19 +255,27 @@ class MY_Controller extends CI_Controller {
 		$this->{$this->_model_name}->_set('direction'		, $this->session->userdata($this->set_ref_field('direction')));
 		$this->{$this->_model_name}->_set('per_page'		, $this->per_page);
 		$this->{$this->_model_name}->_set('page'			, $this->session->userdata($this->set_ref_field('page')));
-		
-		$this->_debug($this->set_ref_field('page'));
-		$this->_debug($this->session->userdata($this->set_ref_field('page')));
-		//GET DATAS
-		$this->data_view['fields'] 	= $this->{$this->_model_name}->_get('autorized_fields');
-		$this->data_view['datas'] 	= $this->{$this->_model_name}->get();
-		
+
 		$config = array();
 		$config['use_page_numbers'] = TRUE;
 		$config['per_page'] 	= $this->per_page;
 		$config['cur_page'] 	= $this->{$this->_model_name}->_get('page');
 		$config['base_url'] 	= $this->config->item('base_url').$this->_controller_name.'/list/page/';
 		$config['total_rows'] 	= $this->{$this->_model_name}->get_pagination();
+
+		if ($config['per_page'] * $config['cur_page'] > $config['total_rows'] ){
+			$config['cur_page'] 	=  1;
+			$this->{$this->_model_name}->_set('page', 1 );
+		}
+		$this->_debug(print_r($config,TRUE), 'list' , 'debug', __file__ , __line__ );		
+		$this->_debug($this->set_ref_field('page'));
+		$this->_debug($this->session->userdata($this->set_ref_field('page')));
+		//GET DATAS
+		$this->data_view['fields'] 	= $this->{$this->_model_name}->_get('autorized_fields');
+		$this->data_view['datas'] 	= $this->{$this->_model_name}->get();
+		
+
+
 		$this->pagination->initialize($config);	
 
 		
@@ -351,6 +359,8 @@ class MY_Controller extends CI_Controller {
 		} else {
 			$datas = array();
 			foreach($this->{$this->_model_name}->_get('autorized_fields') AS $field){
+				//$ref = explode('.',$table_field);
+				//$field = $ref[1];
 				if (method_exists($this->{$this->_model_name}->_get('defs')[$field]->element,'PrepareForDBA')){
 					$datas[$field] 	= $this->{$this->_model_name}->_get('defs')[$field]->element->PrepareForDBA($this->input->post($field));
 				} else {
