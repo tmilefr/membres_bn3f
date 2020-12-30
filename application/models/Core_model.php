@@ -287,8 +287,6 @@ class Core_model extends CI_Model {
 	}	
 
 	function _setField($field){
-		//$real = explode('.', $field );
-
 		$def = $this->_get('defs')[$field];
 		if (isset($def->table[$field])){
 			$this->_mode = 'join';
@@ -300,8 +298,7 @@ class Core_model extends CI_Model {
 			} else {
 				return $field;
 			}
-		}
-		
+		}		
 	}
 	
 
@@ -442,7 +439,8 @@ class Core_model extends CI_Model {
 	 */
 	public function __destruct(){
 		if ($this->_debug){
-			echo '<pre><code>'.print_r($this->_debug_array ,1).'</code></pre>';
+			//echo '<pre><code>'.print_r($this->_debug_array ,1).'</code></pre>';
+			//$this->CI->bootstrap_tools->render_debug($this->_debug_array);
 		}
 	}	
 

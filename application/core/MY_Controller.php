@@ -149,13 +149,12 @@ class MY_Controller extends CI_Controller {
 	 */
 	function __destruct(){
 		if ($this->_debug){
-			//echo '<pre>'.print_r($this->data_view,true).'</pre>';
-
-			$this->bootstrap_tools->render_debug($this->_debug_array);
+			$this->_debug_array = array_merge($this->_debug_array, $this->{$this->_model_name}->_get('_debug_array')  );
+			//$this->bootstrap_tools->render_debug($this->_debug_array);
+			echo '<pre><code>'.print_r($this->_debug_array ,1).'</code></pre>';
 		}
-		
 	}	
-	
+
 	/**
 	 * @brief 		Render View in Template
 	 * @param       $this->view_inprogress
@@ -190,7 +189,7 @@ class MY_Controller extends CI_Controller {
 		$msg->file = $file;
 		$msg->line = $line;
 		
-		$this->_debug_array[] = $msg;
+		$this->_debug_array[] = $message;
 	}
  
 	/**
@@ -259,14 +258,15 @@ class MY_Controller extends CI_Controller {
 		$config = array();
 		$config['use_page_numbers'] = TRUE;
 		$config['per_page'] 	= $this->per_page;
-		$config['cur_page'] 	= $this->{$this->_model_name}->_get('page');
+		$config['cur_page'] 	= (($this->{$this->_model_name}->_get('page')) ? $this->{$this->_model_name}->_get('page'):1);
 		$config['base_url'] 	= $this->config->item('base_url').$this->_controller_name.'/list/page/';
 		$config['total_rows'] 	= $this->{$this->_model_name}->get_pagination();
 
-		if ($config['per_page'] * $config['cur_page'] > $config['total_rows'] ){
+		if ($config['per_page'] > $config['total_rows'] ){
 			$config['cur_page'] 	=  1;
 			$this->{$this->_model_name}->_set('page', 1 );
 		}
+		
 		$this->_debug(print_r($config,TRUE), 'list' , 'debug', __file__ , __line__ );		
 		$this->_debug($this->set_ref_field('page'));
 		$this->_debug($this->session->userdata($this->set_ref_field('page')));

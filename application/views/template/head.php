@@ -13,7 +13,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<body>
 	<div class="wrapper">
 		<!-- top menu -->
-		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark ml-auto">
 			<a href="#menu-toggle" id="menu-toggle"><span class="navbar-toggler-icon"></span></a>
 			<a title="<?php echo $slogan;?>" class="navbar-brand" href="<?php echo base_url();?>Home"><?php echo $app_name;?> <small class="text-muted"></small></a>
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,7 +31,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="#" data-toggle="modal" data-target="#AboutModal"><?php echo Lang('About');?></a>
 					</div>
+				</li>					
+				<li class="nav-item"> 
+					<span class="title"><?php echo $title;?></span>
 				</li>
+				<?php  
+				if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
+					if ($this->render_object->_get('_ui_rules')['add']->autorize)
+						echo '<li class="nav-item"><a class="nav-link" href="'.$this->render_object->_get('_ui_rules')['add']->url.'"><span class="oi oi-plus"></span> '.$this->render_object->_get('_ui_rules')['add']->name.'</a></li>'; 
+					if (isset($this->render_object->_get('_ui_rules')['sendbymail']) AND $this->render_object->_get('_ui_rules')['sendbymail']->autorize)
+						echo '<li class="nav-item"><a class="nav-link" href="'.$this->render_object->_get('_ui_rules')['sendbymail']->url.'"><span class="oi oi-envelope-closed"></span> '.$this->render_object->_get('_ui_rules')['sendbymail']->name.'</a></li>'; 
+
+				} 
+				?> 
+			
+			</ul>
+			<ul class="ml-auto navbar-nav nav nav-pills navbar-dark bg-dark">
+
+
 			</ul>
 			<?php
 			if ($search_object->autorize){
@@ -54,8 +71,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<nav class="navbar navbar-dark bg-dark">
 				<ul class="navbar-nav mr-auto flex-column">
 					<li class="nav-item">
-						<a class="nav-link" href="<?php echo base_url('Users_controller/list');?>">
-							<span class="oi oi-person"></span> <?php echo Lang('Users_controller');?></span>
+						<a class="nav-link <?php echo (($this->render_object->_getCi('_controller_name') == 'Users_controller') ? 'active':'');?>" href="<?php echo base_url('Users_controller/list');?>">
+							<span class="oi oi-person "></span> <?php echo Lang('Users_controller');?></span>
 						</a>
 					</li>	
 				</ul>
@@ -63,7 +80,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<nav class="navbar navbar-dark bg-dark">
 				<ul class="navbar-nav mr-auto flex-column">
 					<li class="nav-item">
-						<a class="nav-link" href="<?php echo base_url('Contribution_controller/list');?>">
+						<a class="nav-link <?php echo (($this->render_object->_getCi('_controller_name') == 'Contribution_controller') ? 'active':'');?>" href="<?php echo base_url('Contribution_controller/list');?>">
 							<span class="oi oi-browser"></span> <?php echo Lang('Contribution_controller');?></span>
 						</a>
 					</li>	
@@ -73,23 +90,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 		<!-- Page Content  -->
 		<div id="content">	
-			<nav class="navbar navbar-expand-lg navbar-light bg-light"> 
-				<ul class="navbar-nav mr-auto">
-					<li class="nav-item"> 
-						<h2><?php echo $title;?></h2> 
-					</li> 
-				</ul>
-				<ul class="nav justify-content-end">
-				<?php  
-				if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
-					if ($this->render_object->_get('_ui_rules')['add']->autorize)
-						echo '<li class="nav-item"><a class="btn btn-success" href="'.$this->render_object->_get('_ui_rules')['add']->url.'"><span class="oi oi-plus"></span> '.$this->render_object->_get('_ui_rules')['add']->name.'</a></li>'; 
-					if (isset($this->render_object->_get('_ui_rules')['sendbymail']) AND $this->render_object->_get('_ui_rules')['sendbymail']->autorize)
-						echo '<li class="nav-item"><a class="btn btn-warning" href="'.$this->render_object->_get('_ui_rules')['sendbymail']->url.'"><span class="oi oi-envelope-closed"></span> '.$this->render_object->_get('_ui_rules')['sendbymail']->name.'</a></li>'; 
-
-				} 
-				?> 
-				</ul> 
-			</nav> 	
 		
 

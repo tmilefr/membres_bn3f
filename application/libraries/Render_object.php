@@ -84,6 +84,10 @@ Class Render_object{
 		return $string_render_link;
 	}
 	
+	public function _getCi($field){
+		return $this->CI->_get($field);
+	}
+
 	public function Set_Rules_elements()
 	{
 		$this->_model = $this->CI->{$this->datamodel};
@@ -132,7 +136,7 @@ Class Render_object{
 		if ($this->_debug == TRUE){
 			unset($this->CI);
 			unset($this->_model);
-			echo '<pre><code>'.print_r($this , 1).'</code></pre>';
+			//echo '<pre><code>'.print_r($this , 1).'</code></pre>';
 		}
 	}
 	

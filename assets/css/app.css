@@ -35,7 +35,13 @@ code {
 	display: block;
 	margin: 14px 0 14px 0;
 	padding: 12px 10px 12px 10px;
+	padding-left:160px;
 }
+
+.padding160{
+	padding-left:160px;
+}
+
 
 p.footer {
 	text-align: right;
@@ -55,7 +61,6 @@ a:focus {
 
 body {
 	background:#f9f9f9;
-	min-height: 75rem;
 	padding-top: 56px;
 	overflow-x: hidden;		
 }
@@ -68,14 +73,18 @@ body {
 .wrapper {
     display: flex;
     width: 100%;
-    align-items: stretch;
+	align-items: stretch;
 }
 
 #sidebar {
     min-width: 150px;
     max-width: 150px;
     color: #fff;
-    transition: all 0.3s;
+	transition: all 0.3s;
+	position: fixed;
+	display: block;	
+	float:left;
+	height:100%;
 }
 
 #sidebar.active {
@@ -101,10 +110,20 @@ body {
     CONTENT STYLE
 ----------------------------------------------------- */
 
+.title {
+	display: block;
+    padding: .5rem 1rem;
+	color: #fff;
+	font-size: 16px;
+	font-weight: normal;
+	line-height: 1.5;
+}
+
 #content {
     width: 100%;
     padding: 20px;
     min-height: 100vh;
-    transition: all 0.3s;
+	transition: all 0.3s;
+	padding-left:160px;
 }
 

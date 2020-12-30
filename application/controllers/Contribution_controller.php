@@ -21,9 +21,8 @@ class Contribution_controller extends MY_Controller {
 		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true,'sendbymail'=>true);
 		
 		
-		$this->title .= ' - '.$this->lang->line($this->_controller_name);
-		
-		$this->_set('_debug', FALSE);
+		$this->title .= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
+
 		$this->init();
 
 		$this->load->model('Users_model');

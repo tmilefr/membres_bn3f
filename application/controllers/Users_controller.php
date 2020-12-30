@@ -20,9 +20,8 @@ class Users_controller extends MY_Controller {
 		$this->_edit_view 		= 'edition/Users_form';//template for editing
 		$this->_list_view		= 'unique/Users_view.php';
 		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true);
-		$this->title 			.= ' - '.$this->lang->line($this->_controller_name);
+		$this->title 			.= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
 		
-		$this->_set('_debug', TRUE);
 		$this->init();
 
 		$this->{$this->_model_name}->_set('_debug', FALSE);

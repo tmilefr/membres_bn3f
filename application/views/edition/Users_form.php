@@ -9,6 +9,9 @@ foreach($required_field AS $name){
 
 
 <div class="card" >
+	<div class="card-header">
+		<?php echo $this->lang->line('Users_controller_'.$this->render_object->_get('form_mod'));?>
+	</div>	
   <div class="card-body">
 	<div class="form-row">
 		<div class="form-group col-md-4">

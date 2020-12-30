@@ -17,6 +17,9 @@
 				</ul>
 				<span class="navbar-text">Page rendered in <strong>{elapsed_time}</strong> seconds. <?php echo  (ENVIRONMENT === 'development') ?  'CodeIgniter Version <strong>' . CI_VERSION . '</strong>' : '' ?></span>
 			</nav>
+
+			<?php //echo $this->_render_debug(); ?>
+
 		</div>
 	</div>
 

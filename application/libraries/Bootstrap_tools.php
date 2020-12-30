@@ -94,7 +94,7 @@ Class Bootstrap_tools{
 	
 	function render_debug($messages){
 		if (is_array($messages) AND count($messages)){
-			echo '<a class="btn btn-warning btn-sm" data-toggle="collapse" href="#collapseDEBUG" role="button" aria-expanded="false" aria-controls="collapseExample">DEBUG</a>';
+			echo '<a class="btn btn-warning btn-sm padding160" data-toggle="collapse" href="#collapseDEBUG" role="button" aria-expanded="false" aria-controls="collapseExample">DEBUG</a>';
 			echo '<div class="collapse" id="collapseDEBUG">';
 			echo '<table class="table table-sm">';
 			foreach($messages AS $message){

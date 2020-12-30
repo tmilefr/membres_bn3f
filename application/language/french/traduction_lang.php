@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') || exit('No direct script access allowed');
 $lang['User'] = 'Membres';
-$lang['Users_controller'] = 'Gestion des Membres';
+$lang['Users_controller'] = 'Membres';
 $lang['ADD_Users_controller'] = 'Ajouter';
 $lang['EDIT_Users_controller'] = 'Valider';
 $lang['name'] = 'Nom';
@@ -11,7 +11,7 @@ $lang['section'] = 'Section';
 $lang['type'] = 'Type';
 $lang['password'] = 'password';
 
-$lang['Contribution_controller'] = 'Gestion des Cotisations';
+$lang['Contribution_controller'] = 'Cotisations';
 $lang['Family'] = 'Familles';
 $lang['ADD_Contribution_controller'] = 'Ajouter';
 $lang['EDIT_Contribution_controller'] = 'Valider';
@@ -25,20 +25,35 @@ $lang['family'] = 'Famille';
 $lang['password'] = 'mot de passe';
 $lang['SENDBYMAIL_Contribution_controller'] = 'Send';
 
+$lang['Users_controller_edit'] = 'Edition d\'un membre';
+$lang['Users_controller_add'] = 'Ajout d\'un membre';
+
+$lang['Taux_controller_edit'] = 'Edition d\'un Taux';
+$lang['Taux_controller_add'] = 'Ajout d\'un Taux';
+
+$lang['Service_controller_edit'] = 'Edition d\'un service';
+$lang['Service_controller_add'] = 'Ajout d\'un service';
+
+$lang['Contribution_controller_edit'] = 'Edition d\'un appel à cotisation';
+$lang['Contribution_controller_add'] = 'Ajout d\'un appel à cotisation';
+
+
 $lang['Service_controller'] = 'Prestations';
 $lang['ADD_Service_controller'] = 'Ajouter';
 $lang['EDIT_Service_controller'] = 'Valider';
 $lang['code'] = 'Code';
 $lang['prix'] = 'Prix';
 
+$lang['SEND_BY_MAIL'] = 'Envoyer par les appels de cotisation par e-mail';
+$lang['send'] = 'Envois';
+$lang['sendmail'] = 'Envoyer les e-mails';
 
+
+$lang['GESTION'] = 'Gestion des ';
 $lang['Taux_controller'] = 'Taux';
 $lang['ADD_Taux_controller'] = 'Ajouter';
 $lang['EDIT_Taux_controller'] = 'Valider';
 
-
-$lang['Contribution_controller'] = 'Gestion des Cotisations';
-$lang['Family'] = 'Familles';
 $lang['ADD_Contribution_controller'] = 'Ajouter';
 $lang['EDIT_Contribution_controller'] = 'Valider';
 
