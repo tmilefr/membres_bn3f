@@ -5,7 +5,7 @@ defined('BASEPATH') || exit('No direct script access allowed');
 $config['app_name'] = 'Membres BN3F';
 $config['slogan'] 	= 'Outil de gestion des membres de la BN3F';
 $config['about'] 	= 'By NL';
-$config['debug_app']= 'debug'; //none,debug,profiler
+$config['debug_app']= 'none'; //none,debug,profiler
 $config['sidebar'] = 'on';
 
 $config['crlf'] = '';

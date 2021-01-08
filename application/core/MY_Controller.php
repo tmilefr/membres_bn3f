@@ -16,7 +16,8 @@ class MY_Controller extends CI_Controller {
 	protected $_model_name			= false;
 	protected $_debug_array  		= array();
 	protected $_debug 				= FALSE;
-	protected $_controller_name 	= null;
+	protected $_controller_name 	= null; 
+	protected $_action			 	= null;
 	protected $_rules				= null;
 	protected $_autorize			= array();
 	
@@ -88,11 +89,13 @@ class MY_Controller extends CI_Controller {
 	function init(){
 		$this->process_url();
 		
+		//echo debug( $this->uri->segment_array());
+
 		$this->data_view['app_name'] 	= $this->config->item('app_name'); 
 		$this->data_view['slogan'] 		= $this->config->item('slogan'); 
 		$this->data_view['title'] 		= $this->title;
 		
-		$this->data_view['footer_line'] = '';	
+		$this->data_view['footer_line'] = '';
 		switch($this->config->item('debug_app')){
 			case 'debug':
 				$this->_set('_debug', TRUE);
@@ -135,8 +138,11 @@ class MY_Controller extends CI_Controller {
 	function _set_ui_rules($key,$value){
 		$rules = new StdClass();
 		$rules->url 	=  base_url($this->_controller_name.'/'.$key);
+		$rules->term 	= $key;
 		$rules->name 	= $this->lang->line(strtoupper($key).'_'.$this->_controller_name);
 		$rules->autorize= $value;
+		$rules->icon 	= $this->lang->line($key.'_icon');
+		$rules->class  = $this->lang->line($key.'_class');
 		$this->_rules[$key] = $rules;
 	}
 
@@ -149,9 +155,7 @@ class MY_Controller extends CI_Controller {
 	 */
 	function __destruct(){
 		if ($this->_debug){
-			$this->_debug_array = array_merge($this->_debug_array, $this->{$this->_model_name}->_get('_debug_array')  );
-			//$this->bootstrap_tools->render_debug($this->_debug_array);
-			echo '<pre><code>'.print_r($this->_debug_array ,1).'</code></pre>';
+			echo debug($this->_debug_array, __file__);
 		}
 	}	
 
@@ -202,6 +206,8 @@ class MY_Controller extends CI_Controller {
 		if ($this->input->post('global_search')){
 			$this->session->set_userdata( $this->set_ref_field('global_search') ,$this->input->post('global_search'));
 		}
+		$this->_action = $this->uri->segment(2, 0);
+
 		$array = $this->uri->uri_to_assoc(3);
 		foreach($array AS $field=>$value){
 			if (in_array($field,$this->_autorised_get_key)){
@@ -217,7 +223,6 @@ class MY_Controller extends CI_Controller {
 							$filtered[$value] = $array['filter_value'];
 						}
 						$this->session->set_userdata( $this->set_ref_field('filter') , $filtered );
-						
 					break;
 					default:
 						$this->session->set_userdata( $this->set_ref_field($field) , $value );

@@ -10,6 +10,13 @@ if ( ! function_exists('PassWordGenerator'))
 	}
 }
 
+if ( ! function_exists('debug'))
+{
+	function debug($inc,$line = null){
+		return $line.' <pre><code>'.print_r($inc, TRUE).'</code></pre>';
+	}
+}
+
 /**
  * Returns a human readable filesize
  *

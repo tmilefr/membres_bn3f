@@ -5,7 +5,6 @@ class Parameters_model extends Core_model{
 
 	function __construct(){
 		parent::__construct();
-		$this->_set('_debug', FALSE);
 
 		$this->_set('table'	, 'parameters');
 		$this->_set('key'	, 'id');

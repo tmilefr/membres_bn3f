@@ -25,6 +25,13 @@ $lang['family'] = 'Famille';
 $lang['password'] = 'mot de passe';
 $lang['SENDBYMAIL_Contribution_controller'] = 'Send';
 
+$lang['LIST_Contribution_controller'] = 'liste';
+$lang['LIST_Users_controller'] = 'liste';
+
+
+$lang['RECAP_Contribution_controller'] = 'Recap';
+
+
 $lang['Users_controller_edit'] = 'Edition d\'un membre';
 $lang['Users_controller_add'] = 'Ajout d\'un membre';
 
@@ -136,4 +143,46 @@ $lang['invoices_list'] = 'document recapitulatif';
 $lang['invoice_list_in'] = 'liste des factures pour ';
 $lang['invoices_period'] = 'Période de facturation';
 $lang['details'] = 'Détails';
+
+$lang['list_icon'] = '';
+$lang['list_class'] = '';
+
+$lang['edit_icon'] = 'oi-pencil';
+$lang['edit_class'] = 'btn-warning';
+$lang['add_icon'] = 'oi oi-plus';
+$lang['add_class'] = 'btn-success';
+$lang['delete_icon'] = 'oi-circle-x';
+$lang['delete_class'] = 'btn-danger confirmModalLink';
+$lang['view_icon'] = 'oi-zoom-in';
+$lang['view_class'] = 'btn-success';
+
+$lang['sendbymail_icon'] = 'oi oi-envelope-closed';
+$lang['sendbymail_class'] = 'btn-success';
+
+$lang['recap_icon'] = 'oi oi-grid-three-up';
+$lang['list_icon'] = 'oi oi-spreadsheet';
+
+$lang['set_rules_icon'] = 'oi-grid-three-up';
+$lang['set_rules_class'] = 'btn-warning';
+
+$lang['_mail_txt'] = 'Chers membres, liebe mitglieder, \n
+Veuillez trouver ci-joint votre facture personnelle pour le renouvellement de votre adhésion à la BN3F pour l’année 2021. \n
+Comme vous le constaterez, il y aura quelques changements mineurs : \n
+-	Les tarifs (sauf parc à bateaux) restent inchangés \n
+-	Les emplacements bateau passent tous à 60 Euros\n
+-	Les journées de travail passent de 4 fois 75 Euros à 2 fois 150 euros à titre d’essai. Ceci devrait favoriser les personnes désireuses de prêter main forte à la base, sans pénaliser ceux qui ne viennent jamais. Par contre : Ces 2 journées de travail devront, à de rares exceptions près, être consacrées à l’intérêt général de la base, à l’exclusion de tous travaux internes aux sections. \n
+-	La date limite de payement est fixée au 28 février. Au-delà de cette date, une majoration de 20€ (10€ pour une cotisation individuelle) sera appliquée pour chaque mois entamé. A compter du 1er juin tout membre dont la cotisation ne sera pas réglée sera considéré comme démissionnaire et un nouveau droit d’entrée sera demandé pour une réinscription. \n
+
+Pour toute demande/réclamation/modification : info@bn3f.fr \n
+En vous souhaitant une belle saison 2021\n\n
+
+In der Beilage, finden Sie bitte eure persönliche Rechnung bezüglich der Erneuerung eurer Mitgliedschaft für die Saison 2021. Wie Ihr sehen könnt, gibt es ein Paar kleine Neuigkeiten: \n
+-	Die Preise bleiben unverändert (mit Ausnahme der Bootsplätzen) \n
+-	Die Bootsplätze werden alle auf 60 Euros gesetzt\n
+-	Die Arbeitstage werden, versuchsweise, von 4 auf 2 reduziert. (2x150 Euros statt 4x75 Euros). Diese 2 Arbeitstage sollten jedoch exklusiv zur gemeinsamen Interessen genutzt werden. Sektionentätigkeiten werden nicht mehr anerkannt. \n
+-	Letzter Einzahlungstermin ist der 28. Februar. Danach wird jeder angefangener Monat um 20€ (10 Euros für Einzelbeiträge) erhöht. Ab dem 1. Juni werden die nicht erneuerten Mitglieder als austeigend betrachtet und müssen sich ggf. neu-eischreiben (Inklusive Eintragsgebühr) \n
+Für Fragen/Reklamationen/ Änderungen: info@bn3f.fr \n
+Wir wünschen Ihnen eine schöne Saison 2021 \n
+Pour le comité, Für das Komitee				\n';
+
 ?>

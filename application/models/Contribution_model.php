@@ -5,7 +5,6 @@ class Contribution_model extends Core_model{
 
 	function __construct(){
 		parent::__construct();
-		$this->_set('_debug', FALSE);
 		
 		$this->_set('table'	, 'contribution');
 		$this->_set('key'	, 'id');
@@ -24,6 +23,12 @@ class Contribution_model extends Core_model{
 						   ->result();
 
 		return $datas;
+	}
+
+	function UpdateAmount($id, $amount){
+		$this->db->where($this->key, $id);
+		$this->db->update($this->table, ['amount'=>$amount] );
+		$this->_debug_array[] = $this->db->last_query();
 	}
 
 }

@@ -14,7 +14,7 @@ class Home extends MY_Controller {
 
 	public function index()
 	{
-		$this->_set('view_inprogress','home_page');
+		$this->_set('view_inprogress','unique/home_page');
 		$this->render_view();
 	}
 }

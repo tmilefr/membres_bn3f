@@ -15,7 +15,7 @@ class Core_model extends CI_Model {
 	protected $filter = array();//filter for model
 	protected $group_by = array(); //group by for model
 	protected $per_page = 20;
-	protected $_debug = TRUE;
+	protected $_debug = FALSE;
 	protected $page = 1;
 	protected $nb = null;
 	protected $_debug_array = array();
@@ -439,7 +439,7 @@ class Core_model extends CI_Model {
 	 */
 	public function __destruct(){
 		if ($this->_debug){
-			//echo '<pre><code>'.print_r($this->_debug_array ,1).'</code></pre>';
+			echo debug($this->_debug_array, __file__);
 			//$this->CI->bootstrap_tools->render_debug($this->_debug_array);
 		}
 	}	

@@ -19,7 +19,7 @@ class Users_controller extends MY_Controller {
 		$this->_model_name 		= 'Users_model';	   //DataModel
 		$this->_edit_view 		= 'edition/Users_form';//template for editing
 		$this->_list_view		= 'unique/Users_view.php';
-		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true);
+		$this->_autorize 		= array('list'=>true,'add'=>true,'edit'=>true,'delete'=>true,'view'=>true);
 		$this->title 			.= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
 		
 		$this->init();

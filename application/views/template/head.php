@@ -37,11 +37,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</li>
 				<?php  
 				if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
-					if ($this->render_object->_get('_ui_rules')['add']->autorize)
-						echo '<li class="nav-item"><a class="nav-link" href="'.$this->render_object->_get('_ui_rules')['add']->url.'"><span class="oi oi-plus"></span> '.$this->render_object->_get('_ui_rules')['add']->name.'</a></li>'; 
-					if (isset($this->render_object->_get('_ui_rules')['sendbymail']) AND $this->render_object->_get('_ui_rules')['sendbymail']->autorize)
-						echo '<li class="nav-item"><a class="nav-link" href="'.$this->render_object->_get('_ui_rules')['sendbymail']->url.'"><span class="oi oi-envelope-closed"></span> '.$this->render_object->_get('_ui_rules')['sendbymail']->name.'</a></li>'; 
 
+					foreach($this->render_object->_get('_ui_rules') AS $rule){
+						if (in_array($rule->term , $this->render_object->_get('_not_link_list')) AND $rule->autorize ){
+							echo '<li class="nav-item '.(($this->render_object->_getCi('_action') == $rule->term) ? 'active':'').'"><a class="nav-link " href="'.$rule->url.'"><span class="'.$rule->icon.'"></span> '.$rule->name.'</a></li>';
+
+						}
+					}
 				} 
 				?> 
 			

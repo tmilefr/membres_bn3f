@@ -5,7 +5,6 @@ class Sendmail_model extends Core_model{
 	
 	function __construct(){
 		parent::__construct();
-		$this->_set('_debug', FALSE);
 		
 		$this->_set('table'	, 'sendmail');
 		$this->_set('key'	, 'id');

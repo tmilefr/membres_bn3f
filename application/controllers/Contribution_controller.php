@@ -18,7 +18,7 @@ class Contribution_controller extends MY_Controller {
 		$this->_model_name 		= 'Contribution_model';	   //DataModel
 		$this->_edit_view 		= 'edition/Contribution_form';//template for editing
 		$this->_list_view		= 'unique/Contribution_view.php';
-		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true,'sendbymail'=>true);
+		$this->_autorize 		= array('list'=>true,'add'=>true,'edit'=>true,'delete'=>true,'view'=>true,'sendbymail'=>true,'recap'=>true);
 		
 		
 		$this->title .= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
@@ -32,25 +32,9 @@ class Contribution_controller extends MY_Controller {
 		$this->load->model('Sendmail_model');
 		$this->load->library('Libpdf');
 		
-		$this->_mail_txt = "Chers membres, liebe mitglieder, \n
-Veuillez trouver ci-joint votre facture personnelle pour le renouvellement de votre adhésion à la BN3F pour l’année 2021. \n
-Comme vous le constaterez, il y aura quelques changements mineurs : \n
--	Les tarifs (sauf parc à bateaux) restent inchangés \n
--	Les emplacements bateau passent tous à 60 Euros\n
--	Les journées de travail passent de 4 fois 75 Euros à 2 fois 150 euros à titre d’essai. Ceci devrait favoriser les personnes désireuses de prêter main forte à la base, sans pénaliser ceux qui ne viennent jamais. Par contre : Ces 2 journées de travail devront, à de rares exceptions près, être consacrées à l’intérêt général de la base, à l’exclusion de tous travaux internes aux sections. \n
--	La date limite de payement est fixée au 28 février. Au-delà de cette date, une majoration de 20€ (10€ pour une cotisation individuelle) sera appliquée pour chaque mois entamé. A compter du 1er juin tout membre dont la cotisation ne sera pas réglée sera considéré comme démissionnaire et un nouveau droit d’entrée sera demandé pour une réinscription. \n
+		$this->_mail_txt = $this->lang->line('_mail_txt');
 
-Pour toute demande/réclamation/modification : info@bn3f.fr \n
-En vous souhaitant une belle saison 2021\n\n
-
-In der Beilage, finden Sie bitte eure persönliche Rechnung bezüglich der Erneuerung eurer Mitgliedschaft für die Saison 2021. Wie Ihr sehen könnt, gibt es ein Paar kleine Neuigkeiten: \n
--	Die Preise bleiben unverändert (mit Ausnahme der Bootsplätzen) \n
--	Die Bootsplätze werden alle auf 60 Euros gesetzt\n
--	Die Arbeitstage werden, versuchsweise, von 4 auf 2 reduziert. (2x150 Euros statt 4x75 Euros). Diese 2 Arbeitstage sollten jedoch exklusiv zur gemeinsamen Interessen genutzt werden. Sektionentätigkeiten werden nicht mehr anerkannt. \n
--	Letzter Einzahlungstermin ist der 28. Februar. Danach wird jeder angefangener Monat um 20€ (10 Euros für Einzelbeiträge) erhöht. Ab dem 1. Juni werden die nicht erneuerten Mitglieder als austeigend betrachtet und müssen sich ggf. neu-eischreiben (Inklusive Eintragsgebühr) \n
-Für Fragen/Reklamationen/ Änderungen: info@bn3f.fr \n
-Wir wünschen Ihnen eine schöne Saison 2021 \n
-Pour le comité, Für das Komitee				\n";
+		$this->render_object->_set('_not_link_list', ['add','list','sendbymail','recap']);
 	}
 
 	Public function view($id){
@@ -59,6 +43,17 @@ Pour le comité, Für das Komitee				\n";
 		$this->data_view['url_pdf'] = '<a target="_new" href="'.$this->libpdf->_get('pdf_url_path').'/'. $dba_data->pdf.'"><span class="oi oi-file"></span> '. $dba_data->pdf.'</a>';
 		$this->_set('view_inprogress',$this->_list_view);
 		$this->render_view();	
+	}
+
+	Public function recap(){
+
+		$dba_data = $this->{$this->_model_name}->GetUserAndLog();
+		foreach($dba_data AS $key=>$user){
+			$dba_data[$key] = $this->MakeCotisation($user->id);
+		}
+		$this->data_view['datas'] = $dba_data;
+		$this->_set('view_inprogress','unique/Recap');
+		$this->render_view();		
 	}
 
 	function SendByMail()
@@ -135,6 +130,7 @@ Pour le comité, Für das Komitee				\n";
 						$this->ContributionLgn_model->post($lgn);
 					}
 				}
+				$this->MakeCotisation($id);
 			}			
 		}
 		
@@ -142,7 +138,8 @@ Pour le comité, Für das Komitee				\n";
 	}
 
 
-	function MakePdf($id = null, $override = true){
+
+	function MakeCotisation($id){
 		if ($id){
 			$this->render_object->_set('id',		$id);
 			$this->{$this->_model_name}->_set('key_value',$id);
@@ -186,15 +183,23 @@ Pour le comité, Für das Komitee				\n";
 				$dba_data->real += $detail->total;
 				$dba_data->services[] = $detail;
 			}
-
 			$values = json_decode($dba_data->check);
 			$dba_data->check = $values;
+			//maj amount
+			$this->{$this->_model_name}->UpdateAmount($id,$dba_data->real);
+			return $dba_data;
+		}
+	}
+
+
+	function MakePdf($id = null, $override = true){
+		if ($dba_data = $this->MakeCotisation($id)){
 			$dba_data->pdf = NameToFilename('Cotisation_'.$dba_data->user->name.'_'.$dba_data->year).'.pdf';
 			if (!is_file($this->libpdf->_get('pdf_path').$dba_data->pdf) OR $override){
 				$this->libpdf->DoPdf($dba_data,'unique/Contribution_view_pdf', $dba_data->pdf);
-			} 
+			} 		
 			return $dba_data;
-		}	
+		}
 	}
 
 }

@@ -7,11 +7,12 @@ Class Render_object{
 	protected $id 		= NULL; //id of active element
 	protected $dba_data = NULL; //Data from DATABASE from id element
 	protected $_debug 	= FALSE;//Debug 
-	protected $_model 	= FALSE;
-	protected $_ui_rules= FALSE;
+	protected $_model 	= null;
+	protected $_ui_rules= [];
 	protected $form_mod = FALSE;
 	protected $notime	= TRUE;
 	protected $_reset   = [];
+	protected $_not_link_list = ['add','list'];
 	
 	public function __construct()
 	{
@@ -51,12 +52,11 @@ Class Render_object{
 		}		
 		if ($key_value)
 		{
-			if ($this->CI->_get('_rules')['delete']->autorize AND !$blocked)
-				$element_menu .= $this->CI->bootstrap_tools->render_icon_link($this->CI->_get('_rules')['delete']->url 	, $key_value , 'oi-circle-x', 'btn-danger confirmModalLink');		
-			if ($this->CI->_get('_rules')['edit']->autorize AND !$blocked)
-				$element_menu .= $this->CI->bootstrap_tools->render_icon_link($this->CI->_get('_rules')['edit']->url 	, $key_value , 'oi-pencil'	, 'btn-warning');	
-			if ($this->CI->_get('_rules')['view']->autorize AND !$blocked)
-				$element_menu .= $this->CI->bootstrap_tools->render_icon_link($this->CI->_get('_rules')['view']->url	, $key_value , 'oi-zoom-in'	, 'btn-success');	
+			foreach($this->_ui_rules AS $rule){
+				if (!in_array($rule->term , $this->_not_link_list ) AND $rule->autorize AND  !$blocked){
+					$element_menu .= $this->CI->bootstrap_tools->render_icon_link($rule->url , $key_value , $rule->icon, $rule->class);
+				}
+			}
 		}
 		return $element_menu;
 	}
@@ -119,13 +119,16 @@ Class Render_object{
 		return $this->_model->_get('defs')[$field]->element->RenderFormElement();
 	}
 	
-	function RenderElement($field,$value = null)
+	function RenderElement($field,$value = null, $parent_id = null)
 	{
 		if (!$value) {
 			if (isset($this->dba_data)){ // try to check database
 				$value = $this->dba_data->{$field};
 			}
 		}	
+		if ($parent_id){
+			$this->_model->_get('defs')[$field]->element->_set('parent_id',$parent_id);
+		}
 		$this->_model->_get('defs')[$field]->element->_set('form_mod', $this->form_mod);	
 		$this->_model->_get('defs')[$field]->element->_set('value', $value);
 		return $this->_model->_get('defs')[$field]->element->Render();
@@ -136,7 +139,7 @@ Class Render_object{
 		if ($this->_debug == TRUE){
 			unset($this->CI);
 			unset($this->_model);
-			//echo '<pre><code>'.print_r($this , 1).'</code></pre>';
+			echo debug($this, __file__ );
 		}
 	}
 	

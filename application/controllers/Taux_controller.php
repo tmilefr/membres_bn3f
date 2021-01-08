@@ -21,9 +21,6 @@ class Taux_controller extends MY_Controller {
 		$this->_list_view		= 'unique/Taux_view.php';
 		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true);
 		$this->title 			.= ' - '.$this->lang->line($this->_controller_name);
-		
-		$this->_set('_debug', TRUE);
-		
 		$this->init();
 	}
 }

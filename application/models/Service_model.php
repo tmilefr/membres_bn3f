@@ -5,7 +5,6 @@ class Service_model extends Core_model{
 
 	function __construct(){
 		parent::__construct();
-		$this->_set('_debug', FALSE);
 		
 		$this->_set('table'	, 'service');
 		$this->_set('key'	, 'id');
