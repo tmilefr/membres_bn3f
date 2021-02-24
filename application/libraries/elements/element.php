@@ -1,5 +1,10 @@
 <?php
-/* * element.php * Object in page *  */
+/*
+ * element.php
+ * Object in page
+ * 
+ */
+
 class element
 {
 	protected $mode; //view, form.
@@ -7,9 +12,24 @@ class element
 	protected $value  	= null;
 	protected $values 	= [];
 	protected $type 	= '';
+	protected $mutliple	= FALSE;
+	protected $parent_id= 0;
 	
+	public function SetMultiple($action = 'FALSE'){
+		$this->name = str_replace(['[',']'],['',''], $this->name);
+		$this->mutliple = $action;
+		if ($this->mutliple)
+			$this->name .= '[]';
+	}
+
+	public function set_name($name){
+		$this->name = str_replace($name,'', $this->name);
+		$this->name .= $name;
+	}
+
+
 	public function RenderFormElement(){
-		return $this->CI->bootstrap_tools->input_text($this->name, $this->CI->lang->line($this->name) , $this->value);
+		return $this->CI->bootstrap_tools->input_text($this->name , $this->CI->lang->line($this->name) , $this->value);
 	}
 	
 	public function Render(){

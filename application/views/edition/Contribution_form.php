@@ -55,6 +55,8 @@ foreach($required_field AS $name){
 				
 		<button type="submit" class="btn btn-primary"><?php echo $this->render_object->_get('_ui_rules')[$this->render_object->_get('form_mod')]->name;?></button>
 		<?php
+		echo $this->render_object->RenderFormElement('created'); 
+		echo $this->render_object->RenderFormElement('updated'); 		
 		echo form_close();
 		?>
 	</div>
