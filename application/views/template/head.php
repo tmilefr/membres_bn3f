@@ -100,13 +100,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				</ul>
 				<ul class="nav justify-content-end">
 				<?php  
-				if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
+				/*if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
 					if ($this->render_object->_get('_ui_rules')['add']->autorize)
 						echo '<li class="nav-item"><a class="btn btn-success" href="'.$this->render_object->_get('_ui_rules')['add']->url.'"><span class="oi oi-plus"></span> '.$this->render_object->_get('_ui_rules')['add']->name.'</a></li>'; 
 					if (isset($this->render_object->_get('_ui_rules')['sendbymail']) AND $this->render_object->_get('_ui_rules')['sendbymail']->autorize)
 						echo '<li class="nav-item"><a class="btn btn-warning" href="'.$this->render_object->_get('_ui_rules')['sendbymail']->url.'"><span class="oi oi-envelope-closed"></span> '.$this->render_object->_get('_ui_rules')['sendbymail']->name.'</a></li>'; 
 
-				} 
+				} */
 				?> 
 				</ul> 
 			</nav> 	
