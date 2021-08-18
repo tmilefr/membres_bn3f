@@ -2,7 +2,7 @@
 	<div class="card-body">
 	  
 <?php
-echo form_open(base_url('/Home/login'), array('class' => '', 'id' => 'login') , array('form_mod'=>'') );
+echo form_open(base_url('/Home/login'), array('class' => 'login', 'id' => 'login-form') , array('form_mod'=>'') );
 
 
 echo $this->session->flashdata('message');
@@ -19,7 +19,16 @@ echo $this->session->flashdata('message');
     <?php echo form_error('password', 	'<div class="alert alert-danger">', '</div>'); ?>	  
   </div>
 
-  <button type="submit" class="btn btn-primary"><?php echo $this->lang->line('SUBMIT');?></button>
+	<button class="g-recaptcha" data-sitekey="<?php echo SITE_CAPTCHA_KEY;?>" data-callback='onSubmit' data-action='submit'>Submit</button>
+	
+  <script src="https://www.google.com/recaptcha/api.js"></script>
+
+  <script>
+   function onSubmit(token) {
+     document.getElementById("login-form").submit();
+   }
+ </script>
+
 <?php
 echo form_close();
 ?>

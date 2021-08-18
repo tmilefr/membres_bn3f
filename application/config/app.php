@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') || exit('No direct script access allowed');
 
+CONST PASSWORD_SALT = '6245nnx/OCIN';
+CONST SITE_CAPTCHA_KEY = '6Lc7VAwcAAAAALPIYowkfQ65CSintUBXB4SdtAYX';
+CONST SITE_CAPTCHA_SECRET_KEY = '6Lc7VAwcAAAAAIQmE8iugh2UemgtXkMCFHt478I5';
+
 /* APP STUFF */
 $config['app_name'] = 'Membres BN3F';
 $config['slogan'] 	= 'Outil de gestion des membres de la BN3F';

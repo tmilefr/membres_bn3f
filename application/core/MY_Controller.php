@@ -1,7 +1,5 @@
 <?php
 
-CONST PASSWORD_SALT = '6245nnx/OCIN';
-
 defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * MY_Controller

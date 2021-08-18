@@ -156,6 +156,9 @@ $lang['NB_TOUR']  = 'Tours';
 $lang['SUM_TOUR'] = 'Minutes';
 $lang['MOY_TOUR'] = 'Moyenne';
 
+$lang['Login_out'] = 'Log out';
+$lang['Login_account'] = 'Compte';
+
 $lang['About'] = 'A propos';
 
 $lang['DELETE_CONFIRMATION'] = 'Confirmation d\'effacement';

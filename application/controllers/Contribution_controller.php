@@ -20,7 +20,7 @@ class Contribution_controller extends MY_Controller {
 		$this->_list_view		= 'unique/Contribution_view.php';
 		$this->_autorize 		= array('list'=>true,'add'=>true,'edit'=>true,'delete'=>true,'view'=>true,'sendbymail'=>true,'recap'=>true);
 		
-		$this->_set('_debug', TRUE);
+		$this->_set('_debug', FALSE);
 		
 		$this->title .= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
 
@@ -61,6 +61,8 @@ class Contribution_controller extends MY_Controller {
 	{
 		$this->load->library('email');
 		
+		$this->data_view['FieldSection'] = $this->Users_model->_get('defs')['section']->values;
+
 		if (isset($_POST['ids'])){
 			foreach($_POST['ids'] AS $key=>$val){
 				$ref = explode('|', $val);
@@ -91,11 +93,18 @@ class Contribution_controller extends MY_Controller {
 
 		$dba_data = $this->{$this->_model_name}->GetUserAndLog();
 
+		$list_sendmail = [];
 		foreach($dba_data as $key=>$data){
+			
+
 			$dba_data[$key]->log = $this->Sendmail_model->GetLog($data->user);
+
+			$list_sendmail[$dba_data[$key]->section][] = $dba_data[$key];
 		}
 
-		$this->data_view['datas'] = $dba_data;
+
+
+		$this->data_view['datas'] = $list_sendmail;
 		$this->_set('view_inprogress','unique/Contribution_view_send.php');
 		$this->render_view();	
 	}

@@ -24,7 +24,7 @@ class Users_controller extends MY_Controller {
 		
 		$this->init();
 
-		$this->{$this->_model_name}->_set('_debug', false);
+		$this->{$this->_model_name}->_set('_debug', FALSE);
 
 		$this->csv_path = str_replace('application','data/csv',APPPATH);
 	}

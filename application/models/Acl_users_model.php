@@ -46,7 +46,7 @@ class Acl_users_model extends Core_model{
 		$usercheck->id = 0;
 	    $query = $this->db->select('*')
 			->from('acl_users u')
-			->where("login", $login)
+			->where("login", $login )
 			->get();
 		$this->_debug_array[] = $this->db->last_query();
 		// User was found

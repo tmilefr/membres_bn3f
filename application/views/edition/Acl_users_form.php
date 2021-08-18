@@ -1,5 +1,5 @@
 <?php
-echo form_open('Acl_users_controller/'.$this->render_object->_get('form_mod'), array('class' => '', 'id' => 'edit') , array('form_mod'=>$this->render_object->_get('form_mod'),'id'=>$id) );
+echo form_open('Acl_users_controller/'.$this->render_object->_get('form_mod'), array('class' => '', 'id' => '') , array('form_mod'=>$this->render_object->_get('form_mod'),'id'=>$id) );
 
 //champ obligatoire
 foreach($required_field AS $name){
