@@ -294,7 +294,7 @@ class Core_model extends CI_Model {
 			return $def->table[$field].'.'.$def->foreignField[$field];
 		} else {
 			if ($this->_mode == 'join'){
-				return $this->table.'.'.$field.',';
+				return $this->table.'.'.$field.'';
 			} else {
 				return $field;
 			}

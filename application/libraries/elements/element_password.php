@@ -1,5 +1,10 @@
 <?php
-/* * element_password.php * PASSWORD Object in page *  */require_once(APPPATH.'libraries/elements/element.php');
+/*
+ * element_password.php
+ * PASSWORD Object in page
+ * 
+ */
+require_once(APPPATH.'libraries/elements/element.php');
 
 class element_password extends element
 {
@@ -9,6 +14,10 @@ class element_password extends element
 	
 	public function Render(){
 		return '********';//$this->value;
+	}
+
+	public function PrepareForDBA($value){
+		return crypt($value, PASSWORD_SALT);
 	}
 }
 

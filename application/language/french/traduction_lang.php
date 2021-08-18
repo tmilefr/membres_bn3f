@@ -31,6 +31,21 @@ $lang['LIST_Users_controller'] = 'liste';
 
 $lang['RECAP_Contribution_controller'] = 'Recap';
 
+$lang['Acl_controllers_controller'] = 'ACL';
+$lang['ADD_Acl_controllers_controller'] = 'Ajouter';
+$lang['EDIT_Acl_controllers_controller'] = 'Valider';
+$lang['LIST_Acl_controllers_controller'] = 'Liste';
+
+$lang['Acl_roles_controller'] = 'Rôles';
+$lang['ADD_Acl_roles_controller'] = 'Ajouter';
+$lang['EDIT_Acl_roles_controller'] = 'Ajouter';
+$lang['LIST_Acl_roles_controller'] = 'Liste';
+
+
+$lang['Parameters'] = 'Paramètres';
+$lang[''] = '';
+$lang[''] = '';
+
 
 $lang['Users_controller_edit'] = 'Edition d\'un membre';
 $lang['Users_controller_add'] = 'Ajout d\'un membre';
@@ -45,9 +60,18 @@ $lang['Contribution_controller_edit'] = 'Edition d\'un appel à cotisation';
 $lang['Contribution_controller_add'] = 'Ajout d\'un appel à cotisation';
 
 
+$lang['Acl_users_controller'] = 'Utilisateurs';
+$lang['ADD_Acl_users_controller'] = 'Ajouter';
+$lang['EDIT_Acl_users_controller'] = 'Valider';
+$lang['LIST_Acl_users_controller'] = 'Liste';
+
+
+
 $lang['Service_controller'] = 'Prestations';
 $lang['ADD_Service_controller'] = 'Ajouter';
 $lang['EDIT_Service_controller'] = 'Valider';
+$lang['LIST_Service_controller'] = 'Liste';
+
 $lang['code'] = 'Code';
 $lang['prix'] = 'Prix';
 
@@ -60,6 +84,7 @@ $lang['GESTION'] = 'Gestion des ';
 $lang['Taux_controller'] = 'Taux';
 $lang['ADD_Taux_controller'] = 'Ajouter';
 $lang['EDIT_Taux_controller'] = 'Valider';
+$lang['LIST_Taux_controller'] = 'Liste';
 
 $lang['ADD_Contribution_controller'] = 'Ajouter';
 $lang['EDIT_Contribution_controller'] = 'Valider';
@@ -143,6 +168,9 @@ $lang['invoices_list'] = 'document recapitulatif';
 $lang['invoice_list_in'] = 'liste des factures pour ';
 $lang['invoices_period'] = 'Période de facturation';
 $lang['details'] = 'Détails';
+
+
+$lang['role_id'] = 'Rôles';
 
 $lang['list_icon'] = '';
 $lang['list_class'] = '';
