@@ -1,4 +1,7 @@
 <?php
+
+CONST PASSWORD_SALT = '6245nnx/OCIN';
+
 defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * MY_Controller
@@ -13,7 +16,7 @@ class MY_Controller extends CI_Controller {
 	
 	protected $_autorised_get_key 	= array('order','direction','filter','page','repertoire','search','id'); //autorised key in url
 	protected $_redirect			= true;
-	protected $_model_name			= false;
+	protected $_model_name			= FALSE;
 	protected $_debug_array  		= array();
 	protected $_debug 				= FALSE;
 	protected $_controller_name 	= null; 
@@ -41,6 +44,7 @@ class MY_Controller extends CI_Controller {
 		$this->load->helper('tools');
 		$this->load->library('Render_object');
 		$this->load->library('bootstrap_tools');
+		$this->load->library('acl');
 		
 		$this->lang->load('traduction');
 		$this->config->load('app');
@@ -117,7 +121,8 @@ class MY_Controller extends CI_Controller {
 		}
 		//to permit use it in view.
 		$this->render_object->_set('_ui_rules' , $this->_rules);
-		
+		$this->_debug($this->_rules);
+
 		$search_object 					= new StdClass();
 		$search_object->url 			= $this->router->class.'/'.$this->router->method;
 		$search_object->global_search 	= $this->session->userdata($this->set_ref_field('global_search'));
@@ -140,6 +145,10 @@ class MY_Controller extends CI_Controller {
 		$rules->url 	=  base_url($this->_controller_name.'/'.$key);
 		$rules->term 	= $key;
 		$rules->name 	= $this->lang->line(strtoupper($key).'_'.$this->_controller_name);
+		if (!$this->acl->hasAccess(strtolower($this->_controller_name.'/'.$key))){
+			$this->_debug(strtolower($this->_controller_name.'/'.$key.':FALSE'));
+			$value = FALSE;
+		} 
 		$rules->autorize= $value;
 		$rules->icon 	= $this->lang->line($key.'_icon');
 		$rules->class  = $this->lang->line($key.'_class');
@@ -279,8 +288,12 @@ class MY_Controller extends CI_Controller {
 		$this->data_view['fields'] 	= $this->{$this->_model_name}->_get('autorized_fields');
 		$this->data_view['datas'] 	= $this->{$this->_model_name}->get();
 		
-
-
+		$config = array();
+		$config['use_page_numbers'] = TRUE;
+		$config['per_page'] 	= $this->per_page;
+		$config['cur_page'] 	= $this->{$this->_model_name}->_get('page');
+		$config['base_url'] 	= $this->config->item('base_url').$this->_controller_name.'/list/page/';
+		$config['total_rows'] 	= $this->{$this->_model_name}->get_pagination();
 		$this->pagination->initialize($config);	
 
 		

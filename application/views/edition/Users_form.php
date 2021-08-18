@@ -42,6 +42,12 @@ foreach($required_field AS $name){
 		</div>
 		<div class="form-group col-md-4">
 			<?php 
+				echo $this->render_object->label('role_id');
+				echo $this->render_object->RenderFormElement('role_id'); 
+			?>
+		</div>		
+		<div class="form-group col-md-4">
+			<?php 
 				echo $this->render_object->label('fixe');
 				echo $this->render_object->RenderFormElement('fixe');
 			?>
