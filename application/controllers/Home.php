@@ -44,6 +44,17 @@ class Home extends MY_Controller {
 	public function index()
 	{
 		$this->_set('view_inprogress','unique/home_page');
+		$this->load->model('Users_model');
+
+		$this->data_view['FieldSection'] = $this->Users_model->_get('defs')['section']->values;
+
+		$membres = [];
+		foreach( $this->Users_model->GetUserBySection() AS $membre){
+			$membres[$membre->section][] = $membre;
+		}
+		$this->data_view['list_membres'] = $membres;
+
+
 		$this->render_view();
 	}
 
