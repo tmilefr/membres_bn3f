@@ -13,6 +13,14 @@ class Users_model extends Core_model{
 		$this->_set('json'	, 'Users.json');
 		$this->_init_def();
 	}
-
+	
+	function GetUserBySection(){
+		$datas = $this->db->select('*')
+					   ->order_by('section', 'ASC' )
+					   ->get($this->table)
+					   ->result();
+		$this->_debug_array[] = $this->db->last_query();
+		return $datas;
+	}
 }
 ?>
