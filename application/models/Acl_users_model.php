@@ -60,6 +60,7 @@ class Acl_users_model extends Core_model{
 			$usercheck->name = $row['name'];
 			$usercheck->autorize = true;
 			$usercheck->id = $row['id'];
+			$usercheck->role_id = $row['role_id'];
 		}
 		return $usercheck;
 	}

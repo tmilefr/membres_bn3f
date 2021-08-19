@@ -3,8 +3,8 @@
 class Loginchecker
 {
     private $CI;
-    private $dontcheck = TRUE;
-
+    private $DontCheck  = FALSE;
+    private $_debug     = TRUE;
     function __construct()
     {
         $this->CI = & get_instance();
@@ -19,15 +19,24 @@ class Loginchecker
 
     function loginCheck()
     {
-        $controller = $this->CI->uri->rsegment(1);
-        $action     = $this->CI->uri->rsegment(2);
+        $controller = strtolower($this->CI->uri->rsegment(1));
+        $action     = strtolower($this->CI->uri->rsegment(2));
         $usercheck  = $this->CI->session->userdata('usercheck');
+
+        if ($this->DontCheck)
+            return TRUE;
         
         if ( $usercheck && $usercheck->autorize) {
             // Check for ACL
-            if (!$this->CI->acl->hasAccess() AND !$this->dontcheck) {
-                //echo '<pre>'.print_r($this->CI->acl->getGuestPages(),TRUE).'</pre>';
+            if (!$this->CI->acl->hasAccess()) {
+                if ($this->_debug){
+                    echo '<p>'.$controller . '/' . $action.'</p>';
+                    echo '<pre>'.print_r($this->CI->acl->getGuestPages(),TRUE).'</pre>';
+                    echo '<pre>'.print_r($this->CI->acl->_get('permissions'),TRUE).'</pre>';
+                }
+
                 if (!in_array($controller . '/' . $action, $this->CI->acl->getGuestPages())) {
+                    die();
                     return redirect('/Home/no_right');
                 } 
             }

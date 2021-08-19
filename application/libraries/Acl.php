@@ -2,23 +2,20 @@
 
 if (! defined('BASEPATH'))
     exit('No direct script access allowed');
-//ALTER TABLE `users` ADD `role_id` INT(11) NOT NULL AFTER `driver`;
+//ALTER TABLE `users` ADD `role_id` INT(11) NOT NULL AFTER `created`;
+
 class Acl
 {
     protected $CI;
-
     protected $userId = NULL;
-
     protected $userRoleId = NULL;
     protected $permissions = [];
-
     protected $guestPages = [
-        'Home/login'
+        'Home/login',
+        'Home/index',
+        'Home'
     ];
-
-    protected $_config = [
-        'acl_user_session_key' => 'user_id'
-    ];
+    protected $DontCheck = false;
 
     /**
      * Constructor
@@ -34,32 +31,24 @@ class Acl
         $this->CI->load->model('Acl_roles_model');
         $this->CI->load->model('Acl_users_model');
         $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();
+        $this->CI->_debug($this->permissions);
     }
-
-    public function getAclConfig($key = NULL)
-    {
-        if ($key) {
-            return $this->_config[$key];
-        }
-        
-        return $this->_config;
-    }
-    
-    // --------------------------------------------------------------------
     
     /**
      * Check is controller/method has access for role
      *
      * @access public
-     * 
      * @return bool
+     * 
      */
     public function hasAccess($currentPermission = null)
     {
+        if ($this->DontCheck)
+            return TRUE;
+
         if ($this->getUserId()) {            
             if (!$currentPermission)
                 $currentPermission = $this->CI->uri->rsegment(1) . '/' . $this->CI->uri->rsegment(2);
-            
             if (isset($this->permissions[$this->getUserRoleId()]) && count($this->permissions[$this->getUserRoleId()]) > 0) {
                 if (in_array($currentPermission, $this->permissions[$this->getUserRoleId()])) {
                     return TRUE;
@@ -89,9 +78,7 @@ class Acl
         }        
         return $this->userId;
     }
-    
-    // --------------------------------------------------------------------
-    
+
     /**
      * Return user role
      *
@@ -101,7 +88,10 @@ class Acl
     {
         if ($this->userRoleId == NULL) {
             // Set the role
-            $this->userRoleId = $this->CI->Acl_users_model->getUserRoleId($this->getUserId());
+            if ($this->CI->session->userdata('usercheck'))
+                $this->userRoleId = $this->CI->session->userdata('usercheck')->role_id;
+            if ($this->userId === FALSE) 
+                $this->userRoleId = $this->CI->Acl_users_model->getUserRoleId($this->getUserId());
             if (! $this->userRoleId) {
                 $this->userRoleId = 0;
             }
@@ -114,4 +104,12 @@ class Acl
     {
         return $this->guestPages;
     }
+
+    public function _set($field,$value){
+		$this->$field = $value;
+	}
+
+	public function _get($field){
+		return $this->$field;
+	}	
 }

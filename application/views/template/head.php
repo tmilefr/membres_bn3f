@@ -24,9 +24,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="oi oi-key"></span></a>
-					<?php if ($this->session->userdata('usercheck')) { ?>
+					<?php if ($this->session->userdata('usercheck') || $this->acl->_get('DontCheck')  ) { ?>
 					<div class="dropdown-menu">
-						<span class="dropdown-item-text"><?php echo $this->session->userdata('usercheck')->name; ?></span>
+						<span class="dropdown-item-text"><?php echo (($this->session->userdata('usercheck')) ? $this->session->userdata('usercheck')->name:''); ?></span>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="<?php echo base_url('Home/logout');?>"><?php echo Lang('Login_out');?></a>
 						<a class="dropdown-item" href="<?php echo base_url('Home/account');?>"><?php echo Lang('Login_account');?></a>
