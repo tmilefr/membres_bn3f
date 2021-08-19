@@ -18,20 +18,25 @@ echo $this->session->flashdata('message');
 	<?php echo form_password('password', 'password', 'class="form-control" aria-describedby="passwordHelp" placeholder="Password"'); ?>
     <?php echo form_error('password', 	'<div class="alert alert-danger">', '</div>'); ?>	  
   </div>
-
-	<button class="g-recaptcha" data-sitekey="<?php echo SITE_CAPTCHA_KEY;?>" data-callback='onSubmit' data-action='submit'>Submit</button>
-	
-  <script src="https://www.google.com/recaptcha/api.js"></script>
-
-  <script>
-   function onSubmit(token) {
-     document.getElementById("login-form").submit();
-   }
- </script>
-
+  <div class="form-group">
+    <?php 
+				echo $this->render_object->label('recaptchaResponse');
+				echo $this->render_object->RenderFormElement('recaptchaResponse'); 
+        if ($captcha_error){
+          $this->bootstrap_tools->render_msg($captcha_error);
+        }
+			?>
+  </div>
 <?php
 echo form_close();
 ?>
 	</div>
 </div>
-
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+<script>
+grecaptcha.ready(function() {
+    grecaptcha.execute('<?php echo SITE_CAPTCHA_KEY;?>', {action: 'homepage'}).then(function(token) {
+        document.getElementById('recaptchaResponse').value = token
+    });
+});
+</script>

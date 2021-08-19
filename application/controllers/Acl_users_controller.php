@@ -21,6 +21,7 @@ class Acl_users_controller extends MY_Controller {
 		$this->_list_view		= 'unique/Acl_users_view.php';
 		$this->_autorize 		= array('list'=>true,'add'=>true,'edit'=>true,'delete'=>true,'view'=>true);
 		$this->title 			.= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
+		$this->_set('_debug',TRUE);
 		$this->init();
 	}
 

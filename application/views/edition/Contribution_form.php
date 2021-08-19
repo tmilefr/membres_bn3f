@@ -1,17 +1,15 @@
-
-	  
-<?php
-echo form_open(base_url('Contribution_controller/'.$this->render_object->_get('form_mod')), array('class' => '', 'id' => 'edit') , array('form_mod'=>$this->render_object->_get('form_mod'),'id'=>$id) );
-//champ obligatoire
-foreach($required_field AS $name){
-	echo form_error($name, 	'<div class="alert alert-danger">', '</div>');
-}
-?>
 <div class="card" >
 	<div class="card-header">
 		<?php echo $this->lang->line('Contribution_controller_'.$this->render_object->_get('form_mod'));?>
 	</div>
-  	<div class="card-body">
+	<div class="card-body">
+		<?php
+		echo form_open(base_url('Contribution_controller/'.$this->render_object->_get('form_mod')), array('class' => '', 'id' => 'edit') , array('form_mod'=>$this->render_object->_get('form_mod'),'id'=>$id) );
+		//champ obligatoire
+		foreach($required_field AS $name){
+			echo form_error($name, 	'<div class="alert alert-danger">', '</div>');
+		}
+		?>
 		<div class="form-row">
 			<div class="form-group col-md-4">
 				<?php 

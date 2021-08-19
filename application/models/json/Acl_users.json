@@ -45,6 +45,28 @@
 			"constraint": "255"
 		}
 	},
+	"role_id": {
+		"type": "select_database",
+		"list": true,
+		"search": true,
+		"rules": null,
+		"since": 2,
+		"values": "distinct(acl_roles,id:role_name)",
+		"dbforge": {
+			"type": "INT",
+			"constraint": "5"
+		}
+	},
+	"recaptchaResponse":{
+		"type": "captcha",
+		"list": false,
+		"search": false,
+		"rules": "trim|min_length[2]|max_length[255]",
+		"dbforge": {
+			"type": "VARCHAR",
+			"constraint": "255"
+		}
+	},	
 	"created": {
 		"type": "created",
 		"list": false,
@@ -64,17 +86,5 @@
 		"dbforge": {
 			"type": "DATETIME"
 		}
-	},
-	"role_id": {
-		"type": "select_database",
-		"list": true,
-		"search": true,
-		"rules": null,
-		"since": 2,
-		"values": "distinct(acl_roles,id:role_name)",
-		"dbforge": {
-			"type": "INT",
-			"constraint": "5"
-		}
-	}	
+	}
 }

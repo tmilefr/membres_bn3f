@@ -391,6 +391,8 @@ class MY_Controller extends CI_Controller {
 					$this->{$this->_model_name}->put();
 				} 
 			} else if ($this->input->post('form_mod') == 'add'){
+				$this->_debug($datas);
+
 				$this->data_view['id'] = $this->{$this->_model_name}->post($datas);
 			}
 			if ($this->_redirect){

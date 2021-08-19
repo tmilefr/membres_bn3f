@@ -165,5 +165,8 @@ Class Bootstrap_tools{
 		return $this->random_color_part() . $this->random_color_part() . $this->random_color_part();
 	}
 	
+	function render_msg($value, $type = 'alert-danger'){
+		echo '<div class="alert '.$type.'" role="alert">'.$value.'</div>';
+	}
 	
 }

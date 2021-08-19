@@ -24,53 +24,53 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			<ul class="navbar-nav mr-auto">
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="oi oi-key"></span></a>
-					<?php if ($this->session->userdata('usercheck')) { ?>
+					<?php if ($this->session->userdata('usercheck') || $this->acl->_get('DontCheck')  ) { ?>
 					<div class="dropdown-menu">
-						<span class="dropdown-item-text"><?php echo $this->session->userdata('usercheck')->name; ?></span>
+						<span class="dropdown-item-text"><?php echo (($this->session->userdata('usercheck')) ? $this->session->userdata('usercheck')->name:''); ?></span>
 						<div class="dropdown-divider"></div>
 						<a class="dropdown-item" href="<?php echo base_url('Home/logout');?>"><?php echo Lang('Login_out');?></a>
-						<a class="dropdown-item" href="<?php echo base_url('Home/account');?>"><?php echo Lang('Login_account');?></a>
 						<div class="dropdown-divider"></div>
 						<?php if ($this->acl->hasAccess('acl_users_controller/list')){ ?>
 							<a class="dropdown-item" href="<?php echo base_url('Acl_users_controller/list');?>"><?php echo Lang('Acl_users_controller');?></a>
 						<?php } ?>						
 						<?php if ($this->acl->hasAccess('acl_roles_controller/list')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Acl_roles_controller');?>"><?php echo Lang('Acl_roles_controller');?></a>
+							<a class="dropdown-item" href="<?php echo base_url('Acl_roles_controller/list');?>"><?php echo Lang('Acl_roles_controller');?></a>
 						<?php } ?>
 						<?php if ($this->acl->hasAccess('acl_controllers_controller/list')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Acl_controllers_controller');?>"><?php echo Lang('Acl_controllers_controller');?></a>
+							<a class="dropdown-item" href="<?php echo base_url('Acl_controllers_controller/list');?>"><?php echo Lang('Acl_controllers_controller');?></a>
 						<?php } ?>						
 					</div>
 					<?php } ?>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="oi oi-cog"></span></a>
-						<div class="dropdown-menu">
-							<?php if ($this->acl->hasAccess('service_controller/list')){ ?>
-								<a class="dropdown-item" href="<?php echo base_url('Service_controller/list');?>"><?php echo Lang('Service_controller');?></a>
-							<?php } ?>
-							<?php if ($this->acl->hasAccess('taux_controller/list')){ ?>
-								<a class="dropdown-item" href="<?php echo base_url('Taux_controller/list');?>"><?php echo Lang('Taux_controller');?></span></a>
-							<?php } ?>
-							<div class="dropdown-divider"></div>
-							<?php if ($this->acl->hasAccess('parameters/view')){ ?>
-								<a class="dropdown-item" href="<?php echo base_url('Parameters');?>"><?php echo Lang('Parameters');?></a>
-							<?php } ?>
-							<a class="dropdown-item" href="#" data-toggle="modal" data-target="#AboutModal"><?php echo Lang('About');?></a>
-						</div>
-					</li>					
-					<li class="nav-item"> 
-						<span class="title"><?php echo $title;?></span>
-					</li>
-					<?php  
-					if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="oi oi-cog"></span></a>
+					<div class="dropdown-menu">
+						<?php if ($this->acl->hasAccess('service_controller/list')){ ?>
+							<a class="dropdown-item" href="<?php echo base_url('Service_controller/list');?>"><?php echo Lang('Service_controller');?></a>
+						<?php } ?>
+						<?php if ($this->acl->hasAccess('taux_controller/list')){ ?>
+							<a class="dropdown-item" href="<?php echo base_url('Taux_controller/list');?>"><?php echo Lang('Taux_controller');?></span></a>
+						<?php } ?>
+						<div class="dropdown-divider"></div>
+						<?php if ($this->acl->hasAccess('parameters/view')){ ?>
+							<a class="dropdown-item" href="<?php echo base_url('Parameters');?>"><?php echo Lang('Parameters');?></a>
+						<?php } ?>
+						<a class="dropdown-item" href="#" data-toggle="modal" data-target="#AboutModal"><?php echo Lang('About');?></a>
+					</div>
+				</li>					
+				<li class="nav-item"> 
+					<span class="title"><?php echo $title;?></span>
+				</li>
+				<?php  
+				if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
 
-						foreach($this->render_object->_get('_ui_rules') AS $rule){
-							if (in_array($rule->term , $this->render_object->_get('_not_link_list')) AND $rule->autorize ){
-								echo '<li class="nav-item '.(($this->render_object->_getCi('_action') == $rule->term) ? 'active':'').'"><a class="nav-link " href="'.$rule->url.'"><span class="'.$rule->icon.'"></span> '.$rule->name.'</a></li>';
-							}
+					foreach($this->render_object->_get('_ui_rules') AS $rule){
+						if (in_array($rule->term , $this->render_object->_get('_not_link_list')) AND $rule->autorize ){
+							echo '<li class="nav-item '.(($this->render_object->_getCi('_action') == $rule->term) ? 'active':'').'"><a class="nav-link " href="'.$rule->url.'"><span class="'.$rule->icon.'"></span> '.$rule->name.'</a></li>';
 						}
-					} 
-					?> 
+					}
+				} 
+				?> 
 			
 			</ul>
 			<ul class="ml-auto navbar-nav nav nav-pills navbar-dark bg-dark">

@@ -2,24 +2,26 @@
 
 if (! defined('BASEPATH'))
     exit('No direct script access allowed');
-//ALTER TABLE `users` ADD `role_id` INT(11) NOT NULL AFTER `driver`;
+//ALTER TABLE `users` ADD `role_id` INT(11) NOT NULL AFTER `created`;
+
 class Acl
 {
+    protected $is_log = false;
     protected $CI;
-
     protected $userId = NULL;
-
     protected $userRoleId = NULL;
+    protected $controller = NULL;
+    protected $action = NULL;
     protected $permissions = [];
-
     protected $guestPages = [
-        'Home/login'
+        'home/logout',
+        'home/login',
+        'home/no_right',
+        'home/index',
+        'home'
     ];
-
-    protected $_config = [
-        'acl_user_session_key' => 'user_id'
-    ];
-
+    protected $DontCheck = FALSE;
+    protected $_debug = FALSE;
     /**
      * Constructor
      *
@@ -28,47 +30,101 @@ class Acl
     public function __construct($config = array())
     {
         $this->CI = &get_instance();
-        // Load Session library
         $this->CI->load->library('session');
-        // Load ACL model
+        $this->CI->load->helper('url');
         $this->CI->load->model('Acl_roles_model');
         $this->CI->load->model('Acl_users_model');
-        $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();
-    }
 
-    public function getAclConfig($key = NULL)
-    {
-        if ($key) {
-            return $this->_config[$key];
-        }
-        
-        return $this->_config;
+        $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();
+        $this->CI->_debug($this->permissions);
+
+        $this->controller = strtolower($this->CI->uri->rsegment(1));
+        $this->action     = strtolower($this->CI->uri->rsegment(2));
+        $this->routes_hisory = [];
+        $this->IsLog();
     }
-    
-    // --------------------------------------------------------------------
     
     /**
-     * Check is controller/method has access for role
+     * Check if user is connected
      *
      * @access public
-     * 
      * @return bool
+     * 
+     */
+    public function IsLog(){
+        $usercheck  = $this->CI->session->userdata('usercheck');
+        if ( isset($usercheck) && $usercheck->autorize ){
+            $this->is_log = true;  
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
+    /**
+     * Check is current controller/method has access in role
+     *
+     * @access public
+     * @return bool
+     * 
      */
     public function hasAccess($currentPermission = null)
     {
+        if ($this->DontCheck)
+            return TRUE;
         if ($this->getUserId()) {            
             if (!$currentPermission)
-                $currentPermission = $this->CI->uri->rsegment(1) . '/' . $this->CI->uri->rsegment(2);
-            
+                $currentPermission =  $this->controller . '/' . $this->action;
             if (isset($this->permissions[$this->getUserRoleId()]) && count($this->permissions[$this->getUserRoleId()]) > 0) {
                 if (in_array($currentPermission, $this->permissions[$this->getUserRoleId()])) {
                     return TRUE;
+                } else {
+                    $this->CI->_debug($this->controller . '/' . $this->action.' NOT GRANTED');
                 }
             }
         }        
         return FALSE;
     }
     
+    /**
+     * Check if current controller/method has access
+     *
+     * @access public
+     * @return bool
+     * 
+     */
+    public function Route(){
+        if ($this->DontCheck)
+            return TRUE;
+       
+        if ( $this->_get('is_log') ) {
+            
+            /*if ($this->action == 'index')
+                return TRUE;*/
+            // Check for ACL
+            if (!$this->CI->acl->hasAccess()) {
+                if ($this->_debug){
+                    echo '<p>'.$this->controller . '/' . $this->action.'</p>';
+                    echo '<pre>'.print_r($this->CI->acl->getGuestPages(),TRUE).'</pre>';
+                    echo '<pre>'.print_r($this->CI->acl->_get('permissions'),TRUE).'</pre>';
+                    die();
+                }
+                if ($this->controller . '/' . $this->action != '/home/no_right' && !in_array($this->controller . '/' . $this->action, $this->CI->acl->getGuestPages())) {
+                    
+                
+                    $this->routes_hisory[] = $this->controller . '/' . $this->action;
+                    $this->CI->session->set_userdata('routes',  $this->routes_hisory); 
+                    return redirect('/Home/no_right');
+                } 
+            } else {
+                $this->CI->_debug($this->controller . '/' . $this->action.' GRANTED');
+            }
+        } else {
+            if ($this->controller . '/' . $this->action != 'home/login')
+                return redirect('/Home/login');
+        }
+    }
+
     // --------------------------------------------------------------------
     
     /**
@@ -89,9 +145,7 @@ class Acl
         }        
         return $this->userId;
     }
-    
-    // --------------------------------------------------------------------
-    
+
     /**
      * Return user role
      *
@@ -101,7 +155,10 @@ class Acl
     {
         if ($this->userRoleId == NULL) {
             // Set the role
-            $this->userRoleId = $this->CI->Acl_users_model->getUserRoleId($this->getUserId());
+            if ($this->CI->session->userdata('usercheck'))
+                $this->userRoleId = $this->CI->session->userdata('usercheck')->role_id;
+            if ($this->userId === FALSE) 
+                $this->userRoleId = $this->CI->Acl_users_model->getUserRoleId($this->getUserId());
             if (! $this->userRoleId) {
                 $this->userRoleId = 0;
             }
@@ -114,4 +171,12 @@ class Acl
     {
         return $this->guestPages;
     }
+
+    public function _set($field,$value){
+		$this->$field = $value;
+	}
+
+	public function _get($field){
+		return $this->$field;
+	}	
 }

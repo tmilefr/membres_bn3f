@@ -3,7 +3,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Home extends MY_Controller {
 
-	
 	public function __construct(){
 		parent::__construct();
 		$this->_controller_name = 'Home';  //controller name for routing
@@ -16,18 +15,24 @@ class Home extends MY_Controller {
 	}
 
 	public function login(){
-		$error = '';
+		$captcha_error = '';
         if($this->input->server('REQUEST_METHOD') == 'POST'){
-			if ($this->form_validation->run() == true) {
+			$captcha = json_decode($this->{$this->_model_name}->_get('defs')['recaptchaResponse']->element->PrepareForDBA($this->input->post("g-recaptcha-response")));
+			//echo '<pre>'.print_r($captcha, TRUE).'</pre>';
+			if (isset( $captcha->{'error-codes'}))
+				$captcha_error = implode('<br/>', $captcha->{'error-codes'});
+			if ($this->form_validation->run() == true AND $captcha->success == true) {
 				$data = $this->input->post();
 				$usercheck  = $this->Acl_users_model->verifyLogin($data['login'], $data['password']);
-                if ($usercheck->autorize){ 
+				if ($usercheck->autorize){ 
 					$this->session->set_userdata('usercheck', $usercheck);  
 					redirect('/Home');
 				}                
 			}	
         }
+		$this->{$this->_model_name}->_get('defs')['recaptchaResponse']->element->_set('catptcha',TRUE);
 		$this->data_view['required_field'] = $this->{$this->_model_name}->_get('required');
+		$this->data_view['captcha_error'] = $captcha_error;
 
 		$this->_set('view_inprogress','unique/login_view');
 		$this->render_view();
@@ -63,6 +68,8 @@ class Home extends MY_Controller {
 	public function no_right()
 	{
 		$this->_set('view_inprogress','unique/no_right');
+		$routes = $this->session->userdata('routes');
+		$this->data_view['routes_history'] = $routes;
 		$this->render_view();
 	}
 

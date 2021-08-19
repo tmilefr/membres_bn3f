@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
 <div class="container-fluid">
-	<div class="accordion" id="accordionMembre">
+	<div class="accordion accordion-flush" id="accordionMembre">
 			<?php
 			foreach($list_membres AS $section => $membres){
 				?>
