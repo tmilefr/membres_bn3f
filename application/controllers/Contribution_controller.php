@@ -47,12 +47,14 @@ class Contribution_controller extends MY_Controller {
 	}
 
 	Public function recap(){
-
+		$this->data_view['FieldSection'] = $this->Users_model->_get('defs')['section']->values;
+		
+		$list_recap = [];
 		$dba_data = $this->{$this->_model_name}->GetUserAndLog();
 		foreach($dba_data AS $key=>$user){
-			$dba_data[$key] = $this->MakeCotisation($user->id);
+			$list_recap[$dba_data[$key]->section][] = $this->MakeCotisation($user->id);
 		}
-		$this->data_view['datas'] = $dba_data;
+		$this->data_view['datas'] = $list_recap;
 		$this->_set('view_inprogress','unique/Recap');
 		$this->render_view();		
 	}
@@ -154,49 +156,53 @@ class Contribution_controller extends MY_Controller {
 			$this->render_object->_set('id',		$id);
 			$this->{$this->_model_name}->_set('key_value',$id);
 			$dba_data = $this->{$this->_model_name}->get_one();
-			//get Taux
-			$this->Taux_model->_set('key_value',$dba_data->taux);
-			$dba_data->taux = $this->Taux_model->get_one();
-			//get User
-			$this->Users_model->_set('key_value',$dba_data->user);
-			$dba_data->user = $this->Users_model->get_one();
-			$trad_section = $this->Users_model->_get('defs')['section']->values;
-			$dba_data->user->section = $trad_section[$dba_data->user->section];
-			//get services
-			$this->ContributionLgn_model->_set('filter', ['id_cnt'=> $dba_data->id ]);
-			$this->ContributionLgn_model->_set('order', 'id_cnt');
-			$presta = $this->ContributionLgn_model->get_all();
-			$dba_data->real = 0;
-			$dba_data->services = array();
-			foreach($presta AS $service){
-				$this->Service_model->_set('key', 'id');
-				$this->Service_model->_set('key_value', $service->id_ser );
-				$detail = $this->Service_model->get_one();
+			if (isset($dba_data)){
+				//get Taux
+				$this->Taux_model->_set('key_value',$dba_data->taux);
+				$dba_data->taux = $this->Taux_model->get_one();
+				if (!isset($dba_data->taux))
+					debug($dba_data);
+				//get User
+				$this->Users_model->_set('key_value',$dba_data->user);
+				$dba_data->user = $this->Users_model->get_one();
+				$trad_section = $this->Users_model->_get('defs')['section']->values;
+				$dba_data->user->section = $trad_section[$dba_data->user->section];
+				//get services
+				$this->ContributionLgn_model->_set('filter', ['id_cnt'=> $dba_data->id ]);
+				$this->ContributionLgn_model->_set('order', 'id_cnt');
+				$presta = $this->ContributionLgn_model->get_all();
+				$dba_data->real = 0;
+				$dba_data->services = array();
+				foreach($presta AS $service){
+					$this->Service_model->_set('key', 'id');
+					$this->Service_model->_set('key_value', $service->id_ser );
+					$detail = $this->Service_model->get_one();
 
-				switch($dba_data->taux->code){
-					case 'N':
-					case 'H':
-					case 'C':
-						if ($detail->code =='WI' && $dba_data->taux->code == 'C'){ //hivernage offert au comité
-							$detail->taux = 0;
-							$detail->total = $detail->taux*$detail->amount;	
-						} else {
+					switch($dba_data->taux->code){
+						case 'N':
+						case 'H':
+						case 'C':
+							if ($detail->code =='WI' && $dba_data->taux->code == 'C'){ //hivernage offert au comité
+								$detail->taux = 0;
+								$detail->total = $detail->taux*$detail->amount;	
+							} else {
+								$detail->taux = $dba_data->taux->taux;
+								$detail->total = $detail->taux*$detail->amount;
+							}
+						break;
+						case 'D':
 							$detail->taux = $dba_data->taux->taux;
 							$detail->total = $detail->taux*$detail->amount;
-						}
-					break;
-					case 'D':
-						$detail->taux = $dba_data->taux->taux;
-						$detail->total = $detail->taux*$detail->amount;
-					break;
+						break;
+					}
+					$dba_data->real += $detail->total;
+					$dba_data->services[] = $detail;
 				}
-				$dba_data->real += $detail->total;
-				$dba_data->services[] = $detail;
+				$values = json_decode($dba_data->check);
+				$dba_data->check = $values;
+				//maj amount
+				$this->{$this->_model_name}->UpdateAmount($id,$dba_data->real);
 			}
-			$values = json_decode($dba_data->check);
-			$dba_data->check = $values;
-			//maj amount
-			$this->{$this->_model_name}->UpdateAmount($id,$dba_data->real);
 			return $dba_data;
 		}
 	}

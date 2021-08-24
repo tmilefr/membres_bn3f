@@ -46,6 +46,7 @@ class MY_Controller extends CI_Controller {
 		
 		$this->lang->load('traduction');
 		$this->config->load('app');
+		$this->config->load('secured');
 	}
 	
 	public function SaveToJson($name, $data){

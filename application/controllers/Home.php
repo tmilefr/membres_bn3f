@@ -21,7 +21,7 @@ class Home extends MY_Controller {
 			//echo '<pre>'.print_r($captcha, TRUE).'</pre>';
 			if (isset( $captcha->{'error-codes'}))
 				$captcha_error = implode('<br/>', $captcha->{'error-codes'});
-			if ($this->form_validation->run() == true AND $captcha->success == true) {
+			if ($this->form_validation->run() == true AND isset($captcha) AND $captcha->success == true) {
 				$data = $this->input->post();
 				$usercheck  = $this->Acl_users_model->verifyLogin($data['login'], $data['password']);
 				if ($usercheck->autorize){ 
