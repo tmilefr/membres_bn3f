@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="card">
 	  <div class="card-header">
-		<?php echo $this->render_object->RenderElement('controller'); ?>
+	  	<span class="card-title"><?php echo $this->render_object->RenderElement('controller'); ?></span>
 	  </div>
 	  <div class="card-body">
 		

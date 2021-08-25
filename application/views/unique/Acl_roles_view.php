@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="card">
 	  <div class="card-header">
-		<?php echo $this->render_object->RenderElement('role_name'); ?>
+	  	<span class="card-title"><?php echo $this->render_object->RenderElement('role_name'); ?></span>
 	  </div>
 	  <div class="card-body">
 		

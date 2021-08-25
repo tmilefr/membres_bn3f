@@ -43,7 +43,8 @@ class MY_Controller extends CI_Controller {
 		$this->load->library('Render_object');
 		$this->load->library('bootstrap_tools');
 		$this->load->library('acl');
-		
+		$this->load->library('Render_menu');
+
 		$this->lang->load('traduction');
 		$this->config->load('app');
 		$this->config->load('secured');
@@ -91,7 +92,6 @@ class MY_Controller extends CI_Controller {
 	 */
 	function init(){
 		$this->process_url();
-		
 		//echo debug( $this->uri->segment_array());
 
 		$this->data_view['app_name'] 	= $this->config->item('app_name'); 
@@ -118,6 +118,7 @@ class MY_Controller extends CI_Controller {
 		foreach($this->_autorize AS $key=>$value){
 			$this->_set_ui_rules($key , $value);
 		}
+		$this->render_menu->init();
 		//to permit use it in view.
 		$this->render_object->_set('_ui_rules' , $this->_rules);
 		$this->_debug($this->_rules);
@@ -145,7 +146,6 @@ class MY_Controller extends CI_Controller {
 		$rules->term 	= $key;
 		$rules->name 	= $this->lang->line(strtoupper($key).'_'.$this->_controller_name);
 		if (!$this->acl->hasAccess(strtolower($this->_controller_name.'/'.$key))){
-			$this->_debug(strtolower($this->_controller_name.'/'.$key.':FALSE'));
 			$value = FALSE;
 		} 
 		$rules->autorize= $value;

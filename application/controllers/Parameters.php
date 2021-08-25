@@ -33,6 +33,10 @@ class Parameters extends MY_Controller {
 	 */
 	public function index()
 	{
+		$this->list();
+	}
+
+	public function list(){
 		$fields = $this->Parameters_model->_get('autorized_fields');
 		$dba_data = new StdClass();
 		foreach($fields AS $field){

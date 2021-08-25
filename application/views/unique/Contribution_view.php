@@ -5,7 +5,7 @@
 	?>
 	<div class="card">
 	  <div class="card-header">
-			Appel à cotisation Année<?php echo $datas->year;?> Section <?php echo $datas->user->section?> 	<div class="float-right"><?php echo $url_pdf;?></div>
+	  	<span class="card-title">Appel à cotisation Année<?php echo $datas->year;?> Section <?php echo $datas->user->section?> 	<div class="float-right"><?php echo $url_pdf;?></div></span>
 	  </div>
 	  <div class="card-body">
 	  

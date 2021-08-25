@@ -8,7 +8,7 @@ echo form_open('Contribution_controller/SendByMail', array('class' => '', 'id' =
 <div class="container-fluid">
 	<div class="card">
 		<div class="card-header">
-			<h5 class="card-title"><?php echo Lang('SEND_BY_MAIL');?></h5>
+			<span class="card-title"><?php echo Lang('SEND_BY_MAIL');?></span>
 		</div>
 		<div class="card-body">	
         

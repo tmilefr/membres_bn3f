@@ -35,14 +35,13 @@ class Acl
         $this->CI->load->model('Acl_roles_model');
         $this->CI->load->model('Acl_users_model');
 
-        $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();
-        $this->CI->_debug($this->permissions);
-
         $this->controller = strtolower($this->CI->uri->rsegment(1));
         $this->action     = strtolower($this->CI->uri->rsegment(2));
         $this->routes_hisory = [];
         $this->IsLog();
-    }
+
+        $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();
+     }
     
     /**
      * Check if user is connected
@@ -103,15 +102,7 @@ class Acl
                 return TRUE;*/
             // Check for ACL
             if (!$this->CI->acl->hasAccess()) {
-                if ($this->_debug){
-                    echo '<p>'.$this->controller . '/' . $this->action.'</p>';
-                    echo '<pre>'.print_r($this->CI->acl->getGuestPages(),TRUE).'</pre>';
-                    echo '<pre>'.print_r($this->CI->acl->_get('permissions'),TRUE).'</pre>';
-                    die();
-                }
                 if ($this->controller . '/' . $this->action != '/home/no_right' && !in_array($this->controller . '/' . $this->action, $this->CI->acl->getGuestPages())) {
-                    
-                
                     $this->routes_hisory[] = $this->controller . '/' . $this->action;
                     $this->CI->session->set_userdata('routes',  $this->routes_hisory); 
                     return redirect('/Home/no_right');
@@ -179,4 +170,12 @@ class Acl
 	public function _get($field){
 		return $this->$field;
 	}	
+
+	function __destruct(){
+		if ($this->_debug){
+			unset($this->CI);
+			echo debug($this, __file__);
+		}
+	}
+    
 }

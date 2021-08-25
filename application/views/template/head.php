@@ -22,60 +22,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		  
 		  <div class="collapse navbar-collapse" id="navbarCollapse">
 			<ul class="navbar-nav mr-auto">
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="oi oi-key"></span></a>
-					<?php if ($this->session->userdata('usercheck') || $this->acl->_get('DontCheck')  ) { ?>
-					<div class="dropdown-menu">
-						<span class="dropdown-item-text"><?php echo (($this->session->userdata('usercheck')) ? $this->session->userdata('usercheck')->name:''); ?></span>
-						<div class="dropdown-divider"></div>
-						<a class="dropdown-item" href="<?php echo base_url('Home/logout');?>"><?php echo Lang('Login_out');?></a>
-						<div class="dropdown-divider"></div>
-						<?php if ($this->acl->hasAccess('acl_users_controller/list')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Acl_users_controller/list');?>"><?php echo Lang('Acl_users_controller');?></a>
-						<?php } ?>						
-						<?php if ($this->acl->hasAccess('acl_roles_controller/list')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Acl_roles_controller/list');?>"><?php echo Lang('Acl_roles_controller');?></a>
-						<?php } ?>
-						<?php if ($this->acl->hasAccess('acl_controllers_controller/list')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Acl_controllers_controller/list');?>"><?php echo Lang('Acl_controllers_controller');?></a>
-						<?php } ?>						
-					</div>
-					<?php } ?>
-				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><span class="oi oi-cog"></span></a>
-					<div class="dropdown-menu">
-						<?php if ($this->acl->hasAccess('service_controller/list')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Service_controller/list');?>"><?php echo Lang('Service_controller');?></a>
-						<?php } ?>
-						<?php if ($this->acl->hasAccess('taux_controller/list')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Taux_controller/list');?>"><?php echo Lang('Taux_controller');?></span></a>
-						<?php } ?>
-						<div class="dropdown-divider"></div>
-						<?php if ($this->acl->hasAccess('parameters/view')){ ?>
-							<a class="dropdown-item" href="<?php echo base_url('Parameters');?>"><?php echo Lang('Parameters');?></a>
-						<?php } ?>
-						<a class="dropdown-item" href="#" data-toggle="modal" data-target="#AboutModal"><?php echo Lang('About');?></a>
-					</div>
-				</li>					
+				<?php echo $this->render_menu->Get('sysmenu');?>
+				<?php echo $this->render_menu->Get('optionmenu');?>
 				<li class="nav-item"> 
 					<span class="title"><?php echo $title;?></span>
 				</li>
 				<?php  
 				if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
-
 					foreach($this->render_object->_get('_ui_rules') AS $rule){
 						if (in_array($rule->term , $this->render_object->_get('_not_link_list')) AND $rule->autorize ){
 							echo '<li class="nav-item '.(($this->render_object->_getCi('_action') == $rule->term) ? 'active':'').'"><a class="nav-link " href="'.$rule->url.'"><span class="'.$rule->icon.'"></span> '.$rule->name.'</a></li>';
 						}
 					}
 				} 
-				?> 
-			
+				?> 			
 			</ul>
 			<ul class="ml-auto navbar-nav nav nav-pills navbar-dark bg-dark">
-
-
+				<?php if ($this->session->userdata('usercheck') || $this->acl->_get('DontCheck')  ) { ?>
+				<li class="nav-item dropdown no-arrow">
+					<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo (($this->session->userdata('usercheck')) ? $this->session->userdata('usercheck')->name:''); ?></span>
+					</a>
+					<!-- Dropdown - User Information -->
+					<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+						<a class="dropdown-item" href="<?php echo base_url('Home/logout');?>"><span class="oi oi-account-logout"></span> <?php echo Lang('Login_out');?></a>
+					</div>
+				</li>
+				<?php } ?>
 			</ul>
 			<?php
 			if ($search_object->autorize){
@@ -95,28 +68,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 		
 		<!-- Sidebar  -->
 		<div id="sidebar" class="bg-dark">
-			<?php if ($this->acl->hasAccess('users_controller/list')){ ?>
-				<nav class="navbar navbar-dark bg-dark">
-					<ul class="navbar-nav mr-auto flex-column">
-						<li class="nav-item">
-							<a class="nav-link <?php echo (($this->render_object->_getCi('_controller_name') == 'Users_controller') ? 'active':'');?>" href="<?php echo base_url('Users_controller/list');?>">
-								<span class="oi oi-person "></span> <?php echo Lang('Users_controller');?></span>
-							</a>
-						</li>	
-					</ul>
-				</nav>
-			<?php } ?>
-			<?php if ($this->acl->hasAccess('contribution_controller/list')){ ?>
-			<nav class="navbar navbar-dark bg-dark">
-				<ul class="navbar-nav mr-auto flex-column">
-					<li class="nav-item">
-						<a class="nav-link <?php echo (($this->render_object->_getCi('_controller_name') == 'Contribution_controller') ? 'active':'');?>" href="<?php echo base_url('Contribution_controller/list');?>">
-							<span class="oi oi-browser"></span> <?php echo Lang('Contribution_controller');?></span>
-						</a>
-					</li>	
-				</ul>
-			</nav>	
-			<?php } ?>			
+			<?php echo $this->render_menu->Get('leftmenu');?>		
 		</div>
 
 		<!-- Page Content  -->

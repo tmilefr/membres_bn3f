@@ -1,7 +1,7 @@
 <div class="container-fluid">
 	<div class="card">
 		<div class="card-header">
-			<h5 class="card-title"><?php echo Lang('RECAP_BY_SECTION');?></h5>
+			<span class="card-title"><?php echo Lang('RECAP_BY_SECTION');?></span>
 		</div>
 		<div class="card-body">	
 			<nav>

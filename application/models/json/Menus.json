@@ -1,0 +1,65 @@
+{
+	"sysmenu": {
+		"type": "dropdown",
+		"icon": "oi-key",
+		"items":[
+			{
+				"url":"Acl_users_controller/list",
+				"name":"Acl_users_controller",
+				"type":"link"
+			},
+			{
+				"url":"Acl_roles_controller/list",
+				"name":"Acl_roles_controller",
+				"type":"link"
+			},
+			{
+				"url":"Acl_controllers_controller/list",
+				"name":"Acl_controllers_controller",
+				"type":"link"
+			}
+		]
+	},
+	"optionmenu":{
+		"type": "dropdown",
+		"icon": "oi-cog",
+		"items":[
+			{
+				"url":"Service_controller/list",
+				"name":"Service_controller",
+				"type":"link"
+			},
+			{
+				"url":"Taux_controller/list",
+				"name":"Taux_controller",
+				"type":"link"
+			},
+			{
+				"type":"divider"
+			},
+			{
+				"url":"Parameters/list",
+				"name":"Parameters",
+				"type":"link"
+			}
+		]
+	},
+	"leftmenu":{
+		"type": "link",
+		"icon": "oi-key",		
+		"items":[
+			{
+				"url":"Users_controller/list",
+				"name":"Users_controller",
+				"icon":"oi-person",
+				"type":"link"
+			},
+			{
+				"url":"Contribution_controller/list",
+				"name":"Contribution_controller",
+				"icon":"oi-browser",
+				"type":"link"
+			}
+		]
+	}
+}

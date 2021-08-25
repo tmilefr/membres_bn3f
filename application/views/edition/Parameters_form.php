@@ -25,7 +25,7 @@ $bloc = '';
 		<br/>
 		<div class="form-row">
 			<div class="col">
-				<button type="submit" class="btn btn-primary"><?php echo Lang('edit');?></button>
+				<button type="submit" class="btn btn-primary"><?php echo Lang('valid');?></button>
 			</div>
 		</div>
 	</div>

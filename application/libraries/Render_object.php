@@ -134,6 +134,11 @@ Class Render_object{
 		return $this->_model->_get('defs')[$field]->element->Render();
 	}
 	
+	function RenderMenu(){
+		
+	}
+
+
 	public function __destruct()
 	{
 		if ($this->_debug == TRUE){

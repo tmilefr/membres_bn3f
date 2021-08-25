@@ -31,3 +31,6 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /tests/results/
 *.csv
 *.pdf
+application/config/secured.php
+application/config/production/config.php
+application/config/production/database.php
