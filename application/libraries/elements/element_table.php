@@ -9,10 +9,13 @@ class element_table extends element
 {
 	protected $mode; //view, form.
 	protected $name   	= null; //unique id ?
-	protected $value  	= null;
+	protected $value  	= NULL;
 	protected $values 	= [];
 	protected $type 	= '';
-	protected $model 	= '';
+	protected $model	= '';
+	protected $foreignkey = '';
+	protected $action = '';
+	protected $ref = '';
 
 	public function __construct(){
 		parent::__construct();
@@ -20,85 +23,119 @@ class element_table extends element
 		{
 			$this->CI->bootstrap_tools->_SetHead('assets/js/dynamic_row.js','js');
 		}
-		$this->CI->load->model($this->model);
+		if ($this->model)
+			$this->CI->load->model($this->model);
 	}	
 
-	/*public function PrepareForDBA($value){
+	public function AfterExec($datas){
+		$this->CI->{$this->model}->SetLink($datas->id, $this->foreignkey, $datas->{$this->foreignkey});
+	}
+
+	public function PrepareForDBA($value){
+		//echo debug($_POST);
+		$this->CI->{$this->model}->_set('debug',TRUE);
+
+		$id_parent = $this->CI->render_object->_get('id');
 		$obj = [];
+		$datas = [];
 		//return json_encode($obj);
-		$id = $this->CI->render_object->_get('id');
-		if ($id){
-			if (method_exists($this->CI->{$this->model},'DeleteLink'))
-				$this->CI->{$this->model}->DeleteLink($id);
-			foreach( $this->CI->input->post('id_ser') AS $key=>$id_ser){
-				if ($id_ser != '...'){
-					$lgn = new Stdclass();
-					$lgn->id_cnt = $id;
-					$lgn->id_ser = $id_ser;
-					$lgn->created = date('Y-m-d H:i:s');
-					$this->CI->ContributionLgn_model->post($lgn);
-					$obj[] = $lgn;
-				}
-			}
+		if (method_exists($this->CI->{$this->model},'DeleteLink'))
+			$this->CI->{$this->model}->DeleteLink($id_parent);
+
+		foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
+			$datas[$field] = $this->CI->input->post($field.'_'.$this->model);
 		}	
+		foreach($datas[$this->ref] AS $key=>$value){
+			$lgn = new Stdclass();
+			foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
+				$lgn->$field = $datas[$field][$key];
+			}
+			if ($lgn->{$this->ref}){
+				if ($id_parent){
+					$lgn->{$this->foreignkey} = $id_parent;
+				} else {
+					$lgn->{$this->foreignkey} = 'tmp';
+				}					
+				$this->CI->{$this->model}->post($lgn);
+				$obj[] = $lgn->{$this->ref};
+			}
+		}
+		//echo debug($obj);
+		//die();
 		return json_encode($obj);
-	*/
+	}
 
 	public function RenderFormElement(){
 		//return $this->CI->bootstrap_tools->input_text($this->name, $this->CI->lang->line($this->name) , $this->value);
 		$id = $this->CI->render_object->_get('id');
-	
+		$ref = [];
 		$table = '<div class="Dynamic_row">';
-
-		$this->CI->{$this->model}->_set('filter', [$this->foreignkey => $id ]);
-		$this->CI->{$this->model}->_set('order', $this->foreignkey);
-		$datas = $this->CI->{$this->model}->get_all();
-		if (count($datas)){
-			foreach($datas AS $key => $data){
-				
-				$table .= '<div class="input-group mb-3">';
-				foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
-					
-					if ($defs->list === true){
-						switch($defs->type){
-							case 'select':
-							case 'select_database':
-								$table .= $this->CI->bootstrap_tools->input_select($field.'[]', $defs->values, $data->{$field}); //'<select type="text" name="'.$field.'[]" class="form-control m-input" value="'.$value.'" placeholder="'.$field.'" autocomplete="off">';
-							break;
-							default:
-								$table .= '<input type="text" name="'.$field.'[]" class="form-control m-input" value="'.$data->{$field}.'" placeholder="'.$field.'" autocomplete="off">';
-						}
+		if ($id){
+			$this->CI->{$this->model}->_set('filter', [$this->foreignkey => $id ]);
+			$this->CI->{$this->model}->_set('order', $this->foreignkey);
+			$datas = $this->CI->{$this->model}->get_all();
+			if (count($datas)){
+				foreach($datas AS $key => $data){
+					$table .= '<div class="input-group mb-3">';
+					foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
+						//echo debug($this->CI->render_object->_get('form_mod'), __file__.' '.__line__);
+						$defs->element->_set('form_mod', $this->CI->render_object->_get('form_mod'));
+						$defs->element->_set('value', $data->{$field});
 						
-					} else {
-						if ($field == 'id'){
-							$table .= '<input type="hidden" id="id_table" name="id_table[]" value="'.$data->id.'">';
-						}
-					}				
+						$defs->element->set_name('_'.$this->model);
+						$defs->element->SetMultiple(TRUE);
+						
+
+						if (in_array( $field , ['id',$this->foreignkey])){							
+							$table .= '<input type="hidden" value="'.$data->{$field}.'" name="'.$field.'_'.$this->model.'[]">';
+						} else {
+							$table .= $defs->element->RenderFormElement();
+						}				
+					}
+					$table .= '<div class="input-group-append"><button id="removeRow'.$data->id.'" type="button" class="removeRow btn btn-danger">Remove</button></div></div>';
 				}
-				$table .= '<div class="input-group-append"><button id="removeRow'.$data->id.'" type="button" class="removeRow btn btn-danger">Remove</button></div></div>';
 			}
 		}
 		$table .= '<div class="d-none" id="model"><div class="input-group mb-3">';
 		foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
-			if ($defs->list === true){
-				switch($defs->type){
-					case 'select':
-					case 'select_database':
-						$table .= $this->CI->bootstrap_tools->input_select($field.'[]', $defs->values, ''); //'<select type="text" name="'.$field.'[]" class="form-control m-input" value="'.$value.'" placeholder="'.$field.'" autocomplete="off">';
-					break;
-					default:
-						$table .= '<input type="text" name="'.$field.'[]" class="form-control m-input" value="" placeholder="'.$field.'" autocomplete="off">';
-				}
-			}				
+			$defs->element->_set('value', '');
+			$defs->element->set_name('_'.$this->model);
+			$defs->element->SetMultiple(TRUE);
+
+			if (in_array( $field , ['id',$this->foreignkey])){							
+				$table .= '<input type="hidden" value="" name="'.$field.'_'.$this->model.'[]">';
+			} else {
+				$table .= $defs->element->RenderFormElement();
+			}			
 		}
 		$table .= '<div class="input-group-append"><button id="removeRow" type="button" class="removeRow btn btn-danger">Remove</button></div></div></div>';
-		$table .= '</div><button id="addRow" type="button" class="btn btn-info">Add Row</button><textarea class="d-none" id="input'.$this->name.'" name="'.$this->name.'">'.$this->value.'</textarea>';
-		return $table;
+		$table .= '</div><button id="addRow" type="button" class="btn btn-info">Add Row</button>';
+		return form_hidden($this->name , $this->value ).$table;
 
 	}
 	
 	public function Render(){
-		return $this->value;
+		//return $this->value;
+		$render = [];
+		//echo debug($this->parent_id);
+		if ($this->parent_id){
+			$this->CI->{$this->model}->_set('filter', [$this->foreignkey => $this->parent_id ]);
+			$this->CI->{$this->model}->_set('order', $this->foreignkey);
+			$datas = $this->CI->{$this->model}->get_all();
+			if (count($datas)){
+				//echo debug($datas);
+				foreach($datas AS $key => $data){
+					foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
+						$defs->element->_set('form_mod', $this->CI->render_object->_get('form_mod'));
+						$defs->element->_set('value', $data->{$field});
+						if ( $field != 'id' AND $defs->element->_get('list') == true AND $string =  $defs->element->Render()){
+							$render[] = $string;
+						}				
+					}
+				}
+			}
+		}
+		return implode(',', $render);
 	}
 
 	/**
@@ -109,6 +146,7 @@ class element_table extends element
 	{
 		unset($this->CI);
 		//echo '<pre><code>'.print_r($this , 1).'</code></pre>';
+		//echo debug($this);
 	}
 	
 	/**

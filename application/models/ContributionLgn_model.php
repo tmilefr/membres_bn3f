@@ -14,6 +14,20 @@ class ContributionLgn_model extends Core_model{
 		$this->_init_def();
 	}
 
+	function SetLink($id = null, $field, $value){
+		if ($id){
+			$datas = array();
+			$datas['id'] = $id;
+			$datas[$field] = $value;
+
+			echo debug($data);
+			die();
+			
+			$this->db->where($this->{$field}, 0);
+			$this->db->update($this->table, $datas);	
+		}
+	}
+
 	function DeleteLink($id_cnt = null){
 		if ($id_cnt){
 			$this->db->where_in('id_cnt', $id_cnt)

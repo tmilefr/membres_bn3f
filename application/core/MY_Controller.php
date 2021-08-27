@@ -376,15 +376,12 @@ class MY_Controller extends CI_Controller {
 		} else {
 			$datas = array();
 			foreach($this->{$this->_model_name}->_get('autorized_fields') AS $field){
-				//$ref = explode('.',$table_field);
-				//$field = $ref[1];
 				if (method_exists($this->{$this->_model_name}->_get('defs')[$field]->element,'PrepareForDBA')){
 					$datas[$field] 	= $this->{$this->_model_name}->_get('defs')[$field]->element->PrepareForDBA($this->input->post($field));
 				} else {
 					$datas[$field] 	= $this->input->post($field);
 				}
 			}
-
 			if ($this->input->post('form_mod') == 'edit'){
 				if (isset($datas['id']) AND $id = $datas['id']){
 					$this->{$this->_model_name}->_set('key_value', $id);	
@@ -393,9 +390,16 @@ class MY_Controller extends CI_Controller {
 				} 
 			} else if ($this->input->post('form_mod') == 'add'){
 				$this->_debug($datas);
-
 				$this->data_view['id'] = $this->{$this->_model_name}->post($datas);
+				$datas['id'] = $this->data_view['id'];
 			}
+
+			foreach($this->{$this->_model_name}->_get('autorized_fields') AS $field){
+				if (method_exists($this->{$this->_model_name}->_get('defs')[$field]->element,'AfterExec')){
+					$this->{$this->_model_name}->_get('defs')[$field]->element->AfterExec($datas);
+				} 
+			}
+			
 			if ($this->_redirect){
 				redirect($this->_get('_rules')[$this->next_view]->url);
 			}

@@ -121,32 +121,9 @@ class Contribution_controller extends MY_Controller {
 	public function edit($id = 0)
 	{		
 		$this->_redirect = true;
-		if ($this->form_validation->run() === FALSE){
-
-
-		} else {
-			$this->data_view['id'] = '';
-			if (!$id){
-				if ($this->input->post('id') ){
-					$id = $this->input->post('id');
-				}
-			}
-			if ($id){
-				$this->ContributionLgn_model->DeleteLink($id);
-				foreach( $this->input->post('id_ser') AS $key=>$id_ser){
-					if ($id_ser != '...'){
-						$lgn = new Stdclass();
-						$lgn->id_cnt = $id;
-						$lgn->id_ser = $id_ser;
-						$lgn->created = date('Y-m-d H:i:s');
-						$this->ContributionLgn_model->post($lgn);
-					}
-				}
-				$this->MakeCotisation($id);
-			}			
-		}
-		
 		parent::edit($id);
+		if ($id)
+			$this->MakeCotisation($id);
 	}
 
 

@@ -60,6 +60,7 @@
 		"rules": "trim",
 		"since": 1,
 		"model": "ContributionLgn_model",
+		"ref":"id_ser",
 		"foreignkey":"id_cnt",
 		"dbforge": {
 			"type": "VARCHAR",
