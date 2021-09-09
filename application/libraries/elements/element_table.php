@@ -28,7 +28,8 @@ class element_table extends element
 	}	
 
 	public function AfterExec($datas){
-		$this->CI->{$this->model}->SetLink($datas->id, $this->foreignkey, $datas->{$this->foreignkey});
+		//echo debug($datas);
+		$this->CI->{$this->model}->SetLink($this->foreignkey, $datas['id']);
 	}
 
 	public function PrepareForDBA($value){
@@ -45,11 +46,12 @@ class element_table extends element
 		foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
 			$datas[$field] = $this->CI->input->post($field.'_'.$this->model);
 		}	
+
 		foreach($datas[$this->ref] AS $key=>$value){
 			if ($value != '...'){
 				$lgn = new Stdclass();
 				foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
-					$lgn->$field = $datas[$field][$key];
+					$lgn->{$field} = $datas[$field][$key];
 				}
 				if ($lgn->{$this->ref}){
 					if ($id_parent){
