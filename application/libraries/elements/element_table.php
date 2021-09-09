@@ -46,22 +46,22 @@ class element_table extends element
 			$datas[$field] = $this->CI->input->post($field.'_'.$this->model);
 		}	
 		foreach($datas[$this->ref] AS $key=>$value){
-			$lgn = new Stdclass();
-			foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
-				$lgn->$field = $datas[$field][$key];
-			}
-			if ($lgn->{$this->ref}){
-				if ($id_parent){
-					$lgn->{$this->foreignkey} = $id_parent;
-				} else {
-					$lgn->{$this->foreignkey} = 'tmp';
-				}					
-				$this->CI->{$this->model}->post($lgn);
-				$obj[] = $lgn->{$this->ref};
+			if ($value != '...'){
+				$lgn = new Stdclass();
+				foreach($this->CI->{$this->model}->_get('defs') AS $field=>$defs){
+					$lgn->$field = $datas[$field][$key];
+				}
+				if ($lgn->{$this->ref}){
+					if ($id_parent){
+						$lgn->{$this->foreignkey} = $id_parent;
+					} else {
+						$lgn->{$this->foreignkey} = 'tmp';
+					}					
+					$this->CI->{$this->model}->post($lgn);
+					$obj[] = $lgn->{$this->ref};
+				}
 			}
 		}
-		//echo debug($obj);
-		//die();
 		return json_encode($obj);
 	}
 

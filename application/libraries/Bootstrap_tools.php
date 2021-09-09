@@ -9,6 +9,7 @@ Class Bootstrap_tools{
 	public function __construct(){
 		$this->CI =& get_instance();
 		$this->_SetHead('assets/js/jquery-3.3.1.min.js','js');
+		$this->_SetHead('assets/js/app.js','js');
 		$this->_SetHead('assets/vendor/bootstrap/js/bootstrap.bundle.js','js');
 
 		$this->_SetHead('assets/vendor/bootstrap/css/bootstrap.min.css','css');
@@ -113,8 +114,7 @@ Class Bootstrap_tools{
 	}
 	
 	public function textarea($field, $value, $message = '', $required = false){
-		return '<label for="validationTextarea">Textarea</label>
-		<textarea class="form-control" id="validationTextarea" placeholder="'.$message.'" '.(($required) ? 'required':'').'>'.$value.'</textarea>';
+		return '<textarea class="form-control" id="'.$field.'" name="'.$field.'" placeholder="'.$message.'" '.(($required) ? 'required':'').'>'.$value.'</textarea>';
 	}
 
 	public function input_checkbox($field, $value){
@@ -127,7 +127,6 @@ Class Bootstrap_tools{
 		if (!$value OR $value == '0000-00-00'){
 			$value = date('Y-m-d');
 		}
-		
 		return '<div class="input-group">
 				  <input autocomplete="off" class="form-control datepicker" name="'.$name.'" id="input'.$name.'" value="'.$value.'" type="text">
 				  <div class="input-group-append">

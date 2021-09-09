@@ -147,5 +147,20 @@
 			"type": "INT",
 			"constraint": "5"
 		}
+	},
+	"emails": {
+		"type": "table",
+		"link" : "",
+		"list": false,
+		"search": false,
+		"rules": "trim",
+		"since": 1,
+		"model": "Email_model",
+		"ref":"email",
+		"foreignkey":"id_user",
+		"dbforge": {
+			"type": "VARCHAR",
+			"constraint": "255"
+		}
 	}
 }

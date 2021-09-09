@@ -46,7 +46,11 @@ Class Render_menu{
 						switch($element->type){
 							case "link":
 								if ($this->CI->acl->hasAccess(strtolower($element->url))){ 
-									$menu .= '<li class="nav-item"><a class="nav-link" href="'.base_url($element->url).'"><span class="oi '.$element->icon.'"></span> '.Lang($element->name).'</a></li>';
+									$menu .= '<li class="nav-item">
+									<a class="nav-link" href="'.base_url($element->url).'">
+									<span class="oi '.$element->icon.'"></span> 
+									'.Lang($element->name).'</a>
+									</li>';
 								} else {
 									$this->CI->_debug(strtolower($element->url.':FALSE'));
 								}

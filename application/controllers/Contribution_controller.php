@@ -154,26 +154,27 @@ class Contribution_controller extends MY_Controller {
 					$this->Service_model->_set('key', 'id');
 					$this->Service_model->_set('key_value', $service->id_ser );
 					$detail = $this->Service_model->get_one();
-
-					switch($dba_data->taux->code){
-						case 'N':
-						case 'H':
-						case 'C':
-							if ($detail->code =='WI' && $dba_data->taux->code == 'C'){ //hivernage offert au comité
-								$detail->taux = 0;
-								$detail->total = $detail->taux*$detail->amount;	
-							} else {
+					if (isset($detail->code)){
+						switch($dba_data->taux->code){
+							case 'N':
+							case 'H':
+							case 'C':
+								if ($detail->code =='WI' && $dba_data->taux->code == 'C'){ //hivernage offert au comité
+									$detail->taux = 0;
+									$detail->total = $detail->taux*$detail->amount;	
+								} else {
+									$detail->taux = $dba_data->taux->taux;
+									$detail->total = $detail->taux*$detail->amount;
+								}
+							break;
+							case 'D':
 								$detail->taux = $dba_data->taux->taux;
 								$detail->total = $detail->taux*$detail->amount;
-							}
-						break;
-						case 'D':
-							$detail->taux = $dba_data->taux->taux;
-							$detail->total = $detail->taux*$detail->amount;
-						break;
+							break;
+						}
+						$dba_data->real += $detail->total;
+						$dba_data->services[] = $detail;
 					}
-					$dba_data->real += $detail->total;
-					$dba_data->services[] = $detail;
 				}
 				$values = json_decode($dba_data->check);
 				$dba_data->check = $values;

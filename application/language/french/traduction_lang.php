@@ -98,7 +98,7 @@ $lang['Parameter'] = 'Paramètres';
 
 $lang['invoice'] = 'Facture';
 
-
+$lang['emails'] = 'E-mail complémentaires';
 $lang['Inputs'] = 'Saisies';
 $lang['Inputs_controller'] = 'Gestion des Tours';
 $lang['ADD_Inputs_controller'] = 'Ajouter';
@@ -195,6 +195,9 @@ $lang['list_icon'] = 'oi oi-spreadsheet';
 
 $lang['set_rules_icon'] = 'oi-grid-three-up';
 $lang['set_rules_class'] = 'btn-warning';
+
+$lang['list_icon'] = 'oi oi-eye';
+$lang['list_class'] = 'btn-info';
 
 $lang['_mail_txt'] = 'Chers membres, liebe mitglieder, \n
 Veuillez trouver ci-joint votre facture personnelle pour le renouvellement de votre adhésion à la BN3F pour l’année 2021. \n

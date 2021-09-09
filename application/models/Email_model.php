@@ -1,16 +1,16 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once(dirname(__FILE__).'/Core_model.php');
-class ContributionLgn_model extends Core_model{
-
+class Email_model extends Core_model{
+	
 	function __construct(){
 		parent::__construct();
 		
-		$this->_set('table'	, 'contributionlgn');
+		$this->_set('table'	, 'emails');
 		$this->_set('key'	, 'id');
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
-		$this->_set('json'	, 'ContributionLgn.json');
+		$this->_set('json'	, 'Emails.json');
 		$this->_init_def();
 	}
 
@@ -25,9 +25,9 @@ class ContributionLgn_model extends Core_model{
 		}
 	}
 
-	function DeleteLink($id_cnt = null){
-		if ($id_cnt){
-			$this->db->where_in('id_cnt', $id_cnt)
+	function DeleteLink($id = null){
+		if ($id){
+			$this->db->where_in('id_user', $id)
 				 ->delete($this->table);
 		}
 	}

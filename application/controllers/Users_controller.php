@@ -25,6 +25,8 @@ class Users_controller extends MY_Controller {
 		$this->init();
 
 		$this->{$this->_model_name}->_set('_debug', FALSE);
+		
+		$this->load->model('Email_model');
 
 		$this->csv_path = str_replace('application','data/csv',APPPATH);
 	}
