@@ -188,9 +188,12 @@ $lang['view_icon'] = 'oi-zoom-in';
 $lang['view_class'] = 'btn-success';
 
 $lang['sendbymail_icon'] = 'oi oi-envelope-closed';
-$lang['sendbymail_class'] = 'btn-success';
+$lang['sendbymail_class'] = 'btn-danger';
 
 $lang['recap_icon'] = 'oi oi-grid-three-up';
+$lang['recap_class'] = 'btn-warning';
+
+
 $lang['list_icon'] = 'oi oi-spreadsheet';
 
 $lang['set_rules_icon'] = 'oi-grid-three-up';

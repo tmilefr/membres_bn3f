@@ -21,6 +21,7 @@ class MY_Controller extends CI_Controller {
 	protected $_action			 	= null;
 	protected $_rules				= null;
 	protected $_autorize			= array();
+	protected $_search  			= false;
 	
 	protected $view_inprogress 		= null;
 	protected $data_view 			= array();
@@ -29,6 +30,7 @@ class MY_Controller extends CI_Controller {
 	protected $json_path = APPPATH.'models/json/';
 	protected $per_page	= 10;
 	protected $next_view = 'list';
+	
 					
 	/**
 	 * @brief Generic Constructor
@@ -259,7 +261,8 @@ class MY_Controller extends CI_Controller {
 	 */
 	public function list()
 	{
-		$this->data_view['search_object']->autorize = true;
+		if ($this->_search)
+			$this->data_view['search_object']->autorize = true;
 		
 		$this->{$this->_model_name}->_set('global_search'	, $this->session->userdata($this->set_ref_field('global_search')));
 		$this->{$this->_model_name}->_set('order'			, $this->session->userdata($this->set_ref_field('order')));

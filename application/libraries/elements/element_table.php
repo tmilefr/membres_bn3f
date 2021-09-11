@@ -28,8 +28,7 @@ class element_table extends element
 	}	
 
 	public function AfterExec($datas){
-		//echo debug($datas);
-		$this->CI->{$this->model}->SetLink($this->foreignkey, $datas['id']);
+		$this->CI->{$this->model}->SetLink($this->foreignkey, $datas['id'], $datas[$this->foreignkey]);
 	}
 
 	public function PrepareForDBA($value){

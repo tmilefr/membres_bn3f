@@ -21,6 +21,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</a>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav ml-auto">
+		<li>
+		<?php
+		if ($search_object->autorize){
+			$attributes = array('class' => 'form-inline', 'id' => 'myform');
+			echo form_open($search_object->url, $attributes);?>
+			<input class="form-control mr-sm-2" type="search" name='global_search' id='global_search' placeholder="Search" aria-label="Search" value="<?php echo $search_object->global_search;?>">
+			<button class="btn btn-success btn-sm" type="submit"><span class="oi oi-magnifying-glass"></span></button>&nbsp;
+			<?php if ($search_object->global_search){ ?>
+				<a href='<?php echo base_url($search_object->url);?>/search/reset' class='btn btn-warning btn-sm'><span class="oi oi-circle-x"></span></a>
+			<?php } ?>
+			</form>
+			<?php
+		}
+		?>		
+		</li>
 	
 			<?php echo $this->render_menu->Get('sysmenu');?>
 			<?php echo $this->render_menu->Get('optionmenu');?>	
@@ -36,19 +51,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</li>
 			<?php } ?>
 		</ul>
-		<?php
-		if ($search_object->autorize){
-			$attributes = array('class' => 'form-inline', 'id' => 'myform');
-			echo form_open($search_object->url, $attributes);?>
-			<input class="form-control mr-sm-2" type="search" name='global_search' id='global_search' placeholder="Search" aria-label="Search" value="<?php echo $search_object->global_search;?>">
-			<button class="btn btn-success btn-sm" type="submit"><span class="oi oi-magnifying-glass"></span></button>&nbsp;
-			<?php if ($search_object->global_search){ ?>
-				<a href='<?php echo base_url($search_object->url);?>/search/reset' class='btn btn-warning btn-sm'><span class="oi oi-circle-x"></span></a>
-			<?php } ?>
-			</form>
-			<?php
-		}
-		?>
+
 	</div>
 </nav><!-- NavBar END -->
 <!-- Bootstrap row -->

@@ -19,7 +19,8 @@ class Contribution_controller extends MY_Controller {
 		$this->_edit_view 		= 'edition/Contribution_form';//template for editing
 		$this->_list_view		= 'unique/Contribution_view.php';
 		$this->_autorize 		= array('list'=>true,'add'=>true,'edit'=>true,'delete'=>true,'view'=>true,'sendbymail'=>true,'recap'=>true);
-		
+		$this->_search 			= true;
+
 		$this->_set('_debug', FALSE);
 		
 		$this->title .= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
