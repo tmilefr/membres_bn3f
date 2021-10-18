@@ -191,13 +191,13 @@ $lang['sendbymail_icon'] = 'oi oi-envelope-closed';
 $lang['sendbymail_class'] = 'btn-danger';
 
 $lang['recap_icon'] = 'oi oi-grid-three-up';
-$lang['recap_class'] = 'btn-warning';
+$lang['recap_class'] = 'btn-info';
 
 
 $lang['list_icon'] = 'oi oi-spreadsheet';
 
 $lang['set_rules_icon'] = 'oi-grid-three-up';
-$lang['set_rules_class'] = 'btn-warning';
+$lang['set_rules_class'] = 'btn-info';
 
 $lang['list_icon'] = 'oi oi-eye';
 $lang['list_class'] = 'btn-info';

@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <body>
 <!-- Bootstrap NavBar -->
-<nav class="navbar navbar-expand-md navbar-dark  bg-dark ml-auto">
+<nav class="navbar navbar-expand-md navbar-dark  bg-dark ml-auto sticky-top">
 	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -21,21 +21,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	</a>
 	<div class="collapse navbar-collapse" id="navbarNavDropdown">
 		<ul class="navbar-nav ml-auto">
-		<li>
-		<?php
-		if ($search_object->autorize){
-			$attributes = array('class' => 'form-inline', 'id' => 'myform');
-			echo form_open($search_object->url, $attributes);?>
-			<input class="form-control mr-sm-2" type="search" name='global_search' id='global_search' placeholder="Search" aria-label="Search" value="<?php echo $search_object->global_search;?>">
-			<button class="btn btn-success btn-sm" type="submit"><span class="oi oi-magnifying-glass"></span></button>&nbsp;
-			<?php if ($search_object->global_search){ ?>
-				<a href='<?php echo base_url($search_object->url);?>/search/reset' class='btn btn-warning btn-sm'><span class="oi oi-circle-x"></span></a>
-			<?php } ?>
-			</form>
+			<li>
 			<?php
-		}
-		?>		
-		</li>
+			if ($search_object->autorize){
+				$attributes = array('class' => 'form-inline', 'id' => 'myform');
+				echo form_open($search_object->url, $attributes);?>
+				<input class="form-control mr-sm-2" type="search" name='global_search' id='global_search' placeholder="Search" aria-label="Search" value="<?php echo $search_object->global_search;?>">
+				<button class="btn btn-success btn-sm" type="submit"><span class="oi oi-magnifying-glass"></span></button>&nbsp;
+				<?php if ($search_object->global_search){ ?>
+					<a href='<?php echo base_url($search_object->url);?>/search/reset' class='btn btn-warning btn-sm'><span class="oi oi-circle-x"></span></a>
+				<?php } ?>
+				</form>
+				<?php
+			}
+			?>		
+			</li>
 	
 			<?php echo $this->render_menu->Get('sysmenu');?>
 			<?php echo $this->render_menu->Get('optionmenu');?>	
@@ -51,19 +51,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 			</li>
 			<?php } ?>
 		</ul>
-
 	</div>
-</nav><!-- NavBar END -->
+</nav>
+<!-- NavBar END -->
 <!-- Bootstrap row -->
 <div class="row" id="body-row">
 	<!-- Sidebar -->
-	<div id="sidebar-container" class="sidebar-expanded d-none d-md-block">
-	<ul class="list-group">
-		<li class="list-group-item sidebar-separator-title text-muted d-flex align-items-center menu-collapsed">
-			<small>MAIN MENU</small>
-		</li>
-		<?php echo $this->render_menu->Get('leftmenu');?>
-	</ul>
+	<div id="sidebar-container" class="sidebar-expanded d-none d-md-block bd-sidebar">
+		<ul class="list-group ">
+			<?php echo $this->render_menu->Get('leftmenu');?>
+			<li class="nav-item">
+				<a href="#top" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
+					<div class="d-flex w-100 justify-content-start align-items-center">
+						<span id="collapse-icon" class="oi oi-chevron-left"></span>
+						<span id="collapse-text" class="menu-collapsed">Collapse</span>
+					</div>
+				</a>
+			</li>
+		</ul>
 	</div>
 	<!-- sidebar-container END -->
 	

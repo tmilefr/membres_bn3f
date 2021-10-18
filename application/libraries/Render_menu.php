@@ -48,8 +48,10 @@ Class Render_menu{
 								if ($this->CI->acl->hasAccess(strtolower($element->url))){ 
 									$menu .= '<li class="nav-item">
 									<a class="nav-link" href="'.base_url($element->url).'">
+									<div class="d-flex w-100 justify-content-start align-items-center">
 									<span class="oi '.$element->icon.'"></span> 
-									'.Lang($element->name).'</a>
+									<span class="collapse-text menu-collapsed">'.Lang($element->name).'</span>
+									</div></a>
 									</li>';
 								} else {
 									$this->CI->_debug(strtolower($element->url.':FALSE'));

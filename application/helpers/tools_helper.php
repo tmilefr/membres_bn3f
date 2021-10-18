@@ -13,7 +13,7 @@ if ( ! function_exists('PassWordGenerator'))
 if ( ! function_exists('debug'))
 {
 	function debug($inc,$line = null){
-		return $line.' <pre><code>'.print_r($inc, TRUE).'</code></pre>';
+		return '<div class="offset-1">'.$line.' <pre><code>'.print_r($inc, TRUE).'</code></pre></div>';
 	}
 }
 
