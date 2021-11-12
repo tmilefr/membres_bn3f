@@ -38,18 +38,18 @@ class Acl_roles_model extends Core_model{
 			$query = $this->db->select([
 				"controller",
 				"action",
-				"arc.id_role"
+				"ARC.id_role"
 			])
 			->from('acl_roles_controllers ARC')
 			->join('acl_controllers AC', "ARC.id_ctrl = AC.ID")
 			->join('acl_actions AA', "ARC.id_act = AA.ID")
-			->where("arc.id_role", $roleId)
+			->where("ARC.id_role", $roleId)
 			->get();
 		} else {
 			$query = $this->db->select([
 				"controller",
 				"action",
-				"arc.id_role"
+				"ARC.id_role"
 			])
 			->from('acl_roles_controllers ARC')
 			->join('acl_controllers AC', "ARC.id_ctrl = AC.ID")
@@ -57,15 +57,15 @@ class Acl_roles_model extends Core_model{
 			->get();
 		}
 		$permissions = array();
-
-		// Add to the list of permissions
-		foreach ($query->result_array() as $row)
-		{		    
-			$permissions[$row['id_role']][] = strtolower($row['controller'] . '/' . $row['action']);
+		if($query && $query->num_rows() > 0){
+			// Add to the list of permissions
+			foreach ($query->result_array() as $row)
+			{		    
+				$permissions[$row['id_role']][] = strtolower($row['controller'] . '/' . $row['action']);
+			}
 		}
 		return $permissions;
 	}
 
 }
 ?>
-
