@@ -7,13 +7,13 @@ Class Render_object{
 	protected $id 		= NULL; //id of active element
 	protected $dba_data = NULL; //Data from DATABASE from id element
 	protected $_debug 	= FALSE;//Debug 
-	protected $_model 	= null;
+	protected $_model 	= [];
 	protected $_ui_rules= [];
 	protected $form_mod = FALSE;
 	protected $notime	= TRUE;
 	protected $_reset   = [];
 	protected $_not_link_list = ['add','list'];
-	
+
 	public function __construct()
 	{
 		$this->CI =& get_instance();
@@ -39,15 +39,17 @@ Class Render_object{
 		return $this->CI->bootstrap_tools->label($name);
 	}	
 	
+
+
 	public function render_element_menu($data = null, $blocked = false )
 	{
 		$key_value ='';
 		$element_menu = '';
 		if ($data){	
-			$key_value = $data->{$this->_model->_get('key')};
+			$key_value = $data->{$this->_model[$this->datamodel]->_get('key')};
 		} else {
 			if (isset($this->dba_data)){ // try to check database
-				$key_value = $this->dba_data->{$this->_model->_get('key')};
+				$key_value = $this->dba_data->{$this->_model[$this->datamodel]->_get('key')};
 			}
 		}		
 		if ($key_value)
@@ -65,20 +67,20 @@ Class Render_object{
 	{
 		$filter 	= $this->CI->session->userdata($this->CI->set_ref_field('filter'));
 		$direction 	= $this->CI->session->userdata($this->CI->set_ref_field('direction'));
-		if ( $this->_model->_get('defs')[$field]->dbforge->type == 'INT'){
+		if ( $this->_model[$this->datamodel]->_get('defs')[$field]->dbforge->type == 'INT'){
 			$null_value = 0;
 		} else {
 			$null_value = '';
 		}
 		$add_string =  '';
 		if (isset($filter[$field])){
-			$add_string = '<span class="badge badge-success">'.((isset($this->_model->_get('defs')[$field]->values[$filter[$field]])) ? $this->_model->_get('defs')[$field]->values[$filter[$field]]:$filter[$field]).'</span>';
+			$add_string = '<span class="badge badge-success">'.((isset($this->_model[$this->datamodel]->_get('defs')[$field]->values[$filter[$field]])) ? $this->_model[$this->datamodel]->_get('defs')[$field]->values[$filter[$field]]:$filter[$field]).'</span>';
 		}
 		$string_render_link = '<div class="btn-group">';
 		
 		$string_render_link .= $this->CI->bootstrap_tools->render_head_link($field, $direction, $this->CI->_get('_rules')[$mode]->url, $add_string);
-		if (isset($this->_model->_get('defs')[$field]->values)){
-			$string_render_link .= $this->CI->bootstrap_tools->render_dropdown($field, $this->_model->_get('defs')[$field]->values, $this->CI->_get('_rules')[$mode]->url, $null_value );
+		if (isset($this->_model[$this->datamodel]->_get('defs')[$field]->values)){
+			$string_render_link .= $this->CI->bootstrap_tools->render_dropdown($field, $this->_model[$this->datamodel]->_get('defs')[$field]->values, $this->CI->_get('_rules')[$mode]->url, $null_value );
 		}
 		$string_render_link .= '</div>';
 		return $string_render_link;
@@ -88,54 +90,75 @@ Class Render_object{
 		return $this->CI->_get($field);
 	}
 
-	public function Set_Rules_elements()
+	public function Set_Rules_elements($DataModelToUse = null)
 	{
-		$this->_model = $this->CI->{$this->datamodel};
-		
-		$hidden_form = array('form_mod'=>(($this->id) ? 'edit':'add'));
-		foreach($this->_model->_get('defs') AS $field=>$defs){
+		if ($DataModelToUse == null)
+			$DataModelToUse =  $this->datamodel;
+		$this->_model[$DataModelToUse] = $this->CI->{$DataModelToUse};
+		//set Validation Rules config by DataModel
+		$config = [];
+		foreach($this->_model[$DataModelToUse]->_get('defs') AS $field=>$defs){
 			if (isset($defs->rules) AND $defs->rules){
-				$this->CI->form_validation->set_rules($field, $this->CI->lang->line($field) , $defs->rules);
+				$config[] = ['field' => $field,'label' => $this->CI->lang->line($field),'rules' =>  $defs->rules];
+				//$this->CI->form_validation->set_rules($field, $this->CI->lang->line($field) , $defs->rules); changed for multi-forms !
 			}	
 		}	
+		$this->CI->form_validation->_SetRules($config,$DataModelToUse);
 	}
-	//need to make a real element object.
-	function RenderFormElement($field)
-	{
-		$value = null;
-		if (isset($this->_reset[$field]) AND  $this->_reset[$field]){
-			
-		} else {
-			if ($value = set_value($field)){ //in first, POST data
 
+
+	// design by type
+	function GetDesign($type = ""){
+		return $this->CI->bootstrap_tools->GetDesign($type);
+	}
+
+	//need to make a real element object.
+	function RenderFormElement($field, $val = false, $DataModelToUse = null)
+	{
+		if ($DataModelToUse == null){ //mutli model !
+			$DataModelToUse = $this->datamodel;
+		}		
+		$value = null;
+		if ($val){
+			$value = $val;
+		} else {
+			if (isset($this->_reset[$field]) AND  $this->_reset[$field]){
+				
 			} else {
-				if (isset($this->dba_data)){ // try to check database
-					$value = $this->dba_data->{$field};
+				if ($value = set_value($field)){ //in first, POST data
+
+				} else {
+					if (isset($this->dba_data)){ // try to check database
+						$value = $this->dba_data->{$field};
+					}
 				}
 			}
 		}
-		$this->_model->_get('defs')[$field]->element->_set('form_mod', $this->form_mod);
-		$this->_model->_get('defs')[$field]->element->_set('value', $value);
-		return $this->_model->_get('defs')[$field]->element->RenderFormElement();
+		$this->_model[$DataModelToUse]->_get('defs')[$field]->element->_set('form_mod', $this->form_mod);
+		$this->_model[$DataModelToUse]->_get('defs')[$field]->element->_set('value', $value);
+		return $this->_model[$DataModelToUse]->_get('defs')[$field]->element->RenderFormElement();
 	}
 	
-	function RenderElement($field,$value = null, $parent_id = null)
+	function RenderElement($field, $value = null, $parent_id = null, $DataModelToUse = null)
 	{
+		if ($DataModelToUse == null){ //mutli model !
+			$DataModelToUse = $this->datamodel;
+		}
 		if (!$value) {
 			if (isset($this->dba_data)){ // try to check database
 				$value = $this->dba_data->{$field};
 			}
 		}	
 		if ($parent_id){
-			$this->_model->_get('defs')[$field]->element->_set('parent_id',$parent_id);
+			$this->_model[$DataModelToUse]->_get('defs')[$field]->element->_set('parent_id',$parent_id);
 		}
-		$this->_model->_get('defs')[$field]->element->_set('form_mod', $this->form_mod);	
-		$this->_model->_get('defs')[$field]->element->_set('value', $value);
-		return $this->_model->_get('defs')[$field]->element->Render();
+		$this->_model[$DataModelToUse]->_get('defs')[$field]->element->_set('form_mod', $this->form_mod);	
+		$this->_model[$DataModelToUse]->_get('defs')[$field]->element->_set('value', $value);
+		return $this->_model[$DataModelToUse]->_get('defs')[$field]->element->Render();
 	}
 	
-	function RenderMenu(){
-		
+	function RenderImg($file, $alt = ""){
+		return $this->CI->bootstrap_tools->RenderImg($file, $alt);
 	}
 
 
@@ -143,7 +166,7 @@ Class Render_object{
 	{
 		if ($this->_debug == TRUE){
 			unset($this->CI);
-			unset($this->_model);
+			unset($this->_model[$this->datamodel]);
 			echo debug($this, __file__ );
 		}
 	}

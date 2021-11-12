@@ -54,9 +54,8 @@ class Acl_users_model extends Core_model{
 		{
 			$row = $query->row_array();
 			if (hash_equals($row['password'], crypt($password, PASSWORD_SALT))) {
-				echo "Mot de passe correct !";
+				$usercheck->error = "Mot de passe correct !";
 			}
-			$usercheck = new stdClass();
 			$usercheck->name = $row['name'];
 			$usercheck->autorize = true;
 			$usercheck->id = $row['id'];

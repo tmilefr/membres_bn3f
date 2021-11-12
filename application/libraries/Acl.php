@@ -22,6 +22,7 @@ class Acl
     ];
     protected $DontCheck = FALSE;
     protected $_debug = FALSE;
+    protected $_debug_array = [];
     /**
      * Constructor
      *
@@ -69,16 +70,17 @@ class Acl
      */
     public function hasAccess($currentPermission = null)
     {
+        //echo debug($this->permissions);
         if ($this->DontCheck)
             return TRUE;
         if ($this->getUserId()) {            
             if (!$currentPermission)
                 $currentPermission =  $this->controller . '/' . $this->action;
             if (isset($this->permissions[$this->getUserRoleId()]) && count($this->permissions[$this->getUserRoleId()]) > 0) {
-                if (in_array($currentPermission, $this->permissions[$this->getUserRoleId()])) {
+                if (in_array( strtolower($currentPermission) , $this->permissions[$this->getUserRoleId()])) {
                     return TRUE;
                 } else {
-                    $this->CI->_debug($this->controller . '/' . $this->action.' NOT GRANTED');
+                    $this->_debug_array[] = $currentPermission.' NOT GRANTED';
                 }
             }
         }        
@@ -108,7 +110,7 @@ class Acl
                     return redirect('/Home/no_right');
                 } 
             } else {
-                $this->CI->_debug($this->controller . '/' . $this->action.' GRANTED');
+                $this->_debug_array[] = $this->controller . '/' . $this->action.' GRANTED';
             }
         } else {
             if ($this->controller . '/' . $this->action != 'home/login')

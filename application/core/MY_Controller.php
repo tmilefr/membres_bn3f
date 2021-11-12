@@ -100,6 +100,8 @@ class MY_Controller extends CI_Controller {
 		$this->data_view['slogan'] 		= $this->config->item('slogan'); 
 		$this->data_view['title'] 		= $this->title;
 		
+		$this->data_view['raw_url']		= $this->_controller_name.'/'.$this->_action;
+
 		$this->data_view['footer_line'] = '';
 		switch($this->config->item('debug_app')){
 			case 'debug':
@@ -373,36 +375,10 @@ class MY_Controller extends CI_Controller {
 		}		
 		
 		//$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|matches[password]');
-		if ($this->form_validation->run() === FALSE){
-
-
+		if ($this->form_validation->run($this->_model_name) === FALSE){
+			$this->_debug(validation_errors(),'edit','form_validation',__FILE__,__LINE__);
 		} else {
-			$datas = array();
-			foreach($this->{$this->_model_name}->_get('autorized_fields') AS $field){
-				if (method_exists($this->{$this->_model_name}->_get('defs')[$field]->element,'PrepareForDBA')){
-					$datas[$field] 	= $this->{$this->_model_name}->_get('defs')[$field]->element->PrepareForDBA($this->input->post($field));
-				} else {
-					$datas[$field] 	= $this->input->post($field);
-				}
-			}
-			if ($this->input->post('form_mod') == 'edit'){
-				if (isset($datas['id']) AND $id = $datas['id']){
-					$this->{$this->_model_name}->_set('key_value', $id);	
-					$this->{$this->_model_name}->_set('datas', $datas);
-					$this->{$this->_model_name}->put();
-				} 
-			} else if ($this->input->post('form_mod') == 'add'){
-				$this->_debug($datas);
-				$this->data_view['id'] = $this->{$this->_model_name}->post($datas);
-				$datas['id'] = $this->data_view['id'];
-			}
-
-			foreach($this->{$this->_model_name}->_get('autorized_fields') AS $field){
-				if (method_exists($this->{$this->_model_name}->_get('defs')[$field]->element,'AfterExec')){
-					$this->{$this->_model_name}->_get('defs')[$field]->element->AfterExec($datas);
-				} 
-			}
-			
+			$datas = $this->_ProcessPost($this->_model_name);
 			if ($this->_redirect){
 				redirect($this->_get('_rules')[$this->next_view]->url);
 			}
@@ -412,6 +388,37 @@ class MY_Controller extends CI_Controller {
 
 		$this->_set('view_inprogress',$this->_edit_view);
 		$this->render_view();
+	}
+
+
+
+	function _ProcessPost($model_name){
+		$datas = array();
+		foreach($this->{$model_name}->_get('autorized_fields') AS $field){
+			if (method_exists($this->{$model_name}->_get('defs')[$field]->element,'PrepareForDBA')){
+				$datas[$field] 	= $this->{$model_name}->_get('defs')[$field]->element->PrepareForDBA($this->input->post($field));
+			} else {
+				$datas[$field] 	= $this->input->post($field);
+			}
+		}
+		if ($this->input->post('form_mod') == 'edit'){
+			if (isset($datas['id']) AND $id = $datas['id']){
+				$this->{$model_name}->_set('key_value', $id);	
+				$this->{$model_name}->_set('datas', $datas);
+				$this->{$model_name}->put();
+			} 
+		} else if ($this->input->post('form_mod') == 'add'){
+			//$this->_debug($datas);
+			$this->data_view['id'] = $this->{$model_name}->post($datas);
+			$datas['id'] = $this->data_view['id'];
+		}
+
+		foreach($this->{$model_name}->_get('autorized_fields') AS $field){
+			if (method_exists($this->{$model_name}->_get('defs')[$field]->element,'AfterExec')){
+				$this->{$model_name}->_get('defs')[$field]->element->AfterExec($datas);
+			} 
+		}
+		return $datas;
 	}
 
 	/**

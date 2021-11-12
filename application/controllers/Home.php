@@ -18,10 +18,9 @@ class Home extends MY_Controller {
 		$captcha_error = '';
         if($this->input->server('REQUEST_METHOD') == 'POST'){
 			$captcha = json_decode($this->{$this->_model_name}->_get('defs')['recaptchaResponse']->element->PrepareForDBA($this->input->post("g-recaptcha-response")));
-			//echo '<pre>'.print_r($captcha, TRUE).'</pre>';
 			if (isset( $captcha->{'error-codes'}))
 				$captcha_error = implode('<br/>', $captcha->{'error-codes'});
-			if ($this->form_validation->run() == true AND isset($captcha) AND $captcha->success == true) {
+			if ($this->form_validation->run('Acl_users_model') == true AND isset($captcha) AND $captcha->success == true) {
 				$data = $this->input->post();
 				$usercheck  = $this->Acl_users_model->verifyLogin($data['login'], $data['password']);
 				if ($usercheck->autorize){ 
