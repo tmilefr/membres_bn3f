@@ -33,6 +33,7 @@ echo form_open('Contribution_controller/SendByMail', array('class' => '', 'id' =
                                 echo '<th scope="col">'.$this->lang->line('user').'</a></th>';
                                 echo '<th scope="col">'.$this->lang->line('email').'</a></th>';
                                 echo '<th scope="col">'.$this->lang->line('statut').'</a></th>';
+                                echo '<th scope="col"><input type="checkbox" class="checkAll" name="'.$section.'" /></th>';
                                 ?>
                                 <th scope="col">&nbsp;</th>
                             </tr>
@@ -45,10 +46,11 @@ echo form_open('Contribution_controller/SendByMail', array('class' => '', 'id' =
                             echo '<td>'. $data->email.'</td>';
                             echo '<td>';
                             foreach($data->log AS $log){
-                                echo '<span class="badge badge-pill '.(($log->status == 'not-sended') ? 'badge-danger':'badge-success').'"> <span class="oi oi-envelope-closed"></span>  '.$log->status.' '.$log->date."</span><br/>";
+                                //echo debug($log);
+                                echo '<span class="badge badge-pill '.(($log->status == 'not-sended') ? 'badge-danger':'badge-success').'"> <span class="oi oi-envelope-closed"></span>  '.$log->status.' '.$log->date.'</span> <span class="badge badge-info"><span class="oi oi-file"></span> '.$log->pdf.'</span><br/>';
                             }
                             echo '</td>';
-                            echo '<td><input type="checkbox" '.(($data->email) ? '':'disabled="disabled"').'name="ids[]" value="'.$data->id.'|'.$data->email.'" /></td>';
+                            echo '<td><input class="check'.$section.'" type="checkbox" '.(($data->email) ? '':'disabled="disabled"').' name="ids[]" value="'.$data->id.'|'.$data->email.'" /></td>';
                             echo '</tr>';
                         } ?>
                         </tbody>
@@ -62,7 +64,6 @@ echo form_open('Contribution_controller/SendByMail', array('class' => '', 'id' =
 		</div>
 	</div>
 </div>
-
 
 <?php
 echo form_close();

@@ -15,7 +15,7 @@ class Contribution_model extends Core_model{
 	}
 
 	function GetUserAndLog(){
-		$datas = $this->db->select('*')
+		$datas = $this->db->select('contribution.*,users.name,users.surname,users.email,users.section')
 						   ->join('users', 'contribution.user = users.id', 'left' )
 						   ->order_by('users.section', 'ASC')
 						   ->order_by('users.name', 'ASC')

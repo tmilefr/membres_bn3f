@@ -233,7 +233,7 @@ p{
 	<?php if ($datas->taux->code != 'C' && $datas->taux->code != 'D'){ ?>
 	<table  class="table_page table_border ">
 	<tr><td class="nowrap">
-		<h3>Provisions journées de travail encaissées en 2020</h3>
+		<h3>Provisions journées de travail encaissées en 2021</h3>
 	</td><td>
 		<?php 
 		if (isset($datas->check->encaisse)){
@@ -242,7 +242,7 @@ p{
 		?>
 	</td></tr>
 	<tr><td>
-		<h3>Provisions journées de travail à régler pour 2021 </h3>
+		<h3>Provisions journées de travail à régler pour 2022 </h3>
 	</td><td>
 		<?php if (isset($datas->check->todo) AND $datas->check->todo){ ?>
 		<?php echo $datas->check->todo;?> €

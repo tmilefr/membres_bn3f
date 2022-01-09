@@ -13,11 +13,13 @@ class Sendmail_model extends Core_model{
 		$this->_set('json'	, 'Sendmail.json');
 		$this->_init_def();
 	}
-
+	
+	//SELECT status,pdf,co.user, us.name,us.email FROM `sendmail` se LEFT JOIN `contribution` co ON se.user = co.id LEFT JOIN `users` us ON co.user = us.id
 	function GetLog($id){
 		$datas = $this->db->select('*')
 		->where('sendmail.user', $id)
-		->join('users', 'sendmail.user = users.id', 'left' )
+		->join('contribution', 'sendmail.user = contribution.id', 'left' )
+		->join('users', 'contribution.user = users.id', 'left' )
 		->order_by('sendmail.id', 'ASC')
 		->get($this->table)
 		
@@ -25,5 +27,6 @@ class Sendmail_model extends Core_model{
 
 		return $datas;
 	}
+
 }
 ?>

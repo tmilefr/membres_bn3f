@@ -64,29 +64,37 @@ class Contribution_controller extends MY_Controller {
 	{
 		$this->load->library('email');
 		
+		$this->bootstrap_tools->_SetHead('assets/js/checkall.js','js');
+
 		$this->data_view['FieldSection'] = $this->Users_model->_get('defs')['section']->values;
+		$subject = 'Appel à cotisation BN3F 2022';
 
 		if (isset($_POST['ids'])){
 			foreach($_POST['ids'] AS $key=>$val){
 				$ref = explode('|', $val);
 				$id = $ref[0];
 				$email = $ref[1];
-				$dba_data = $this->MakePdf($id);
+				$dba_data = $this->MakePdf($id, true);
 				if (is_file($this->libpdf->_get('pdf_path').$dba_data->pdf)){
 					$this->email->from('info@bn3f.fr', 'BN3F');
 					$this->email->to($email);
-					$this->email->subject('Appel à cotisation BN3F 2021 (correction)');
+					$this->email->subject($subject);
 					$this->email->message($this->_mail_txt);
 					$this->email->set_alt_message($this->_mail_txt);
 					$this->email->attach($this->libpdf->_get('pdf_path').$dba_data->pdf);
 					//log send mail
+					/* LOG */
 					$log = new StdClass();
 					$log->date = date('Y-m-d H:i:s');
 					$log->user = $id;
+					$log->to = $email;
+					$log->subject = $subject;
+					$log->msg = $this->_mail_txt;
 					$log->pdf = $dba_data->pdf;				
 					$log->status = (($this->email->send()) ? 'sended':'not-sended');
-					$log->log = $this->email->print_debugger(array('headers'));
+					$log->log = $this->email->print_debugger();
 					$this->Sendmail_model->post($log);				
+					//re-init e-mail before send another e-mail.
 					$this->email->clear(TRUE);
 				} else {
 					$this->data_view['sendmail'][] = $this->libpdf->_get('pdf_path').$dba_data->pdf. ' not exist';
@@ -100,7 +108,7 @@ class Contribution_controller extends MY_Controller {
 		foreach($dba_data as $key=>$data){
 			
 
-			$dba_data[$key]->log = $this->Sendmail_model->GetLog($data->user);
+			$dba_data[$key]->log = $this->Sendmail_model->GetLog($data->id);
 
 			$list_sendmail[$dba_data[$key]->section][] = $dba_data[$key];
 		}
@@ -189,7 +197,7 @@ class Contribution_controller extends MY_Controller {
 
 	function MakePdf($id = null, $override = true){
 		if ($dba_data = $this->MakeCotisation($id)){
-			$dba_data->pdf = NameToFilename('Cotisation_'.$dba_data->user->name.'_'.$dba_data->year).'.pdf';
+			$dba_data->pdf = NameToFilename('Cotisation_'.$dba_data->user->name.'_'.$dba_data->user->surname.'_'.$dba_data->year).'.pdf';
 			if (!is_file($this->libpdf->_get('pdf_path').$dba_data->pdf) OR $override){
 				$this->libpdf->DoPdf($dba_data,'unique/Contribution_view_pdf', $dba_data->pdf);
 			} 		

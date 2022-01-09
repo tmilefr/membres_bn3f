@@ -1,0 +1,2 @@
+ALTER TABLE `sendmail` ADD `to` VARCHAR(255) NULL AFTER `user`, ADD `msg` VARCHAR(255) NULL AFTER `to`, ADD `raw` LONGTEXT NULL AFTER `msg`;
+ALTER TABLE `sendmail` ADD `subject` VARCHAR(255) NOT NULL AFTER `to`;

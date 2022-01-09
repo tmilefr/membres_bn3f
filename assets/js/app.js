@@ -26,4 +26,6 @@ $(document).ready(function () {
         // Collapse/Expand icon
         $('#collapse-icon').toggleClass('oi-chevron-left oi-chevron-right');
     }
+
+    
 });
