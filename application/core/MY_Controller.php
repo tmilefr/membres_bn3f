@@ -366,24 +366,32 @@ class MY_Controller extends CI_Controller {
 				$id = $this->input->post('id');
 			}
 		}
+		if ($id){
+			$this->render_object->_set('id',		$id);
+			$this->{$this->_model_name}->_set('key_value',$id);
+			$dba_data = $this->{$this->_model_name}->get_one();
+
+			//echo debug($dba_data);
+
+			$this->render_object->_set('dba_data',$dba_data);
+			$this->render_object->_set('form_mod', 'edit');
+			$this->data_view['id'] = $id;
+		}
 		//$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|matches[password]');
 		if ($this->form_validation->run($this->_model_name) === FALSE){
 			$this->_debug(validation_errors(),'edit','form_validation',__FILE__,__LINE__);
 		} else {
 			$datas = $this->_ProcessPost($this->_model_name);
+			$dba_data = new StdClass();
+			foreach($datas AS $key=>$value)
+				$dba_data->$key = $value;
+			$this->render_object->_set('dba_data',$dba_data);
 			$this->session->set_flashdata('state',  $this->lang->line('SAVED_OK') );
 			if ($this->_redirect){
 				redirect($this->_get('_rules')[$this->next_view]->url);
 			}
 		}
-		if ($id){
-			$this->render_object->_set('id',		$id);
-			$this->{$this->_model_name}->_set('key_value',$id);
-			$dba_data = $this->{$this->_model_name}->get_one();
-			$this->render_object->_set('dba_data',$dba_data);
-			$this->render_object->_set('form_mod', 'edit');
-			$this->data_view['id'] = $id;
-		}	
+	
 		
 		$this->data_view['required_field'] = $this->{$this->_model_name}->_get('required');
 
