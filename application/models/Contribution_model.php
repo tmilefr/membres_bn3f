@@ -14,6 +14,17 @@ class Contribution_model extends Core_model{
 		$this->_init_def();
 	}
 
+	function get_all_ids(){
+		$datas = $this->db->select('id')
+		->get($this->table)
+		->result();
+		$ids = [];
+		foreach($datas AS $data){
+			$ids[] = $data->id;
+		}
+		return $ids;
+	}
+
 	function GetUserAndLog(){
 		$datas = $this->db->select('contribution.*,users.name,users.surname,users.email,users.section')
 						   ->join('users', 'contribution.user = users.id', 'left' )

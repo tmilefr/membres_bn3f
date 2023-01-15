@@ -162,7 +162,7 @@ p{
 		<td>Banque</td><td>Guichet</td><td>N° Compte</td><td>Clé</td><td>DEV</td></tr>
 		<td>10278</td><td>03050</td><td>00021587145</td><td>35</td><td>EUR</td></tr>
 		</table>
-		</td><td>&nbsp;</td><td>
+		</td><td> </td><td>
 		<p>IBAN</p>
 		<table class="small">
 		<tr><td>FR76</td><td>1027</td><td>8030</td><td>5000</td><td>0215</td><td>8714</td><td>535</td></tr>
@@ -233,7 +233,7 @@ p{
 	<?php if ($datas->taux->code != 'C' && $datas->taux->code != 'D'){ ?>
 	<table  class="table_page table_border ">
 	<tr><td class="nowrap">
-		<h3>Provisions journées de travail encaissées en 2021</h3>
+		<h3>Provisions journées de travail encaissées en 2022</h3>
 	</td><td>
 		<?php 
 		if (isset($datas->check->encaisse)){
@@ -242,7 +242,7 @@ p{
 		?>
 	</td></tr>
 	<tr><td>
-		<h3>Provisions journées de travail à régler pour 2022 </h3>
+		<h3>Provisions journées de travail à régler pour 2023 </h3>
 	</td><td>
 		<?php if (isset($datas->check->todo) AND $datas->check->todo){ ?>
 		<?php echo $datas->check->todo;?> €
@@ -284,17 +284,18 @@ p{
 	<tr><td>
 		Date limite de payement
 	</td><td>
-		28 février 2020
+		28 février 2023
 	</td></tr>
 	<tr><td>
 		Majoration pour payement ultérieur
 	</td><td>
-		20 € par mois entamé
+		50 € par mois entamé
 	</td></tr>
 	</table>
 	<table  class="table_page">
 	<tr><td colspan="2">
-		Au 1er juin, vous devrez re-payer les droits d'entrée comme un nouveau membre
+		<b>Au 1er avril, l’accès sera bloqué pour les membres non à jour de cotisation</b><br/>
+		Après cette date, vous devrez re-payer les droits d'entrée comme un nouveau membre
 
 		<br/><br />
 		<h3>Pour le comité</h3>

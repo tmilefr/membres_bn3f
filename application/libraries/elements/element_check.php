@@ -16,6 +16,7 @@ class element_check extends element
 
 	private function RenderElement($value,$name){
 		$val = '';
+		//echo $value->{$name};
 		if (isset($value->{$name})){
 			$val =  preg_replace("/\s+/", " ", $value->{$name});
 		}

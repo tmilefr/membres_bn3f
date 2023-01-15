@@ -67,7 +67,7 @@ class Contribution_controller extends MY_Controller {
 		$this->bootstrap_tools->_SetHead('assets/js/checkall.js','js');
 
 		$this->data_view['FieldSection'] = $this->Users_model->_get('defs')['section']->values;
-		$subject = 'Appel à cotisation BN3F 2022';
+		$subject = 'Appel à cotisation BN3F 2023';
 
 		if (isset($_POST['ids'])){
 			foreach($_POST['ids'] AS $key=>$val){
@@ -125,14 +125,31 @@ class Contribution_controller extends MY_Controller {
 	 * @param $id 
 	 * @returns 
 	 * 
-	 * 
 	 */
 	public function edit($id = 0)
 	{		
-		$this->_redirect = true;
+		$this->_redirect = false;
+		$this->_set('render_view',false);
+		$this->session->set_flashdata('state',  '' );
+		if (!$id){
+			if ($this->input->post('id') ){
+				$id = $this->input->post('id');
+			}
+		}
+		$ids =  $this->{$this->_model_name}->get_all_ids();
+		$key = array_search($id , $ids);
+
+		$this->data_view['id_prec'] =  ((isset($ids[$key-1])) ? $ids[$key-1]:-1);
+		$this->data_view['id_suiv'] =  ((isset($ids[$key+1])) ? $ids[$key+1]:-1);
+
 		parent::edit($id);
-		if ($id)
+
+		if ($id){
 			$this->MakeCotisation($id);
+			$dba_data = $this->MakePdf($id);
+			$this->data_view['url_pdf'] = '<a target="_new" href="'.$this->libpdf->_get('pdf_url_path').'/'. $dba_data->pdf.'"><span class="oi oi-file"></span> '. $dba_data->pdf.'</a>';
+		}
+		$this->render_view();
 	}
 
 

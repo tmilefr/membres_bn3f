@@ -183,3 +183,4 @@ class Users_controller extends MY_Controller {
 	}
 
 }
+?>

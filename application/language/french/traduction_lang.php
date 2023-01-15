@@ -28,6 +28,7 @@ $lang['SENDBYMAIL_Contribution_controller'] = 'Send';
 $lang['LIST_Contribution_controller'] = 'liste';
 $lang['LIST_Users_controller'] = 'liste';
 
+$lang['SAVED_OK'] = '<div class="alert alert-info">sauvegarde ok</div>';
 
 $lang['RECAP_Contribution_controller'] = 'Recap';
 
@@ -203,23 +204,30 @@ $lang['list_icon'] = 'oi oi-eye';
 $lang['list_class'] = 'btn-info';
 
 $lang['_mail_txt'] = 'Chers membres, liebe mitglieder, \n
-Veuillez trouver ci-joint votre facture personnelle pour le renouvellement de votre adhésion à la BN3F pour l’année 2021. \n
-Comme vous le constaterez, il y aura quelques changements mineurs : \n
--	Les tarifs (sauf parc à bateaux) restent inchangés \n
--	Les emplacements bateau passent tous à 60 Euros\n
--	Les journées de travail passent de 4 fois 75 Euros à 2 fois 150 euros à titre d’essai. Ceci devrait favoriser les personnes désireuses de prêter main forte à la base, sans pénaliser ceux qui ne viennent jamais. Par contre : Ces 2 journées de travail devront, à de rares exceptions près, être consacrées à l’intérêt général de la base, à l’exclusion de tous travaux internes aux sections. \n
--	La date limite de payement est fixée au 28 février. Au-delà de cette date, une majoration de 20€ (10€ pour une cotisation individuelle) sera appliquée pour chaque mois entamé. A compter du 1er juin tout membre dont la cotisation ne sera pas réglée sera considéré comme démissionnaire et un nouveau droit d’entrée sera demandé pour une réinscription. \n
 
-Pour toute demande/réclamation/modification : info@bn3f.fr \n
-En vous souhaitant une belle saison 2021\n\n
+Veuillez trouver ci-joint votre facture personnelle pour le renouvellement de votre adhésion à la BN3F pour l’année 2023.
+-              Les tarifs restent inchangés malgré les fortes augmentations des énergies et des assurances
 
-In der Beilage, finden Sie bitte eure persönliche Rechnung bezüglich der Erneuerung eurer Mitgliedschaft für die Saison 2021. Wie Ihr sehen könnt, gibt es ein Paar kleine Neuigkeiten: \n
--	Die Preise bleiben unverändert (mit Ausnahme der Bootsplätzen) \n
--	Die Bootsplätze werden alle auf 60 Euros gesetzt\n
--	Die Arbeitstage werden, versuchsweise, von 4 auf 2 reduziert. (2x150 Euros statt 4x75 Euros). Diese 2 Arbeitstage sollten jedoch exklusiv zur gemeinsamen Interessen genutzt werden. Sektionentätigkeiten werden nicht mehr anerkannt. \n
--	Letzter Einzahlungstermin ist der 28. Februar. Danach wird jeder angefangener Monat um 20€ (10 Euros für Einzelbeiträge) erhöht. Ab dem 1. Juni werden die nicht erneuerten Mitglieder als austeigend betrachtet und müssen sich ggf. neu-eischreiben (Inklusive Eintragsgebühr) \n
-Für Fragen/Reklamationen/ Änderungen: info@bn3f.fr \n
-Wir wünschen Ihnen eine schöne Saison 2021 \n
-Pour le comité, Für das Komitee				\n';
+-              La date limite de payement est fixée au 28 février.
+
+Au-delà de cette date, une majoration de 50€ sera appliquée sur le rappel envoyé automatiquement.
+
+A compter du 1er avril tout membre dont la cotisation ne sera pas réglée sera considéré comme démissionnaire et ses accès seront bloqués
+
+Le comité vous souhaite une bonne année et une belle saison 2023
+ 
+
+Anbei finden Sie Ihre persönliche Rechnung für die Verlängerung Ihrer BN3F-Mitgliedschaft für das Jahr 2023.
+
+- Die Tarife bleiben trotz der starken Erhöhungen bei Energie und Versicherungen unverändert
+
+- Die Zahlungsfrist ist der 28. Februar.
+
+Nach diesem Datum wird die automatisch versendete Mahnung um 50 € erhöht.
+
+Ab dem 1. April gilt jedes Mitglied, dessen Beitrag nicht bezahlt wurde, als ausgetreten und sein Zugang wird gesperrt.
+
+Das Komitee wünscht Ihnen ein gutes neues Jahr und eine schöne Saison 2023';
+
 
 ?>

@@ -30,7 +30,7 @@ class MY_Controller extends CI_Controller {
 	protected $json_path = APPPATH.'models/json/';
 	protected $per_page	= 10;
 	protected $next_view = 'list';
-	
+	protected $render_view = true;
 					
 	/**
 	 * @brief Generic Constructor
@@ -285,9 +285,9 @@ class MY_Controller extends CI_Controller {
 			$this->{$this->_model_name}->_set('page', 1 );
 		}
 		
-		$this->_debug(print_r($config,TRUE), 'list' , 'debug', __file__ , __line__ );		
-		$this->_debug($this->set_ref_field('page'));
-		$this->_debug($this->session->userdata($this->set_ref_field('page')));
+		//$this->_debug(print_r($config,TRUE), 'list' , 'debug', __file__ , __line__ );		
+		//$this->_debug($this->set_ref_field('page'));
+		//$this->_debug($this->session->userdata($this->set_ref_field('page')));
 		//GET DATAS
 		$this->data_view['fields'] 	= $this->{$this->_model_name}->_get('autorized_fields');
 		$this->data_view['datas'] 	= $this->{$this->_model_name}->get();
@@ -300,9 +300,9 @@ class MY_Controller extends CI_Controller {
 		$config['total_rows'] 	= $this->{$this->_model_name}->get_pagination();
 		$this->pagination->initialize($config);	
 
-		
 		$this->_set('view_inprogress','unique/list_view');
-		$this->render_view();
+		if ($this->render_view)
+			$this->render_view();
 	}	
 	
 	/**
@@ -320,7 +320,8 @@ class MY_Controller extends CI_Controller {
 			$this->render_object->_set('dba_data',$dba_data);
 		}	
 		$this->_set('view_inprogress',$this->_list_view);
-		$this->render_view();		
+		if ($this->render_view)
+			$this->render_view();		
 		
 	}	
 	
@@ -365,6 +366,16 @@ class MY_Controller extends CI_Controller {
 				$id = $this->input->post('id');
 			}
 		}
+		//$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|matches[password]');
+		if ($this->form_validation->run($this->_model_name) === FALSE){
+			$this->_debug(validation_errors(),'edit','form_validation',__FILE__,__LINE__);
+		} else {
+			$datas = $this->_ProcessPost($this->_model_name);
+			$this->session->set_flashdata('state',  $this->lang->line('SAVED_OK') );
+			if ($this->_redirect){
+				redirect($this->_get('_rules')[$this->next_view]->url);
+			}
+		}
 		if ($id){
 			$this->render_object->_set('id',		$id);
 			$this->{$this->_model_name}->_set('key_value',$id);
@@ -372,22 +383,13 @@ class MY_Controller extends CI_Controller {
 			$this->render_object->_set('dba_data',$dba_data);
 			$this->render_object->_set('form_mod', 'edit');
 			$this->data_view['id'] = $id;
-		}		
-		
-		//$this->form_validation->set_rules('passconf', 'Password Confirmation', 'trim|required|matches[password]');
-		if ($this->form_validation->run($this->_model_name) === FALSE){
-			$this->_debug(validation_errors(),'edit','form_validation',__FILE__,__LINE__);
-		} else {
-			$datas = $this->_ProcessPost($this->_model_name);
-			if ($this->_redirect){
-				redirect($this->_get('_rules')[$this->next_view]->url);
-			}
-		}
+		}	
 		
 		$this->data_view['required_field'] = $this->{$this->_model_name}->_get('required');
 
 		$this->_set('view_inprogress',$this->_edit_view);
-		$this->render_view();
+		if ($this->render_view)
+			$this->render_view();
 	}
 
 
