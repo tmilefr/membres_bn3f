@@ -1,6 +1,5 @@
 <?php
 defined('BASEPATH') || exit('No direct script access allowed');
-require_once APPPATH.'third_party/dompdf/autoload.inc.php';
 		
 use Dompdf\Dompdf;
 use Dompdf\Options;
@@ -25,9 +24,9 @@ class Libpdf {
 	
 	public function _init(){
 		$options = new Options();
-		$options->set('enable_html5_parser', true);
+		$options->set('enable_html5_parser', false);
 		$options->set('debugPng',false);
-		$options->set("enable_remote", true);
+		$options->set("enable_remote", false);
 		$options->setTempDir($this->pdf_path); 
 		
 		$pdf = new Dompdf($options);

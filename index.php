@@ -53,8 +53,11 @@
  *
  * NOTE: If you change these, also change the error_reporting() code below
  */
+if (php_sapi_name() == 'cli') {
+	define('ENVIRONMENT', $argv[$argc - 1]);
+} else {
 	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
-
+}
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
@@ -66,10 +69,17 @@
 switch (ENVIRONMENT)
 {
 	case 'development':
-		error_reporting(-1);
+	case 'devonline':
+		if (version_compare(PHP_VERSION, '5.3', '>='))
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+		}
+		else
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+		}
 		ini_set('display_errors', 1);
 	break;
-
 	case 'testing':
 	case 'production':
 		ini_set('display_errors', 0);
