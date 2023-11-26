@@ -88,12 +88,12 @@ class Libpdf {
 			$this->CI->dompdf->load_html($html);        
 			$this->CI->dompdf->render();
 			//$this->CI->dompdf->output(array('compress' => 0));
-			$dompdf->stream(
+			/*$this->CI->dompdf->stream(
 				$this->pdf_path.$this->filename,
 				//array('compress' => 0) // disable PDF compression for easier PDF source inspection
-			);
+			);*/
 			//echo '<p>'.$this->pdf_path.$this->filename.'</p>';
-			//file_put_contents($this->pdf_path.$this->filename, $this->CI->dompdf->output()); 
+			file_put_contents($this->pdf_path.$this->filename, $this->CI->dompdf->output()); 
 		} catch (Exception $e) {
 			echo 'Exception reçue : ',  $e->getMessage(), "\n";
 		}
