@@ -154,13 +154,20 @@
         font-size: 11px;
         margin: 0;
         padding: 0;
+        text-align:justify;
     }
 
     .p50{
         width:50%;
     }
 
+    .p60{
+        width:60%;
+    }
 
+    .p70{
+        width:70%;
+    }
 
     .pair {
         background-color: #F4FAFF;
@@ -196,7 +203,7 @@
                 <div class="divTableCell"><?php echo $logo;?></div>
                 <div class="divTableCell text-right">
                     <h1>Base Nautique des 3 frontières</h1>
-                    <h2>Appel à cotisation Année <?php echo $datas->year;?></h2>
+                    <h2>Appel à cotisation Année <?php echo $year_inprogress;?></h2>
                     <p>Section <?php echo $datas->user->section;?></p>
                 </div>
             </div>
@@ -219,7 +226,7 @@
         <div class="divTable">
             <div class="divTableBody">
                 <div class="divTableRow">
-                    <div class="divTableCell">
+                    <div class="divTableCell p70">
                         <div class="divTable">
                             <div class="divTableBody">
                                 <div class="divTableRow">
@@ -253,7 +260,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="divTableCell p50">&nbsp;</div>
+                    <div class="divTableCell">&nbsp;</div>
                 </div>
             </div>
         </div>
@@ -306,37 +313,37 @@
             <div class="divTable">
                 <div class="divTableHeading">
                     <div class="divTableRow ">
-                        <div class="divTableCell">Provisions journées de travail encaissées en 2023</div>
+                        <div class="divTableCell p60">Provisions journées de travail encaissées en <?php echo $year_prec;?></div>
                         <div class="divTableCell"> 
                             <?php 
-                            if (isset($datas->check->encaisse)){
-                                echo $datas->check->encaisse.' €';
+                            if (isset($datas->check->encaisse) AND $datas->check->encaisse ){
+                                echo (($datas->check->encaisse == "...") ? 'Aucun':$datas->check->encaisse.' €');
                             }?>
                         </div>
                     </div>    
                     <div class="divTableRow ">
-                        <div class="divTableCell">Provisions journées de travail à régler pour 2024</div>
+                        <div class="divTableCell p60">Provisions journées de travail à régler pour <?php echo $year_inprogress;?> </div>
                         <div class="divTableCell">
                             <?php 
                             if (isset($datas->check->todo) AND $datas->check->todo){ 
-                                 echo $datas->check->todo.' €';
+                                 echo (($datas->check->todo == '...') ? 'Aucun':$datas->check->todo.' €');
                             }
                             ?>
                         </div>
                     </div>
                 </div>
-                <?php if (isset($datas->check->have) AND $datas->check->have){ ?>
-                <p>Chèque en notre possession : <?php echo $datas->check->have;?> €</p><br/><br/>
-                <?php } ?>
-                <p>
-                    <b><u>Provisions journées de travail</u></b> : <br/>Merci de joindre des chèques séparés pour les
-                    journées de travail (Que nous n'encaisserons pas)<br/>
-                    En cas de payement en liquide ou par virement, (ceux qui ne disposent pas d'un chéquier) merci
-                    d'ajouter le montant des provisions à votre montant total.<br/>
-                    P.S. Mettez impérativement l'ordre (BN3F) sur vos chèques de provisions. Si vous ne mettez pas
-                    de date, cela vous évitera d'en refaire l'année prochaine ...
-                </p>
             </div>
+            <?php if (isset($datas->check->have) AND $datas->check->have){ ?>
+            <p>Chèque en notre possession : <?php echo $datas->check->have;?></p><br/><br/>
+            <?php } ?>
+            <p>
+                <b><u>Provisions journées de travail</u></b> : <br/>Merci de joindre des chèques séparés pour les
+                journées de travail (Que nous n'encaisserons pas). En cas de payement en liquide ou par virement, (ceux qui ne disposent pas d'un chéquier) merci
+                d'ajouter le montant des provisions à votre montant total.<br/>
+                P.S. Mettez impérativement l'ordre (BN3F) sur vos chèques de provisions. Si vous ne mettez pas
+                de date, cela vous évitera d'en refaire l'année prochaine ...
+            </p>
+
         <?php } else { ?>
                     <h3>Provisions journées de travail : Exonéré</h3>
         <?php } ?>
@@ -345,7 +352,7 @@
             <div class="divTableHeading">
                 <div class="divTableRow ">
                     <div class="divTableCell sep_dashed">Date limite de payement </div>
-                    <div class="divTableCell sep_dashed  text-right">28 février 2024 </div>
+                    <div class="divTableCell sep_dashed  text-right">28 février <?php echo $year_inprogress;?> </div>
                 </div>    
                 <div class="divTableRow ">
                     <div class="divTableCell">Majoration pour payement ultérieur</div>
@@ -355,7 +362,7 @@
         </div>
         <br /><br />
         <p><b>Au 1er avril, l’accès sera bloqué pour les membres non à jour de cotisation</b><br />
-        après cette date, vous devrez re-payer les droits d'entrée comme un nouveau membre</p>
+        <span class="red">après cette date, vous devrez re-payer les droits d'entrée comme un nouveau membre</span></p>
         <br /><br />
         <h3>Pour le comité</h3>
 

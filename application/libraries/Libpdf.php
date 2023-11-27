@@ -59,6 +59,10 @@ class Libpdf {
 	function DoPdf($datas,$view_pdf,$filename){
 		$data_view['datas'] = $datas;
 		$data_view['logo'] =  $this->ImgBase64('bn3f.jpg');
+
+		$data_view['year_inprogress'] = $this->CI->config->item('year_inprogress');
+		$data_view['year_prec'] = $this->CI->config->item('year_prec');
+
 		$html = $this->CI->load->view($view_pdf, $data_view, true);
 		$this->filename = $filename;
 		$this->makePdf($html);

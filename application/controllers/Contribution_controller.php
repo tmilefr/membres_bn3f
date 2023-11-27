@@ -67,7 +67,7 @@ class Contribution_controller extends MY_Controller {
 		$this->bootstrap_tools->_SetHead('assets/js/checkall.js','js');
 
 		$this->data_view['FieldSection'] = $this->Users_model->_get('defs')['section']->values;
-		$subject = 'Appel à cotisation BN3F 2023';
+		$subject = 'Appel à cotisation BN3F '.$this->config->item('year_inprogress');
 
 		if (isset($_POST['ids'])){
 			foreach($_POST['ids'] AS $key=>$val){
@@ -214,7 +214,7 @@ class Contribution_controller extends MY_Controller {
 
 	function MakePdf($id = null, $override = true){
 		if ($dba_data = $this->MakeCotisation($id)){
-			$dba_data->pdf = NameToFilename('Cotisation_'.$dba_data->user->name.'_'.$dba_data->user->surname.'_'.$dba_data->year).'.pdf';
+			$dba_data->pdf = NameToFilename('Cotisation_'.$dba_data->user->name.'_'.$dba_data->user->surname.'_'.$this->config->item('year_inprogress')).'.pdf';
 			if (!is_file($this->libpdf->_get('pdf_path').$dba_data->pdf) OR $override){
 				$this->libpdf->DoPdf($dba_data,'unique/Contribution_view_pdf', $dba_data->pdf);
 			} 		

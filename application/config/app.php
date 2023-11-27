@@ -7,6 +7,9 @@ $config['slogan'] 	= 'Outil de gestion des membres de la BN3F';
 $config['about'] 	= 'By NL';
 $config['debug_app']= 'none'; //none,debug,profiler
 $config['sidebar'] = 'on';
+$config['year_inprogress'] = '2024';
+$config['year_prec'] = '2023';
+
 
 $config['crlf'] = '';
 
