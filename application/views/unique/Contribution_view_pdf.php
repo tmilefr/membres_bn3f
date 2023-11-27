@@ -13,16 +13,15 @@
     }
 
     @page {
-        margin: 90px 10px 0px 20px;
+        margin: 10px 20px 20px 40px;
     }
 
     #header {
         position: fixed;
         left: 0px;
-        top: -80px;
+        top: 0px;
         right: 0px;
-        height: 50px;
-        text-align: center;
+        height: 90px;
     }
 
     #footer {
@@ -31,21 +30,22 @@
         bottom: 0px;
         right: 0px;
         height: 100px;
-        text-align: center;
     }
 
     #footer .page:after {
         content: counter(page, upper-roman);
     }
 
-    #content {
-        padding-top: 100px;
-        padding-bottom: 40px;
-        width: 100%;
+    #footer p {
+        font-size: 10px;
+        text-align: left;
+        padding-left: 100px;
     }
 
-    .table_border {
-        border: 0.5px solid #000000;
+    #content {
+        padding-top: 200px;
+        padding-bottom: 40px;
+        width: 100%;
     }
 
     .nowrap {
@@ -156,12 +156,10 @@
         padding: 0;
     }
 
-
-    #footer p {
-        font-size: 10px;
-        text-align: left;
-        padding-left: 100px;
+    .p50{
+        width:50%;
     }
+
 
 
     .pair {
@@ -204,13 +202,14 @@
             </div>
             <div class="divTableRow">
                 <div class="divTableCell">&nbsp;</div>
-                <div class="divTableCell text-right">
+                <div class="divTableCell">
                     <h2>
                         <?php echo $datas->user->name.' '.$datas->user->surname;?><br />
                         <?php echo $datas->user->adresse;?><br />
                         <?php echo $datas->user->cp.' '.$datas->user->ville;?>
                     </h2>
                 </div>
+                <div class="divTableCell">&nbsp;</div>
             </div>
         </div>
     </div>
@@ -220,32 +219,41 @@
         <div class="divTable">
             <div class="divTableBody">
                 <div class="divTableRow">
-                    <div class="divTableCell sep_dashed">Banque</div>
-                    <div class="divTableCell sep_dashed">Guichet</div>
-                    <div class="divTableCell sep_dashed">N° Compte</div>
-                    <div class="divTableCell sep_dashed">Clé</div>
-                    <div class="divTableCell sep_dashed">DEV</div>
-                </div>
-                <div class="divTableRow">
-                    <div class="divTableCell sep_dashed">10278</div>
-                    <div class="divTableCell sep_dashed">03050</div>
-                    <div class="divTableCell sep_dashed">00021587145</div>
-                    <div class="divTableCell sep_dashed">35</div>
-                    <div class="divTableCell sep_dashed">EUR</div>
-                </div>
-            </div>
-        </div>
-        <p>IBAN</p>
-        <div class="divTable">
-            <div class="divTableBody">
-                <div class="divTableRow">
-                    <div class="divTableCell sep_dashed">FR76</div>
-                    <div class="divTableCell sep_dashed">1027</div>
-                    <div class="divTableCell sep_dashed">8030</div>
-                    <div class="divTableCell sep_dashed">5000</div>
-                    <div class="divTableCell sep_dashed">0215</div>
-                    <div class="divTableCell sep_dashed">8714</div>
-                    <div class="divTableCell sep_dashed">535</div>
+                    <div class="divTableCell">
+                        <div class="divTable">
+                            <div class="divTableBody">
+                                <div class="divTableRow">
+                                    <div class="divTableCell sep_dashed">Banque</div>
+                                    <div class="divTableCell sep_dashed">Guichet</div>
+                                    <div class="divTableCell sep_dashed">N° Compte</div>
+                                    <div class="divTableCell sep_dashed">Clé</div>
+                                    <div class="divTableCell sep_dashed">DEV</div>
+                                </div>
+                                <div class="divTableRow">
+                                    <div class="divTableCell sep_dashed">10278</div>
+                                    <div class="divTableCell sep_dashed">03050</div>
+                                    <div class="divTableCell sep_dashed">00021587145</div>
+                                    <div class="divTableCell sep_dashed">35</div>
+                                    <div class="divTableCell sep_dashed">EUR</div>
+                                </div>
+                            </div>
+                        </div>
+                        <p>IBAN</p>
+                        <div class="divTable">
+                            <div class="divTableBody">
+                                <div class="divTableRow">
+                                    <div class="divTableCell sep_dashed">FR76</div>
+                                    <div class="divTableCell sep_dashed">1027</div>
+                                    <div class="divTableCell sep_dashed">8030</div>
+                                    <div class="divTableCell sep_dashed">5000</div>
+                                    <div class="divTableCell sep_dashed">0215</div>
+                                    <div class="divTableCell sep_dashed">8714</div>
+                                    <div class="divTableCell sep_dashed">535</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="divTableCell p50">&nbsp;</div>
                 </div>
             </div>
         </div>
@@ -265,7 +273,7 @@
                 <?php 
 				foreach($datas->services AS $key=>$service) { 
 				?>
-                <div class="divTableRow">
+                <div class="divTableRow <?php echo ((is_float($key/2)) ? 'pair':'');?>">
                     <div class="divTableCell sep_dashed"><?php echo $service->name;?></div>
                     <div class="divTableCell sep_dashed"><?php echo $service->amount;?></div>
                     <div class="divTableCell sep_dashed">1</div>
@@ -288,59 +296,68 @@
         </div>
 
         <div >
-            <p>Si vous désirez changer de type de cotisation (familliale, individuelle, jeune) merci d'en
-                avertir le comité</p>
-            <br /><br />
-            <h3>Payement par chèque, liquide ou virement bancaire. (RIB ci-joint)</h3>
-            <br /><br />
+            <p>Si vous désirez changer de type de cotisation (familliale, individuelle, jeune) merci d'en avertir le comité</p>
+            <br />
+            <p>Payement par chèque, liquide ou virement bancaire. (RIB ci-joint)</p>
+            <br />
         </div>
 
         <?php if ($datas->taux->code != 'C' && $datas->taux->code != 'D'){ ?>
-            
-        <div class="table_page table_border ">
-            <h3>Provisions journées de travail encaissées en 2022
-            <?php 
-            if (isset($datas->check->encaisse)){
-                echo $datas->check->encaisse.' €';
-            }?>
-            </h3>
-            <h3>Provisions journées de travail à régler pour 2023
-            <?php if (isset($datas->check->todo) AND $datas->check->todo){ ?>
-                <?php echo $datas->check->todo;?> €
-            <?php } ?>
-            </h3>
-            <?php if (isset($datas->check->have) AND $datas->check->have){ ?>
-            Chèque en notre possession
-            <?php } ?>
-
-            <?php if (isset($datas->check->have) AND $datas->check->have){ ?>
-            <?php echo $datas->check->have;?> €
-            <?php } ?>
-
+            <div class="divTable">
+                <div class="divTableHeading">
+                    <div class="divTableRow ">
+                        <div class="divTableCell">Provisions journées de travail encaissées en 2023</div>
+                        <div class="divTableCell"> 
+                            <?php 
+                            if (isset($datas->check->encaisse)){
+                                echo $datas->check->encaisse.' €';
+                            }?>
+                        </div>
+                    </div>    
+                    <div class="divTableRow ">
+                        <div class="divTableCell">Provisions journées de travail à régler pour 2024</div>
+                        <div class="divTableCell">
+                            <?php 
+                            if (isset($datas->check->todo) AND $datas->check->todo){ 
+                                 echo $datas->check->todo.' €';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+                <?php if (isset($datas->check->have) AND $datas->check->have){ ?>
+                <p>Chèque en notre possession : <?php echo $datas->check->have;?> €</p><br/><br/>
+                <?php } ?>
+                <p>
+                    <b><u>Provisions journées de travail</u></b> : <br/>Merci de joindre des chèques séparés pour les
+                    journées de travail (Que nous n'encaisserons pas)<br/>
+                    En cas de payement en liquide ou par virement, (ceux qui ne disposent pas d'un chéquier) merci
+                    d'ajouter le montant des provisions à votre montant total.<br/>
+                    P.S. Mettez impérativement l'ordre (BN3F) sur vos chèques de provisions. Si vous ne mettez pas
+                    de date, cela vous évitera d'en refaire l'année prochaine ...
+                </p>
+            </div>
         <?php } else { ?>
                     <h3>Provisions journées de travail : Exonéré</h3>
         <?php } ?>
-        <br />
-        <div>
-            <p>
-                <b><u>Provisions journées de travail</u></b> : Merci de joindre des chèques séparés pour les
-                journées de travail (Que nous n'encaisserons pas)<br/>
-                En cas de payement en liquide ou par virement, (ceux qui ne disposent pas d'un chéquier) merci
-                d'ajouter le montant des provisions à votre montant total.<br/>
-                P.S. Mettez impérativement l'ordre (BN3F) sur vos chèques de provisions. Si vous ne mettez pas
-                de date, cela vous évitera d'en refaire l'année prochaine ...
-            </p>
-            <h3>Date limite de payement <span class="right">28 février 2023</span></h3>
-            <h3>Majoration pour payement ultérieur <span class="right">50 € par mois entamé</span></h3>
+        <br /><br />
+        <div class="divTable">
+            <div class="divTableHeading">
+                <div class="divTableRow ">
+                    <div class="divTableCell sep_dashed">Date limite de payement </div>
+                    <div class="divTableCell sep_dashed  text-right">28 février 2024 </div>
+                </div>    
+                <div class="divTableRow ">
+                    <div class="divTableCell">Majoration pour payement ultérieur</div>
+                    <div class="divTableCell text-right">50 € par mois entamé</div>
+                </div>
+            </div>
         </div>
-        <div class="table_page">
-            <b>Au 1er avril, l’accès sera bloqué pour les membres non à jour de cotisation</b><br />
-            Après cette date, vous devrez re-payer les droits d'entrée comme un nouveau membre
-
-            <br /><br />
-            <h3>Pour le comité</h3>
-        </div>
-
+        <br /><br />
+        <p><b>Au 1er avril, l’accès sera bloqué pour les membres non à jour de cotisation</b><br />
+        après cette date, vous devrez re-payer les droits d'entrée comme un nouveau membre</p>
+        <br /><br />
+        <h3>Pour le comité</h3>
 
     </div>
 
