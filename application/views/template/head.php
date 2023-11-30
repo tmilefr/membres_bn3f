@@ -11,86 +11,58 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	<title><?php echo $app_name;?></title>
 </head>
 <body>
-<!-- Bootstrap NavBar -->
-<nav class="navbar navbar-expand-md navbar-dark  bg-dark ml-auto sticky-top">
-	<button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-		<span class="navbar-toggler-icon"></span>
-	</button>
-	<a class="navbar-brand" href="<?php echo base_url('Home');?>">
-		<?php echo $this->config->item('app_name');?> 
-	</a>
-	<div class="collapse navbar-collapse" id="navbarNavDropdown">
-		<ul class="navbar-nav ml-auto">
-			<li>
-			<?php
-			if ($search_object->autorize){
-				$attributes = array('class' => 'form-inline', 'id' => 'myform');
-				echo form_open($search_object->url, $attributes);?>
-				<input class="form-control mr-sm-2" type="search" name='global_search' id='global_search' placeholder="Search" aria-label="Search" value="<?php echo $search_object->global_search;?>">
-				<button class="btn btn-success btn-sm" type="submit"><span class="oi oi-magnifying-glass"></span></button>&nbsp;
-				<?php if ($search_object->global_search){ ?>
-					<a href='<?php echo base_url($search_object->url);?>/search/reset' class='btn btn-warning btn-sm'><span class="oi oi-circle-x"></span></a>
-				<?php } ?>
-				</form>
+	<header class="border-bottom">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<a class="navbar-brand" href="#"><?php echo $app_name;?></a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarText">
+				<ul class="navbar-nav mr-auto">
+					<?php echo $this->render_menu->Get('leftmenu',  $app_name );?>
+				</ul>
 				<?php
-			}
-			?>		
-			</li>
-	
-			<?php echo $this->render_menu->Get('sysmenu');?>
-			<?php echo $this->render_menu->Get('optionmenu');?>	
-			<?php if ($this->session->userdata('usercheck') || $this->acl->_get('DontCheck')  ) { ?>
-			<li class="nav-item dropdown">
-				<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					<span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo (($this->session->userdata('usercheck')) ? $this->session->userdata('usercheck')->name:''); ?></span>
-				</a>
-				<!-- Dropdown - User Information -->
-				<div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-					<a class="dropdown-item" href="<?php echo base_url('Home/logout');?>"><span class="oi oi-account-logout"></span> <?php echo Lang('Login_out');?></a>
-				</div>
-			</li>
-			<?php } ?>
-		</ul>
-	</div>
-</nav>
-<!-- NavBar END -->
-<!-- Bootstrap row -->
-<div class="row" id="body-row">
-	<!-- Sidebar -->
-	<div id="sidebar-container" class="sidebar-expanded d-none d-md-block bd-sidebar">
-		<ul class="list-group ">
-			<?php echo $this->render_menu->Get('leftmenu');?>
-			<li class="nav-item">
-				<a href="#top" data-toggle="sidebar-colapse" class="bg-dark list-group-item list-group-item-action d-flex align-items-center">
-					<div class="d-flex w-100 justify-content-start align-items-center">
-						<span id="collapse-icon" class="oi oi-chevron-left"></span>
-						<span id="collapse-text" class="menu-collapsed">Collapse</span>
-					</div>
-				</a>
-			</li>
-		</ul>
-	</div>
-	<!-- sidebar-container END -->
-	
-	<!-- Page Content  -->
-	<div class="col p-4">
-		<nav class="navbar navbar-expand-lg navbar-light bg-light"> 
-			<ul class="navbar-nav mr-auto">
-				<li class="nav-item"> 
-					<h2><?php echo $title;?></h2> 
-				</li> 
-			</ul>
-			<ul class="nav justify-content-end">
+					if ($search_object->autorize){
+						$attributes = array('class' => 'form-inline col-md-4', 'id' => 'myform');
+						echo form_open($search_object->url, $attributes);?>
+						<input class="form-control col-md-11" type="search" name='global_search' id='global_search' placeholder="Search" aria-label="Search" value="<?php echo $search_object->global_search;?>">
+						<?php if ($search_object->global_search){ ?>
+							<a href='<?php echo base_url($search_object->url);?>/search/reset' class='btn btn-warning btn-sm'><span class="oi oi-circle-x"></span></a>
+						<?php } ?>
+						</form>
+						<?php
+					}
+					?>
+			</div>
 			<?php  
-			if ($this->render_object->_get('_ui_rules') AND !$this->render_object->_get('form_mod')){  
+			if ($this->render_object->_get('_ui_rules') ){  
 				foreach($this->render_object->_get('_ui_rules') AS $rule){
 					if (in_array($rule->term , $this->render_object->_get('_not_link_list')) AND $rule->autorize ){
 						echo '<a class="btn btn-sm '.$this->lang->line($rule->term.'_class').'" href="'.$rule->url.'"><span class="'.$rule->icon.'"></span> '.$rule->name.'</a>&nbsp;';
 					}
 				}
 			} 
-			?>
-			</ul> 
-		</nav> 	
-		
+			?>	
 
+			<div class="d-flex align-items-center">
+				<ul class="navbar-nav col-auto">
+					<li class="nav-item">
+						<?php echo $this->render_menu->Get('optionmenu');?>
+					</li>
+					<li class="nav-item">
+						<?php echo $this->render_menu->Get('sysmenu');?>
+					</li>
+					<li class="nav-item">
+						<?php echo $this->render_menu->Get('usermenu',  $this->acl->GetUserName() );?>
+					</li>
+				</ul>
+			</div>			
+		</nav>
+
+	</header>
+    
+    <div class="container-fluid">
+		<?php /*<blockquote class="blockquote">
+			<p class="mb-0"><?php echo $title;?></p>
+			<footer class="blockquote-footer"><?php echo $subtitle;?></footer>
+		</blockquote>*/ ?>

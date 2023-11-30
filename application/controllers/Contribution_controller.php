@@ -149,6 +149,7 @@ class Contribution_controller extends MY_Controller {
 			$dba_data = $this->MakePdf($id);
 			$this->data_view['url_pdf'] = '<a target="_new" href="'.$this->libpdf->_get('pdf_url_path').'/'. $dba_data->pdf.'"><span class="oi oi-file"></span> '. $dba_data->pdf.'</a>';
 		}
+		$this->_set('render_view',true);
 		$this->render_view();
 	}
 
@@ -168,7 +169,7 @@ class Contribution_controller extends MY_Controller {
 				//get User
 				$this->Users_model->_set('key_value',$dba_data->user);
 				$dba_data->user = $this->Users_model->get_one();
-				$trad_section = $this->Users_model->_get('defs')['section']->values;
+				$trad_section = $this->Users_model->_get('defs')['section']->_get('values');
 				$dba_data->user->section = $trad_section[$dba_data->user->section];
 				//get services
 				$this->ContributionLgn_model->_set('filter', ['id_cnt'=> $dba_data->id ]);

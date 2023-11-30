@@ -4,7 +4,6 @@
  * created Date Object in page
  * 
  */
-require_once(APPPATH.'libraries/elements/element.php');
 
 class element_updated extends element
 {	

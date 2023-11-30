@@ -1,10 +1,10 @@
 <div class="card" >
 	<div class="card-header">
-		<?php echo $this->lang->line('Acl_actions_controller_'.$this->render_object->_get('form_mod'));?>
+		<?php echo $this->lang->line($this->render_object->_getCi('_controller_name').'_'.$this->render_object->_get('form_mod'));?>
 	</div>
 	<div class="card-body">
 		<?php
-		echo form_open('Acl_actions_controller/'.$this->render_object->_get('form_mod'), array('class' => '', 'id' => 'edit') , array('form_mod'=>$this->render_object->_get('form_mod'),'id'=>$id) );
+		echo form_open($this->render_object->_getCi('_controller_name').'/'.$this->render_object->_get('form_mod'), array('class' => '', 'id' => 'edit') , array('form_mod'=>$this->render_object->_get('form_mod'),'id'=>$id) );
 
 		//champ obligatoire
 		foreach($required_field AS $name){

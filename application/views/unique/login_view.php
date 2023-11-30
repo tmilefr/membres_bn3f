@@ -1,37 +1,67 @@
-<div class="card" >
-	<div class="card-body">
-	  
 <?php
-echo form_open(base_url('/Home/login'), array('class' => 'login', 'id' => 'login-form') , array('form_mod'=>'') );
-
-
-echo $this->session->flashdata('message');
+defined('BASEPATH') OR exit('No direct script access allowed');
 ?>
+<div class="container-fluid text-center">
+  <div class="row">
+        <div class="col-3">&nbsp;</div>
+        <div class="col-3">
+        <div class="card" >
+          <div class="card-body nicdark_aligncenter_responsive">
+            <h5 class="card-title">
 
-  <div class="form-group">
-	<?php echo form_label('Login', 'login'); ?>
-	<?php echo form_input('login', '', 'class="form-control" aria-describedby="emailHelp" placeholder="Enter email"'); ?>
-    <?php echo form_error('login', 	'<div class="alert alert-danger">', '</div>'); ?>
-  </div>
-  <div class="form-group">
-	<?php echo form_label('Password', 'password'); ?>
-	<?php echo form_password('password', 'password', 'class="form-control" aria-describedby="passwordHelp" placeholder="Password"'); ?>
-    <?php echo form_error('password', 	'<div class="alert alert-danger">', '</div>'); ?>	  
-  </div>
-  <div class="form-group">
-    <?php 
-				echo $this->render_object->label('recaptchaResponse');
-				echo $this->render_object->RenderFormElement('recaptchaResponse'); 
-        if ($captcha_error){
-          $this->bootstrap_tools->render_msg($captcha_error);
-        }
-			?>
-  </div>
-<?php
-echo form_close();
-?>
-	</div>
+            </h5>
+            <?php
+        echo form_open(base_url('/Home/login'), array('class' => 'login', 'id' => 'login-form') , array('form_mod'=>'') );
+        echo $this->session->flashdata('message');
+        ?>
+
+            <div class="form-group">
+              <?php echo form_label('Login', 'login'); ?>
+              <?php echo form_input('login', '', 'class="form-control" aria-describedby="emailHelp" placeholder="Enter email"'); ?>
+              <?php echo form_error('login', 	'<div class="alert alert-danger">', '</div>'); ?>
+            </div>
+            <div class="form-group">
+              <?php echo form_label('Password', 'password'); ?>
+              <?php echo form_password('password', 'password', 'class="form-control" aria-describedby="passwordHelp" placeholder="Password"'); ?>
+              <?php echo form_error('password', 	'<div class="alert alert-danger">', '</div>'); ?>	  
+            </div>	
+            <div class="form-group">
+              <div class="modal-footer">
+          
+              <?php 
+                if ($this->config->item('captcha')){
+                  echo $this->render_object->label('recaptchaResponse');
+                  echo $this->render_object->RenderFormElement('recaptchaResponse'); 
+                  if ($captcha_error){
+                    $this->bootstrap_tools->render_msg($captcha_error);
+                  }
+                } else { ?>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-success"><?php echo $this->lang->line('CNX_ME');?></button>
+                  </div>
+                  <?php
+                }
+
+
+                if ($login_error){
+                  $this->bootstrap_tools->render_msg($login_error);
+                }
+                echo form_close();
+              ?>
+              </div>
+            </div>          			
+          </div>
+      </div>
+              </div>
+      </div>
 </div>
+
+
+
+
+	  
+
+
 <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 <script>
 grecaptcha.ready(function() {

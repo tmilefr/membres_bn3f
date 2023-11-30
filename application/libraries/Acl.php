@@ -2,27 +2,48 @@
 
 if (! defined('BASEPATH'))
     exit('No direct script access allowed');
-//ALTER TABLE `users` ADD `role_id` INT(11) NOT NULL AFTER `created`;
 
+/*
+* GESTION DE DROIT
+* la sécurité est basé sur les urls : base_url()/$controller/$method/
+* Acl établi le redirect.
+*
+* -- Chainage --
+* Hook:Loginchecker => acl:route =>  acl:usercheck => auth:connected_user
+*
+*
+*/
 class Acl
 {
-    protected $is_log = false;
     protected $CI;
-    protected $userId = NULL;
-    protected $userRoleId = NULL;
     protected $controller = NULL;
     protected $action = NULL;
     protected $permissions = [];
+    /* BYPASS */
     protected $guestPages = [
         'home/logout',
         'home/login',
         'home/no_right',
-        'home/index',
-        'home'
+        'home/maintenance',
+		'cron/sendmail'
     ];
-    protected $DontCheck = FALSE;
-    protected $_debug = FALSE;
+    /* BYPASS API */
+    protected $APIguestPages = [
+        'api/login',
+        'api/logout'
+    ];    
+    /* PARAM to force TOKEN */
+    protected $apiPages = [
+        'api'
+    ];
+    protected $ApiAsk       = FALSE;
+    protected $DontCheck    = TRUE;
+    protected $_debug       = FALSE;
     protected $_debug_array = [];
+    protected $usercheck    = NULL; //TODO : replace $usercheck 
+    protected $routes_hisory = [];
+	//protected $ApiMode 		= FALSE;
+    
     /**
      * Constructor
      *
@@ -32,37 +53,68 @@ class Acl
     {
         $this->CI = &get_instance();
         $this->CI->load->library('session');
+        $this->CI->load->library('Auth');
+
         $this->CI->load->helper('url');
-        $this->CI->load->model('Acl_roles_model');
-        $this->CI->load->model('Acl_users_model');
+        $this->CI->LoadModel('Acl_roles_model');
+
 
         $this->controller = strtolower($this->CI->uri->rsegment(1));
         $this->action     = strtolower($this->CI->uri->rsegment(2));
         $this->routes_hisory = [];
-        $this->IsLog();
 
-        $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();
-     }
+
+        //création du tableau des droits pour l'utilisateur.
+        if ($this->IsLog()){
+            $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();
+        }
+    }
     
+   private function _IsApiAsk(){
+        if (in_array( $this->controller , $this->apiPages) && !in_array($this->controller . '/' . $this->action, $this->APIguestPages) ) { 
+            $this->ApiAsk = true;
+        }
+   }
+
     /**
      * Check if user is connected
-     *
+     * Use session objet "connected_user" or JWT token.
      * @access public
      * @return bool
      * 
      */
     public function IsLog(){
-        $usercheck  = $this->CI->session->userdata('usercheck');
-        if ( isset($usercheck) && $usercheck->autorize ){
-            $this->is_log = true;  
+        if ( $this->ApiAsk ) { 
+            $headers = getallheaders();
+            //token JWT pour les apis
+            if (isset($headers['Authorization']) && preg_match('/Bearer (.*)/', $headers['Authorization'], $matches)){
+                $jwt = trim($matches[1]);
+                $this->CI->auth->DecodeJWT($jwt);
+                $this->usercheck = $this->CI->auth->_get('connected_user');
+                $this->permissions = $this->CI->Acl_roles_model->getRolePermissions();  
+            } else {
+                //si un utilisateur est connecté...
+                if ($this->usercheck = $this->CI->auth->_get('connected_user')){
+
+                } else {
+                    //Pas de token ! //todo : use CORE method
+                    $this->CI->_renderJson(403, ["message" => "Forbidden"]);
+                    die();
+                }
+            }    
+        }  else {
+            $this->usercheck = $this->CI->auth->_get('connected_user'); //best way to use ?
+        }      
+
+        if (  $this->usercheck->autorize === true ){
             return TRUE;
         } else {
             return FALSE;
         }
     }
-
+   
     /**
-     * Check is current controller/method has access in role
+     * manage url access
      *
      * @access public
      * @return bool
@@ -70,56 +122,143 @@ class Acl
      */
     public function hasAccess($currentPermission = null)
     {
-        //echo debug($this->permissions);
         if ($this->DontCheck)
             return TRUE;
-        if ($this->getUserId()) {            
-            if (!$currentPermission)
+        //Opération de maintenance
+        if ($this->CI->config->item('maintenance') == true &&  $this->controller . '/' . $this->action != 'home/maintenance'){
+            if ($this->getType() != 'sys') //les utilisateurs SYS ne sont pas concerné.
+                return redirect('/Home/maintenance');
+        }
+        //UI Guest Page 
+        if (in_array($this->controller . '/' . $this->action, $this->CI->acl->getGuestPages()) AND !$currentPermission) { //hors page en cours
+            return TRUE;  
+        }
+        if (in_array($this->controller . '/' . $this->action, $this->APIguestPages) AND !$currentPermission) { //hors page en cours
+            return TRUE;
+        }
+        //Check right
+        if (isset($this->usercheck->role_id)){  
+            if (!$currentPermission) //on recupère la page en cours par défaut
                 $currentPermission =  $this->controller . '/' . $this->action;
+            //on regarde dans le tableau des droits ratatchés à l'utilisateur.
             if (isset($this->permissions[$this->getUserRoleId()]) && count($this->permissions[$this->getUserRoleId()]) > 0) {
                 if (in_array( strtolower($currentPermission) , $this->permissions[$this->getUserRoleId()])) {
                     return TRUE;
                 } else {
+					//echo $currentPermission.' NOT GRANTED'."<br/>";
                     $this->_debug_array[] = $currentPermission.' NOT GRANTED';
                 }
             }
         }        
+        //NOT by default
         return FALSE;
     }
     
     /**
-     * Check if current controller/method has access
-     *
+     * Check if current controller/method has access and redirect if it's need
+     * TODO : clean redirect in case
+     * used by hook 
      * @access public
      * @return bool
      * 
      */
     public function Route(){
+        $this->_IsApiAsk();
+        
         if ($this->DontCheck)
-            return TRUE;
-       
-        if ( $this->_get('is_log') ) {
-            
-            /*if ($this->action == 'index')
-                return TRUE;*/
-            // Check for ACL
-            if (!$this->CI->acl->hasAccess()) {
-                if ($this->controller . '/' . $this->action != '/home/no_right' && !in_array($this->controller . '/' . $this->action, $this->CI->acl->getGuestPages())) {
-                    $this->routes_hisory[] = $this->controller . '/' . $this->action;
-                    $this->CI->session->set_userdata('routes',  $this->routes_hisory); 
+            return TRUE;      
+        if ( $this->IsLog() ) {
+            // Check for access
+            if (!$this->hasAccess()) {
+                $this->routes_hisory[] = $this->controller . '/' . $this->action;
+                $this->CI->session->set_userdata('routes',  $this->routes_hisory); 
+                if ($this->CI->input->is_cli_request()){
+                    echo 'you can\'t access to this method';
+                    die();
+                } else {
+                    if ($this->ApiAsk){
+                        $this->CI->_renderJson(403, ["message" => "Forbidden"]);
+                        die();
+                    }
                     return redirect('/Home/no_right');
-                } 
-            } else {
+                }
+            } else {                  
                 $this->_debug_array[] = $this->controller . '/' . $this->action.' GRANTED';
             }
         } else {
-            if ($this->controller . '/' . $this->action != 'home/login')
-                return redirect('/Home/login');
+            if (!$this->hasAccess()) { //check gest page
+                if ($this->CI->input->is_cli_request()){
+                    echo 'you can\'t access to this method';
+                    die();
+                } else {
+                    if ($this->ApiAsk){
+                        $this->CI->_renderJson(403, ["message" => "Forbidden"]);
+                        die();
+                    }
+                    return redirect('Home/login');
+                }
+                
+            }
         }
+    }
+
+
+
+    /**
+     * Check login for user
+     *
+     * @access public
+     * @return bool
+     * 
+     */
+    public function CheckLogin($data){
+        //TODO : reprise de session ?
+
+        //si c'est un appel API
+        if (isset($data['api-key'] ) && $data['api-key'] !=  $this->CI->auth->_get('secretKey')){
+            return false;
+        }
+        $this->usercheck = $this->CI->auth->login($data); 
+        //MAKE JWT in case of use in front
+        if (isset($this->usercheck->autorize) AND  $this->usercheck->autorize == TRUE ){
+            return  $this->usercheck;
+        } else {
+            return $this->CI->lang->line('WRONG_ACCES').'<br/><span class="">'.$this->usercheck->msg.'</span>';
+        }       
+    }
+
+    /**
+     * Get Type
+     *
+     * @access public
+     * @return bool
+     * 
+     */
+    public function getType(){
+        if (isset($this->usercheck->type)){
+            return $this->usercheck->type;
+        } else {
+            return FALSE;
+        }  
     }
 
     // --------------------------------------------------------------------
     
+     /**
+     * Get Name
+     *
+     * @access public
+     * @return bool
+     * 
+     */
+    public function GetUserName(){
+        if (isset($this->usercheck->name)){
+            return $this->usercheck->name;
+        } else {
+            return FALSE;
+        }  
+    }
+
     /**
      * Return the value of user id from the session.
      * Returns 0 if not logged in
@@ -127,16 +266,11 @@ class Acl
      * @access private
      * @return int
      */
-    private function getUserId()
+    public function getUserId()
     {
-        if ($this->userId == NULL) {
-            if ($this->CI->session->userdata('usercheck'))
-                $this->userId = $this->CI->session->userdata('usercheck')->id;
-            if ($this->userId === FALSE) {
-                $this->userId = NULL;
-            }
-        }        
-        return $this->userId;
+        if (isset($this->usercheck->id))
+            return $this->usercheck->id;
+        return false;
     }
 
     /**
@@ -144,22 +278,14 @@ class Acl
      *
      * @return int
      */
-    private function getUserRoleId()
+    public function getUserRoleId()
     {
-        if ($this->userRoleId == NULL) {
-            // Set the role
-            if ($this->CI->session->userdata('usercheck'))
-                $this->userRoleId = $this->CI->session->userdata('usercheck')->role_id;
-            if ($this->userId === FALSE) 
-                $this->userRoleId = $this->CI->Acl_users_model->getUserRoleId($this->getUserId());
-            if (! $this->userRoleId) {
-                $this->userRoleId = 0;
-            }
-        }
-       
-        return $this->userRoleId;
+        if (isset($this->usercheck->role_id))
+            return $this->usercheck->role_id;
+        return false;
     }
     
+    //liste des pages ne nécessitant pas de login
     public function getGuestPages()
     {
         return $this->guestPages;
@@ -175,7 +301,7 @@ class Acl
 
 	function __destruct(){
 		if ($this->_debug){
-			unset($this->CI);
+			unset($this->CI); //pour casser la recursivité d'affichage
 			echo debug($this, __file__);
 		}
 	}

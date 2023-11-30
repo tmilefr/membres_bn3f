@@ -11,6 +11,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Acl_roles_controller extends MY_Controller {
 
+	/* Model in use */
+	public $Acl_controllers_model = null;
+	public $Acl_roles_controllers_model = null;
+	public $Acl_actions_model = null;
+	public $Acl_roles_model = null;
+
+
 	public function __construct(){
 		parent::__construct();
 		
@@ -18,22 +25,21 @@ class Acl_roles_controller extends MY_Controller {
 		$this->_model_name 		= 'Acl_roles_model';	   //DataModel
 		$this->_edit_view 		= 'edition/Acl_roles_form';//template for editing
 		$this->_list_view		= 'unique/Acl_roles_view.php';
-		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>true,'set_rules'=>true);
+		$this->_autorize 		= array('add'=>true,'edit'=>true,'list'=>true,'delete'=>true,'view'=>false,'set_rules'=>true);
 		
 		
-		$this->title .=   $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
-		
-		$this->_set('_debug', TRUE);
+		$this->title 			= $this->lang->line('GESTION_'.$this->_controller_name);
+
 		$this->init();
 		
-		$this->load->model('Acl_controllers_model');
-		$this->load->model('Acl_roles_controllers_model');
-		$this->load->model('Acl_actions_model');
+		$this->LoadModel('Acl_controllers_model');
+		$this->LoadModel('Acl_roles_controllers_model');
+		$this->LoadModel('Acl_actions_model');
 	}
 
 	public function set_rules($id){
 		
-		$this->_set('view_inprogress','edition/set_rules_view');
+		$this->_set('view_inprogress','edition/Set_rules_view');
 		
 		$this->{$this->_model_name}->_set('key_value',$id);
 		$dba_data = $this->{$this->_model_name}->get_one();

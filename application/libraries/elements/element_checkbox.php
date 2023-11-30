@@ -1,10 +1,14 @@
 <?php
-/* * element_checkbox.php * CHECKBOX Object in page *  */require_once(APPPATH.'libraries/elements/element.php');
+/*
+ * element_checkbox.php
+ * CHECKBOX Object in page
+ * 
+ */
 
 class element_checkbox extends element
 {	
 	public function RenderFormElement(){
-		return $this->CI->bootstrap_tools->input_checkbox($this->name, $this->value);
+		return $this->RenderTools->input_checkbox($this->name, $this->value);
 	}
 	
 	public function Render(){

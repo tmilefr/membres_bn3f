@@ -18,7 +18,7 @@
 		"search": false,
 		"rules": null,
 		"since": 2,
-		"values": "distinct(service,id:name)",
+		"param": "distinct(service,id:name)",
 		"dbforge": {
 			"type": "INT",
 			"constraint": "5"

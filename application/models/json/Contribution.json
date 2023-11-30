@@ -18,7 +18,7 @@
 		"search": true,
 		"rules": null,
 		"since": 2,
-		"values": "distinct(users,id:name)",
+		"param": "distinct(users,id:name)",
 		"dbforge": {
 			"type": "INT",
 			"constraint": "5"
@@ -73,7 +73,7 @@
 		"search": true,
 		"rules": null,
 		"since": 2,
-		"values": "distinct(taux,id:name)",
+		"param": "distinct(taux,id:name)",
 		"dbforge": {
 			"type": "INT",
 			"constraint": "5"

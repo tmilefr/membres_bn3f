@@ -11,22 +11,7 @@ class Email_model extends Core_model{
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
 		$this->_set('json'	, 'Emails.json');
-		$this->_init_def();
 	}
 
-	function SetLink($foreign_key, $id){
-		if ($id){
-			$this->db->set($foreign_key, $id);
-			$this->db->where($foreign_key, 0);
-			$this->db->update($this->table); 
-		}
-	}
-
-	function DeleteLink($id = null){
-		if ($id){
-			$this->db->where_in('id_user', $id)
-				 ->delete($this->table);
-		}
-	}
 }
 ?>

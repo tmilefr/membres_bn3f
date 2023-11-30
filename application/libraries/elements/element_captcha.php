@@ -4,16 +4,17 @@
  * created Date Object in page
  * 
  */
-require_once(APPPATH.'libraries/elements/element.php');
 
 class element_captcha extends element
 {	
-
-	protected $catptcha = FALSE;
+	public function __construct()
+	{
+		parent::__construct();
+	}
 	//g-recaptcha-response
 	public function RenderFormElement(){
 		$tmp = '';
-		if ($this->catptcha == TRUE){
+		if ($this->captcha == TRUE){
 			$tmp .= '<div class="g-recaptcha" data-sitekey="'.SITE_CAPTCHA_KEY.'"></div>';
 			$tmp .= '<input type="submit" class="btn btn-primary" value="Submit">';
 		}

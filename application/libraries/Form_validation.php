@@ -118,6 +118,7 @@ class CI_Form_validation {
 	 */
 	public $validation_data	= array();
 
+	
 	/**
 	 * Initialize Form_Validation class
 	 *

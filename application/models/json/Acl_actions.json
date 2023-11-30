@@ -14,7 +14,8 @@
 	},
 	"id_ctrl": {
 		"type": "select_database",
-		"values":"distinct(acl_controllers,id:controller)",
+		"param":"distinct(acl_controllers,id:controller)",
+		"values":[],
 		"list": false,
 		"search": true,
 		"rules": "trim|required",

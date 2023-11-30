@@ -11,7 +11,6 @@ class Parameters_model extends Core_model{
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
 		$this->_set('json'	, 'Parameters.json');
-		$this->_init_def();
 	}
 }
 ?>

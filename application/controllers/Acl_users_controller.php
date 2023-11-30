@@ -19,9 +19,8 @@ class Acl_users_controller extends MY_Controller {
 		$this->_model_name 		= 'Acl_users_model';	   //DataModel
 		$this->_edit_view 		= 'edition/Acl_users_form';//template for editing
 		$this->_list_view		= 'unique/Acl_users_view.php';
-		$this->_autorize 		= array('list'=>true,'add'=>true,'edit'=>true,'delete'=>true,'view'=>true);
-		$this->title 			.= $this->lang->line('GESTION').$this->lang->line($this->_controller_name);
-		$this->_set('_debug',TRUE);
+		$this->_autorize 		= array('list'=>true,'add'=>true,'edit'=>true,'delete'=>true,'view'=>false);
+		$this->title 			= $this->lang->line('GESTION_'.$this->_controller_name);
 		$this->init();
 	}
 

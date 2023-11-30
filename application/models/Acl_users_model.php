@@ -11,7 +11,6 @@ class Acl_users_model extends Core_model{
 		$this->_set('order'	, 'name');
 		$this->_set('direction'	, 'desc');
 		$this->_set('json'	, 'Acl_users.json');
-		$this->_init_def();
 	}
 
 	/**
@@ -39,11 +38,6 @@ class Acl_users_model extends Core_model{
 	}
 
 	function verifyLogin($login, $password){
-
-		$usercheck = new stdClass();
-		$usercheck->name = 'nobody';
-		$usercheck->autorize = false;
-		$usercheck->id = 0;
 	    $query = $this->db->select('*')
 			->from('acl_users u')
 			->where("login", $login )
@@ -53,15 +47,16 @@ class Acl_users_model extends Core_model{
 		if ($query->num_rows() > 0)
 		{
 			$row = $query->row_array();
+
+			echo debug($row);
+			echo crypt($password, PASSWORD_SALT);
+				die();
 			if (hash_equals($row['password'], crypt($password, PASSWORD_SALT))) {
-				$usercheck->error = "Mot de passe correct !";
-			}
-			$usercheck->name = $row['name'];
-			$usercheck->autorize = true;
-			$usercheck->id = $row['id'];
-			$usercheck->role_id = $row['role_id'];
+				return $row;
+			} 
+
 		}
-		return $usercheck;
+		return false;
 	}
 
 

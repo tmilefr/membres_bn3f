@@ -1,17 +1,12 @@
-$(".Dynamic_row").each(function( index ) {
-	var	object = $( this );
+//add row
+$(document).on("click", '.addRow', function(e) {
+  var	object = $( this );
+  console.log(object);
+  var html = $('#model'+object.attr('ref')).html();
+  $('#DR_'+object.attr('ref')).append(html); 
+});
 
-	$("#addRow").click(function () {
-
-        var html = $("#model").html();
-
-        $('.Dynamic_row').append(html);
-    });
-
-    // remove row
-    $(document).on('click', '.removeRow', function () {
-		console.log(this);
-        $(this).closest('.input-group').remove();
-	});
-
+// remove row
+$(document).on('click', '.removeRow', function () {
+  $(this).closest('.input-group').remove();
 });

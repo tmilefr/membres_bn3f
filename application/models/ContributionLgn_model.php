@@ -14,7 +14,7 @@ class ContributionLgn_model extends Core_model{
 		$this->_init_def();
 	}
 
-	function SetLink($foreign_key, $id){
+	/*function SetLink($foreign_key, $id){
 		if ($id){
 			$this->db->set($foreign_key, $id);
 			$this->db->where($foreign_key, 0);
@@ -27,6 +27,6 @@ class ContributionLgn_model extends Core_model{
 			$this->db->where_in('id_cnt', $id_cnt)
 				 ->delete($this->table);
 		}
-	}
+	}*/
 }
 ?>

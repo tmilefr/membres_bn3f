@@ -1,10 +1,14 @@
 <?php
-/* * element_checkbox.php * CHECKBOX Object in page *  */require_once(APPPATH.'libraries/elements/element.php');
+/*
+ * element_month.php
+ * element_month Object in page
+ * 
+ */
 
 class element_month extends element
 {	
 	public function RenderFormElement(){
-		return $this->CI->bootstrap_tools->input_select($this->name, $this->values, $this->value);
+		return $this->RenderTools->input_select($this->name, $this->values, $this->value);
 	}
 	
 	public function Render(){

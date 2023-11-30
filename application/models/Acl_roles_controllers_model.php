@@ -5,14 +5,13 @@ class Acl_roles_controllers_model extends Core_model{
 
 	function __construct(){
 		parent::__construct();
-		$this->_set('_debug', TRUE);
 		
 		$this->_set('table'	, 'acl_roles_controllers');
 		$this->_set('key'	, 'id');
 		$this->_set('order'	, 'id_role');
 		$this->_set('direction'	, 'desc');
 		$this->_set('json'	, 'Acl_roles_controllers.json');
-		$this->_init_def();
+
 	}
 
 	function GetRole($id_role,$id_ctrl,$id_act){

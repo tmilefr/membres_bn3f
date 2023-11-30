@@ -51,7 +51,8 @@
 		"search": true,
 		"rules": null,
 		"since": 2,
-		"values": "distinct(acl_roles,id:role_name)",
+		"param": "distinct(acl_roles,id:role_name)",
+		"values":[],
 		"dbforge": {
 			"type": "INT",
 			"constraint": "5"
